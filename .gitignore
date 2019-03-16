@@ -1,3 +1,4 @@
+/.next
 /config/*.config.js
 /node_modules
 /logs/*
