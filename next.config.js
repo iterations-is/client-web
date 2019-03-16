@@ -5,9 +5,14 @@
 
 const path = require('path');
 const withSass = require('@zeit/next-sass');
+const sassGlob = require('node-sass-glob-importer');
 const withCSS = require('@zeit/next-css');
 
 const nextConfig = {
+   sassLoaderOptions: {
+      importer: sassGlob(),
+   },
+
    webpack(config, options) {
       config.resolve.alias = {
          component: path.join(__dirname, 'components'),

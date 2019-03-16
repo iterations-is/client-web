@@ -5,6 +5,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import 'style/index.scss';
 
 class Index extends React.Component {
    render() {
