@@ -6,7 +6,6 @@
 const path = require('path');
 const withSass = require('@zeit/next-sass');
 const sassGlob = require('node-sass-glob-importer');
-const withCSS = require('@zeit/next-css');
 
 const nextConfig = {
    sassLoaderOptions: {
@@ -15,15 +14,15 @@ const nextConfig = {
 
    webpack(config, options) {
       config.resolve.alias = {
-         component: path.join(__dirname, 'components'),
+         components: path.join(__dirname, 'components'),
          config: path.join(__dirname, 'config'),
-         layout: path.join(__dirname, 'layouts'),
-         style: path.join(__dirname, 'styles'),
-         util: path.join(__dirname, 'utils'),
+         layouts: path.join(__dirname, 'layouts'),
+         styles: path.join(__dirname, 'styles'),
+         utils: path.join(__dirname, 'utils'),
       };
 
       return config;
    },
 };
 
-module.exports = withCSS(withSass(nextConfig));
+module.exports = withSass(nextConfig, { cssModules: true });

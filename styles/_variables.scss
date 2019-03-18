@@ -1,7 +1,33 @@
-/**
- * @file 
- * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
- */
+////
+/// Custom variables
+/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
+////
+
+$grid-size: 8px; // 8px
+
+$g0-5: 0.5 * $grid-size; // 4px
+$g0-75: 0.75 * $grid-size; // 6px
+$g1: 1 * $grid-size; // 8px
+$g1-05: 1.5 * $grid-size; // 12px
+$g2: 2 * $grid-size; // 16px
+$g3: 3 * $grid-size; // 24px
+$g4: 4 * $grid-size; // 32px
+$g5: 5 * $grid-size; // 40px
+$g6: 6 * $grid-size;
+$g7: 7 * $grid-size;
+$g8: 8 * $grid-size;
+$g9: 9 * $grid-size;
+
+//$g10: 10 * $grid-size;
+//$g11: 11 * $grid-size;
+//$g12: 12 * $grid-size;
+//$g13: 13 * $grid-size;
+//$g14: 14 * $grid-size;
+//$g15: 15 * $grid-size;
+//$g16: 16 * $grid-size;
+//$g17: 17 * $grid-size;
+//$g18: 18 * $grid-size;
+//$g19: 19 * $grid-size;
 
 $font-size-body: 16px;
 $font-size-h1: 22px;

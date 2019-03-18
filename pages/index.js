@@ -1,19 +1,33 @@
 /**
- * @file Index Page
+ * @file Index Page - Redirect to Auth or Dashboard (depends on JWT validation)
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
 import React from 'react';
-import Link from 'next/link';
-import 'style/index.scss';
+import Router from 'next/router';
+const utilAuthorization = require('utils/authorization.util');
 
 class Index extends React.Component {
+   static async getInitialProps(ctx) {
+      await utilAuthorization.verifyJWT(ctx).then(isAuthorized => {
+         // Redirect user to dashboard if JWT is valid
+         if (isAuthorized) {
+            if (ctx.res) {
+               // SSR redirect
+               ctx.res.writeHead(302, { Location: '/dashboard' });
+               ctx.res.end();
+            } else {
+               // CSR redirect
+               Router.push('/dashboard');
+            }
+         }
+      });
+
+      return {};
+   }
+
    render() {
-      return (
-         <div>
-            <h1>Iterations</h1>
-         </div>
-      );
+      return <div />;
    }
 }
 
