@@ -7,6 +7,8 @@ import React from 'react';
 import RootLayout from 'layouts/RootLayout';
 
 import NavBar from 'components/NavBar';
+import InfoBar from 'components/InfoBar';
+import Header from 'components/Header';
 
 class Index extends React.Component {
    render() {
@@ -14,7 +16,12 @@ class Index extends React.Component {
          <RootLayout>
             <div className="layout layout_common">
                <NavBar />
-               <main>{this.props.children}</main>
+               <InfoBar />
+
+               <main>
+                  <Header />
+                  <div className="container-fluid">{this.props.children}</div>
+               </main>
             </div>
          </RootLayout>
       );

@@ -1,0 +1,75 @@
+////
+/// Loader Screen
+/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
+////
+
+header.header {
+   padding: $grid-gutter-width / 2 $grid-gutter-width / 2 0;
+   border-bottom: 1px solid $line-separator;
+   width: 100%;
+
+   h1 {
+      margin: 0 0 $g3 0;
+      padding: 0;
+
+      font: {
+         weight: 200;
+      }
+   }
+
+   ul {
+      list-style-type: none;
+      display: flex;
+      padding: 0;
+      margin: 0 0 -1px;
+
+      li {
+         a {
+            display: block;
+            padding: $g1-05 0;
+            color: $color-asphalt-dark;
+            text-decoration: none;
+
+            &:hover,
+            &:active,
+            &:visited {
+               color: $color-asphalt-dark;
+               text-decoration: none;
+            }
+         }
+         margin: 0 $g2;
+
+         &:first-child {
+            margin-left: 0;
+         }
+         &:last-child {
+            margin-right: 0;
+         }
+
+         &.active,
+         &:hover {
+            border-bottom: 2px solid $color-asphalt-medium;
+         }
+      }
+   }
+}
+
+.verified-mark {
+   margin: 0 $g0-5;
+   display: inline-block;
+   background: $color-turquoise-medium;
+   border-radius: 50%;
+   width: 20px;
+   height: 20px;
+   color: white;
+   position: relative;
+   vertical-align: top;
+
+   svg {
+      width: $g1-05 !important;
+      height: $g1-05;
+      position: absolute;
+      top: $g0-5;
+      left: $g0-5;
+   }
+}

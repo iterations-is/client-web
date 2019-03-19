@@ -1,0 +1,34 @@
+////
+/// Common layout
+/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
+////
+
+.layout_common {
+   display: flex;
+
+   background: url('/images/theme_iterations/logo_white_light.svg') -250px 0;
+   background-size: 300px;
+   background-attachment: fixed;
+
+   .nav-bar {
+      flex: 0 0 80px;
+   }
+
+   main {
+      background-color: white;
+      flex: 1 1 0;
+
+      & > .container-fluid {
+         padding-top: $grid-gutter-width / 2;
+         padding-bottom: $grid-gutter-width / 2;
+
+         & > :first-child {
+            margin-top: 0;
+         }
+
+         & > :last-child {
+            margin-bottom: 0;
+         }
+      }
+   }
+}

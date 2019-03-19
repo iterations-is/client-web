@@ -9,7 +9,7 @@ import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 
-const configServer = require('../config/server.config');
+const configServer = require('config/server.config');
 
 /**
  * Check if user is authorized.
@@ -19,6 +19,9 @@ const configServer = require('../config/server.config');
  * @returns {Promise}
  */
 export async function verifyJWT(ctx) {
+   // Return true if you want open pages without auth
+   // return true;
+
    let token = '-';
 
    // Get token (different for SSR and for CSR)
