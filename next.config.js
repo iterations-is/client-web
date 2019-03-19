@@ -14,11 +14,12 @@ const nextConfig = {
 
    webpack(config, options) {
       config.resolve.alias = {
-         components: path.join(__dirname, 'components'),
-         config: path.join(__dirname, 'config'),
-         layouts: path.join(__dirname, 'layouts'),
-         styles: path.join(__dirname, 'styles'),
-         utils: path.join(__dirname, 'utils'),
+         pages: path.join(__dirname, 'pages'),
+         components: path.join(__dirname, 'src/components'),
+         config: path.join(__dirname, 'src/config'),
+         layouts: path.join(__dirname, 'src/layouts'),
+         styles: path.join(__dirname, 'src/styles'),
+         utils: path.join(__dirname, 'src/utils'),
       };
 
       return config;

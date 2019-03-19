@@ -9,7 +9,7 @@ import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 
-const configServer = require('../config/server.config');
+const configServer = require('config/server.config');
 
 /**
  * Check if user is authorized.

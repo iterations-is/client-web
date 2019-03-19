@@ -8,7 +8,7 @@ import { Cookies } from 'react-cookie';
 const utilAuthorization = require('utils/authorization.util');
 
 import axios from 'axios';
-const configServer = require('../../config/server.config');
+const configServer = require('config/server.config');
 import CommonLayout from 'layouts/CommonLayout';
 
 // set up cookies

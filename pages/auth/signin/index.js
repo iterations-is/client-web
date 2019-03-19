@@ -7,7 +7,7 @@ import React from 'react';
 import axios from 'axios';
 import Router from 'next/router';
 import { Cookies } from 'react-cookie';
-const configServer = require('../../../config/server.config');
+const configServer = require('config/server.config');
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';

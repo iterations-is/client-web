@@ -83,7 +83,7 @@ class Index extends React.Component {
             <div>
                <ul>
                   <li className={'nav-bar__logotype'}>
-                     <img src="/static/images/theme_iterations/logo_white.svg" alt="" />
+                     <img src="/images/theme_iterations/logo_white.svg" alt="" />
                   </li>
                </ul>
                <ul className={'nav-bar__small'}>
