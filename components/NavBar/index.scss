@@ -2,3 +2,106 @@
 /// NavBar
 /// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
 ////
+
+.nav-bar {
+   $size: 80px;
+
+   top: 0;
+   left: 0;
+   z-index: 5000;
+   position: fixed;
+   width: $size;
+   height: 100vh;
+   background: $color-asphalt-medium;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+
+   ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+         width: $size;
+         height: $size;
+         overflow: hidden;
+
+         span {
+            color: white;
+            display: none;
+         }
+
+         &:not(.nav-bar__logotype):hover {
+            background: $color-asphalt-light;
+         }
+
+         a {
+            width: $size;
+            height: $size;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+
+            svg {
+               width: $size / 4 !important;
+               height: $size / 4 !important;
+            }
+         }
+      }
+
+      &.nav-bar__small {
+         display: flex;
+
+         li {
+            width: $size / 2;
+            height: $size/ 2;
+
+            a {
+               width: $size / 2;
+               height: $size/2;
+            }
+         }
+      }
+   }
+}
+
+.nav-bar__logotype {
+   display: flex;
+   align-items: flex-end;
+
+   img {
+      max-width: $g6;
+      max-height: $g6;
+      margin: $g1 auto;
+   }
+}
+
+@include media-breakpoint-down(md) {
+   .nav-bar {
+      $size: 80px;
+
+      display: none;
+
+      ul li {
+         height: $size / 2;
+         width: 100%;
+
+         a {
+            width: 100%;
+            height: $size / 2;
+
+            justify-content: flex-start;
+
+            svg {
+               margin: 0 30px;
+            }
+         }
+         span {
+            display: block;
+         }
+      }
+   }
+}
