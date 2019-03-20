@@ -5,16 +5,30 @@
 
 import React from 'react';
 import { Cookies } from 'react-cookie';
-const utilAuthorization = require('utils/authorization.util');
+import { connect } from 'react-redux';
+import { verifyJWT } from 'utils/authorization.util';
+
+import { actionSetPageTitle, actionSetPageVerifiedMark } from 'actions/page-header.action';
 
 import axios from 'axios';
 const configServer = require('config/server.config');
 import CommonLayout from 'layouts/CommonLayout';
+import { bindActionCreators } from 'redux';
+import { actionChangePageTabBarVisibility } from '../../src/actions/page-tabbar.action';
+
+// import headerReducer from 'reducers/header';
 
 // set up cookies
 const cookies = new Cookies();
 
-class Index extends React.Component {
+// -------------------------------------------------------------------------------------------------
+// Component
+// -------------------------------------------------------------------------------------------------
+
+class DashboardPage extends React.Component {
+   // Init
+   // ----------------------------------------------------------------------------------------------
+
    constructor(props) {
       super(props);
       this.state = {
@@ -23,10 +37,17 @@ class Index extends React.Component {
    }
 
    static async getInitialProps(ctx) {
-      await utilAuthorization.verifyJWT(ctx);
+      await verifyJWT(ctx);
+
+      ctx.store.dispatch(actionSetPageTitle('Dashboard, huh'));
+      ctx.store.dispatch(actionSetPageVerifiedMark(false));
+      ctx.store.dispatch(actionChangePageTabBarVisibility(true));
 
       return {};
    }
+
+   // Methods
+   // ----------------------------------------------------------------------------------------------
 
    // Pings to server with JWT token
    onPingTokenCall = async e => {
@@ -43,6 +64,9 @@ class Index extends React.Component {
          console.log(err.response.data.msg);
       }
    };
+
+   // Render
+   // ----------------------------------------------------------------------------------------------
 
    render() {
       return (
@@ -61,45 +85,6 @@ class Index extends React.Component {
                In hac habitasse platea dictumst. Phasellus non tempus mauris.
             </p>
 
-            <p>
-               Morbi efficitur, libero a placerat tristique, erat lectus sagittis leo, eu tristique
-               nulla dui ac purus. Donec dictum ac odio at fermentum. Quisque eget massa eget nunc
-               ultrices sodales eu at turpis. Quisque dignissim viverra sem vitae dapibus.
-               Vestibulum pretium tincidunt tellus a ultrices. Praesent cursus ultricies augue,
-               vitae pharetra nunc tincidunt at. Vivamus eget bibendum massa. Aliquam vitae varius
-               nibh. Quisque tempor a elit eu feugiat. Suspendisse turpis mauris, efficitur eu
-               consequat in, aliquet vel tortor. Quisque id posuere tortor. Proin ut metus accumsan,
-               scelerisque nulla nec, vehicula tortor. Donec consequat metus ut dictum ullamcorper.
-               Ut eu ante magna. Curabitur sed ornare neque. Mauris feugiat leo vel dui sagittis, et
-               vestibulum augue gravida.
-            </p>
-
-            <p>
-               Morbi efficitur, libero a placerat tristique, erat lectus sagittis leo, eu tristique
-               nulla dui ac purus. Donec dictum ac odio at fermentum. Quisque eget massa eget nunc
-               ultrices sodales eu at turpis. Quisque dignissim viverra sem vitae dapibus.
-               Vestibulum pretium tincidunt tellus a ultrices. Praesent cursus ultricies augue,
-               vitae pharetra nunc tincidunt at. Vivamus eget bibendum massa. Aliquam vitae varius
-               nibh. Quisque tempor a elit eu feugiat. Suspendisse turpis mauris, efficitur eu
-               consequat in, aliquet vel tortor. Quisque id posuere tortor. Proin ut metus accumsan,
-               scelerisque nulla nec, vehicula tortor. Donec consequat metus ut dictum ullamcorper.
-               Ut eu ante magna. Curabitur sed ornare neque. Mauris feugiat leo vel dui sagittis, et
-               vestibulum augue gravida.
-            </p>
-
-            <p>
-               Morbi efficitur, libero a placerat tristique, erat lectus sagittis leo, eu tristique
-               nulla dui ac purus. Donec dictum ac odio at fermentum. Quisque eget massa eget nunc
-               ultrices sodales eu at turpis. Quisque dignissim viverra sem vitae dapibus.
-               Vestibulum pretium tincidunt tellus a ultrices. Praesent cursus ultricies augue,
-               vitae pharetra nunc tincidunt at. Vivamus eget bibendum massa. Aliquam vitae varius
-               nibh. Quisque tempor a elit eu feugiat. Suspendisse turpis mauris, efficitur eu
-               consequat in, aliquet vel tortor. Quisque id posuere tortor. Proin ut metus accumsan,
-               scelerisque nulla nec, vehicula tortor. Donec consequat metus ut dictum ullamcorper.
-               Ut eu ante magna. Curabitur sed ornare neque. Mauris feugiat leo vel dui sagittis, et
-               vestibulum augue gravida.
-            </p>
-
             <button onClick={e => this.onPingTokenCall(e)}>Ping With Token Call</button>
             <p>Token: {this.state.token}</p>
          </CommonLayout>
@@ -107,4 +92,24 @@ class Index extends React.Component {
    }
 }
 
-export default Index;
+// -------------------------------------------------------------------------------------------------
+// Redux
+// -------------------------------------------------------------------------------------------------
+
+const mapStateToProps = state => {
+   return {};
+};
+
+const mapDispatchToProps = dispatch => {
+   return bindActionCreators(
+      {
+         // Action objects {type: ...}
+      },
+      dispatch,
+   );
+};
+
+export default connect(
+   mapStateToProps,
+   mapDispatchToProps,
+)(DashboardPage);

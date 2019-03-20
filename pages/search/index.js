@@ -6,11 +6,19 @@
 import React from 'react';
 const utilAuthorization = require('utils/authorization.util');
 
+import { actionSetPageTitle, actionSetPageVerifiedMark } from 'actions/page-header.action';
+import { actionChangePageTabBarVisibility } from 'actions/page-tabbar.action';
+import { connect } from 'react-redux';
+
 import CommonLayout from 'layouts/CommonLayout';
 
-class Index extends React.Component {
+class SearchPage extends React.Component {
    static async getInitialProps(ctx) {
       await utilAuthorization.verifyJWT(ctx);
+
+      ctx.store.dispatch(actionSetPageTitle('Search'));
+      ctx.store.dispatch(actionSetPageVerifiedMark(true));
+      ctx.store.dispatch(actionChangePageTabBarVisibility(false));
 
       return {};
    }
@@ -36,4 +44,4 @@ class Index extends React.Component {
    }
 }
 
-export default Index;
+export default SearchPage;

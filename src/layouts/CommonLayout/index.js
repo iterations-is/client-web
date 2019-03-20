@@ -4,28 +4,27 @@
  */
 
 import React from 'react';
-import RootLayout from 'layouts/RootLayout';
+
+import { connect } from 'react-redux';
 
 import NavBar from 'components/NavBar';
 import InfoBar from 'components/InfoBar';
-import Header from 'components/Header';
+import Header from 'components/PageHeader';
 
-class Index extends React.Component {
+class CommonLayout extends React.Component {
    render() {
       return (
-         <RootLayout>
-            <div className="layout layout_common">
-               <NavBar />
-               <InfoBar />
+         <div className="layout layout_common">
+            <NavBar />
+            <InfoBar />
 
-               <main>
-                  <Header />
-                  <div className="container-fluid">{this.props.children}</div>
-               </main>
-            </div>
-         </RootLayout>
+            <main>
+               <Header />
+               <div className="container-fluid">{this.props.children}</div>
+            </main>
+         </div>
       );
    }
 }
 
-export default Index;
+export default connect()(CommonLayout);
