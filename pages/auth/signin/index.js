@@ -52,7 +52,7 @@ class Index extends React.Component {
             const token = response.data.dat.token;
 
             if (token) {
-               cookies.set('JWT', token, {
+               cookies.set('JWT', `Bearer ${token}`, {
                   path: '/',
                });
                clearInterval(intervalID);
