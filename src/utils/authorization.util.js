@@ -35,7 +35,7 @@ export async function verifyJWT(ctx) {
    }
 
    try {
-      await axios.get(configServer.host + '/api/auth/token/verify', {
+      await axios.get(configServer.host + '/api/token/verify', {
          headers: { Authorization: token },
       });
 
