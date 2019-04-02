@@ -28,7 +28,7 @@ class Index extends React.Component {
    }
 
    static async getInitialProps() {
-      const response = await axios.get(configServer.host + '/api/auth/token/temporary');
+      const response = await axios.get(configServer.host + '/api/token/temporary');
       const tokenTmp = response.data.dat.tokenTmp;
 
       return {
@@ -44,7 +44,7 @@ class Index extends React.Component {
 
       let intervalID = setInterval(async () => {
          try {
-            const response = await axios.get(configServer.host + '/api/auth/token/persistent', {
+            const response = await axios.get(configServer.host + '/api/token/persistent', {
                params: {
                   tokenTmp: this.props.tokenTmp,
                },
@@ -52,7 +52,7 @@ class Index extends React.Component {
             const token = response.data.dat.token;
 
             if (token) {
-               cookies.set('JWT', `Bearer ${token}`, {
+               cookies.set('JWT', `${token}`, {
                   path: '/',
                });
                clearInterval(intervalID);
