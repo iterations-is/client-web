@@ -11,10 +11,12 @@ import { combineReducers } from 'redux';
 // -------------------------------------------------------------------------------------------------
 import reducerPageHeader from 'reducers/page-header.reducer';
 import reducerPageTabBar from 'reducers/page-tabbar.reducer';
+import reducerInfoBar from 'reducers/info-bar.reducer';
 
 const combinedReducers = combineReducers({
    reducerPageHeader,
    reducerPageTabBar,
+   reducerInfoBar,
 });
 
 // -------------------------------------------------------------------------------------------------

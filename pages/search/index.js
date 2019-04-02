@@ -11,6 +11,7 @@ import { actionChangePageTabBarVisibility } from 'actions/page-tabbar.action';
 import { connect } from 'react-redux';
 
 import CommonLayout from 'layouts/CommonLayout';
+import { actionInfoBarHide } from 'actions/info-bar.action';
 
 class SearchPage extends React.Component {
    static async getInitialProps(ctx) {
@@ -19,6 +20,7 @@ class SearchPage extends React.Component {
       ctx.store.dispatch(actionSetPageTitle('Search'));
       ctx.store.dispatch(actionSetPageVerifiedMark(true));
       ctx.store.dispatch(actionChangePageTabBarVisibility(false));
+      ctx.store.dispatch(actionInfoBarHide());
 
       return {};
    }

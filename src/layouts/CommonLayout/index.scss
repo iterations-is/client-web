@@ -9,6 +9,7 @@
    background: url('/static/images/theme_iterations/logo_white_light.svg') -250px 0;
    background-size: 300px;
    background-attachment: fixed;
+   padding-left: 80px;
 
    .nav-bar {
       flex: 0 0 80px;
@@ -30,5 +31,9 @@
             margin-bottom: 0;
          }
       }
+   }
+
+   @include media-breakpoint-down(md) {
+      padding-left: 0;
    }
 }

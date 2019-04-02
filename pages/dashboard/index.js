@@ -14,7 +14,8 @@ import axios from 'axios';
 const configServer = require('config/server.config');
 import CommonLayout from 'layouts/CommonLayout';
 import { bindActionCreators } from 'redux';
-import { actionChangePageTabBarVisibility } from '../../src/actions/page-tabbar.action';
+import { actionChangePageTabBarVisibility } from 'actions/page-tabbar.action';
+import { actionInfoBarShow } from 'actions/info-bar.action';
 
 // import headerReducer from 'reducers/header';
 
@@ -42,6 +43,7 @@ class DashboardPage extends React.Component {
       ctx.store.dispatch(actionSetPageTitle('Dashboard, huh'));
       ctx.store.dispatch(actionSetPageVerifiedMark(false));
       ctx.store.dispatch(actionChangePageTabBarVisibility(true));
+      ctx.store.dispatch(actionInfoBarShow());
 
       return {};
    }
@@ -54,7 +56,7 @@ class DashboardPage extends React.Component {
       const token = cookies.get('JWT');
 
       try {
-         const res = await axios.get(configServer.host + '/api/auth/token/verify', {
+         const res = await axios.get(configServer.host + '/api/token/verify', {
             headers: { Authorization: token },
          });
          console.log(`Request success:`);
