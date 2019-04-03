@@ -1,5 +1,5 @@
 /**
- * @file Search
+ * @file Admin panel
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
@@ -18,7 +18,7 @@ import CommonLayout from 'layouts/CommonLayout';
 // Component
 // -------------------------------------------------------------------------------------------------
 
-class SearchPage extends React.Component {
+class PanelPage extends React.Component {
    // Init
    // ----------------------------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ class SearchPage extends React.Component {
          <CommonLayout>
             <div className={'row'}>
                <div className="col-md-6 col-sm-12">
-                  <h1>Search</h1>
+                  <h1>Admin panel</h1>
                </div>
             </div>
          </CommonLayout>
@@ -70,4 +70,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
    mapStateToProps,
    mapDispatchToProps,
-)(SearchPage);
+)(PanelPage);

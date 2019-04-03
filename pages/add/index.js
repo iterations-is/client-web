@@ -1,5 +1,5 @@
 /**
- * @file Search
+ * @file Add
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
@@ -8,8 +8,8 @@ import { verifyJWT } from 'utils/authorization.util';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 // import { actionSetPageTitle, actionSetPageVerifiedMark } from 'actions/page-header.action';
-// import { actionHideInfoBar } from 'actions/info-bar.action';
 // import { actionChangeTabBarUsage } from 'actions/page-tabbar.action';
+// import { actionHideInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
@@ -18,7 +18,7 @@ import CommonLayout from 'layouts/CommonLayout';
 // Component
 // -------------------------------------------------------------------------------------------------
 
-class SearchPage extends React.Component {
+class AddPage extends React.Component {
    // Init
    // ----------------------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ class SearchPage extends React.Component {
       await verifyJWT(ctx);
 
       // // Set page header
-      // ctx.store.dispatch(actionSetPageTitle('FAQ'));
+      // ctx.store.dispatch(actionSetPageTitle('Create project'));
       // ctx.store.dispatch(actionSetPageVerifiedMark(false));
       // ctx.store.dispatch(actionChangeTabBarUsage(false));
       //
@@ -46,8 +46,10 @@ class SearchPage extends React.Component {
       return (
          <CommonLayout>
             <div className={'row'}>
-               <div className="col-md-6 col-sm-12">
-                  <h1>Search</h1>
+               <div className="col-12">
+                  <h1>Public information</h1>
+                  <h1>Content visibility options</h1>
+                  <h1>Private information</h1>
                </div>
             </div>
          </CommonLayout>
@@ -70,4 +72,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
    mapStateToProps,
    mapDispatchToProps,
-)(SearchPage);
+)(AddPage);

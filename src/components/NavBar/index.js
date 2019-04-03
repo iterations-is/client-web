@@ -40,8 +40,8 @@ const navBarItems = [
       icon: <FontAwesomeIcon icon={faBell} />,
    },
    {
-      name: 'Auth',
-      link: '/auth',
+      name: 'Admin panel',
+      link: '/panel',
       icon: <FontAwesomeIcon icon={faKey} />,
    },
 ];

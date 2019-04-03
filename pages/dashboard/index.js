@@ -30,13 +30,6 @@ class DashboardPage extends React.Component {
    // Init
    // ----------------------------------------------------------------------------------------------
 
-   constructor(props) {
-      super(props);
-      this.state = {
-         token: cookies.get('token') || null,
-      };
-   }
-
    static async getInitialProps(ctx) {
       await verifyJWT(ctx);
 
@@ -88,7 +81,6 @@ class DashboardPage extends React.Component {
             </p>
 
             <button onClick={e => this.onPingTokenCall(e)}>Ping With Token Call</button>
-            <p>Token: {this.state.token}</p>
          </CommonLayout>
       );
    }
@@ -103,12 +95,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-   return bindActionCreators(
-      {
-         // Action objects {type: ...}
-      },
-      dispatch,
-   );
+   return bindActionCreators({}, dispatch);
 };
 
 export default connect(
