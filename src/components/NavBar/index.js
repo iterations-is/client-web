@@ -39,30 +39,32 @@ class NavBar extends React.Component {
    render() {
       return (
          <nav className={!this.props.visibilityMobile ? 'nav-bar' : 'nav-bar nav-bar_mobile-show'}>
-            <ul>
-               {this.props.itemsTop.map((item, index) => {
-                  if (
-                     item.permissions &&
-                     haveAtLeastOneOfPermissions(
-                        this.props.jwtPayload.permissions,
-                        item.permissions,
-                     )
-                  ) {
-                     return (
-                        <li key={index}>
-                           <Link href={item.link}>
-                              <a>
-                                 <FontAwesomeIcon icon={item.icon} />
-                                 <span>{item.name}</span>
-                              </a>
-                           </Link>
-                        </li>
-                     );
-                  }
-               })}
-            </ul>
+            <div className="nav-bar__group_top">
+               <ul>
+                  {this.props.itemsTop.map((item, index) => {
+                     if (
+                        item.permissions &&
+                        haveAtLeastOneOfPermissions(
+                           this.props.jwtPayload.permissions,
+                           item.permissions,
+                        )
+                     ) {
+                        return (
+                           <li key={index}>
+                              <Link href={item.link}>
+                                 <a>
+                                    <FontAwesomeIcon icon={item.icon} />
+                                    <span>{item.name}</span>
+                                 </a>
+                              </Link>
+                           </li>
+                        );
+                     }
+                  })}
+               </ul>
+            </div>
 
-            <div>
+            <div className="nav-bar__group_bottom">
                <ul>
                   <li className={'nav-bar__logotype'}>
                      <img src="/static/images/theme_iterations/logo_white.svg" alt="" />

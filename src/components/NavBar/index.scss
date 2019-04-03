@@ -6,7 +6,6 @@
 .nav-bar {
    $size: 80px;
 
-   flex: 0 0 80px;
    top: 0;
    left: 0;
    z-index: 5000;
@@ -29,16 +28,12 @@
          height: $size;
          overflow: hidden;
 
-         span {
-            color: white;
-            display: none;
-         }
-
          &:not(.nav-bar__logotype):hover {
             background: $color-asphalt-light;
          }
 
          a {
+            text-decoration: none;
             width: $size;
             height: $size;
             display: flex;
@@ -50,20 +45,21 @@
                width: $size / 4 !important;
                height: $size / 4 !important;
             }
+
+            span {
+               color: white;
+               display: none;
+            }
          }
       }
 
       &.nav-bar__small {
          display: flex;
 
-         li {
+         li,
+         li a {
             width: $size / 2;
             height: $size/ 2;
-
-            a {
-               width: $size / 2;
-               height: $size/2;
-            }
          }
       }
    }
@@ -91,19 +87,27 @@
          height: $size / 2;
          width: 100%;
 
+         a {
+            height: $size / 2;
+            width: 100%;
+
+            justify-content: flex-start;
+            color: $color-asphalt-dark;
+
+            svg {
+               margin: 0 $g3;
+            }
+            span {
+               display: block;
+            }
+
+            svg,
+            span {
+               color: $color-asphalt-dark !important;
+            }
+         }
+
          justify-content: flex-start;
-
-         svg {
-            margin: 0 30px;
-         }
-         span {
-            display: block;
-         }
-
-         svg,
-         span {
-            color: $color-asphalt-dark !important;
-         }
 
          &:hover {
             svg,

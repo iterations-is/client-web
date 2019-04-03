@@ -8,6 +8,7 @@ import {
    INFO_BAR_MOBILE_SHOW,
    INFO_BAR_MOBILE_HIDE,
    INFO_BAR_MOBILE_TOGGLE,
+   SET_INFO_BAR_ITEMS
 } from 'actions/info-bar.action';
 
 // -------------------------------------------------------------------------------------------------
@@ -17,6 +18,37 @@ import {
 const initialState = {
    usage: true,
    visibilityMobile: false,
+   items: [
+      {
+         title: 'Group',
+         items: [
+            {
+               title: 'Item',
+            },
+            {
+               title: 'Item',
+               label: {
+                  text: 'Contributors only',
+                  color: 'blue',
+               },
+            },
+            {
+               title: 'Item',
+               label: {
+                  text: '0/3',
+                  color: 'red',
+               },
+            },
+            {
+               title: 'Item',
+               label: {
+                  text: '0/3',
+                  color: 'green',
+               },
+            },
+         ],
+      },
+   ],
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -47,6 +79,12 @@ export default function reducerInfoBar(state = initialState, action) {
          return {
             ...state,
             visibilityMobile: !state.visibilityMobile,
+         };
+
+      case SET_INFO_BAR_ITEMS:
+         return {
+            ...state,
+            items: action.items,
          };
 
       default:
