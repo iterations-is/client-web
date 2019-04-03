@@ -1,0 +1,40 @@
+////
+/// Tab Bar
+/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
+////
+
+.tab-bar {
+   list-style-type: none;
+   display: flex;
+   padding: 0;
+   margin: $g3 0 -1px;
+
+   li {
+      margin: 0 $g2;
+      a {
+         display: block;
+         padding: $g1-05 0;
+         color: $color-asphalt-dark;
+         text-decoration: none;
+
+         &:hover,
+         &:active,
+         &:visited {
+            color: $color-asphalt-dark;
+            text-decoration: none;
+         }
+      }
+
+      &:first-child {
+         margin-left: 0;
+      }
+      &:last-child {
+         margin-right: 0;
+      }
+
+      &.active,
+      &:hover {
+         border-bottom: 2px solid $color-asphalt-medium;
+      }
+   }
+}

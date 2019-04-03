@@ -1,16 +1,16 @@
 /**
- * @file Page tab bar
+ * @file Tab Bar
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
-import { CHANGE_TAB_BAR_VISIBILITY, SET_TAB_BAR_ITEMS } from 'actions/page-tabbar.action';
+import { SET_TAB_BAR_ITEMS, SET_TAB_BAR_USAGE } from 'actions/tab-bar.action';
 
 // -------------------------------------------------------------------------------------------------
 // Initial state
 // -------------------------------------------------------------------------------------------------
 
 const initialState = {
-   visibility: false,
+   usage: false,
    items: [
       {
          tabTitle: 'Example',
@@ -29,12 +29,12 @@ const initialState = {
 // Reducer
 // -------------------------------------------------------------------------------------------------
 
-export default function reducerPageTabBar(state = initialState, action) {
+export default function reducerTabBar(state = initialState, action) {
    switch (action.type) {
-      case CHANGE_TAB_BAR_VISIBILITY:
+      case SET_TAB_BAR_USAGE:
          return {
             ...state,
-            visibility: action.visibility,
+            usage: action.usage,
          };
 
       case SET_TAB_BAR_ITEMS:

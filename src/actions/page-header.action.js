@@ -14,11 +14,6 @@ export const SET_PAGE_TITLE_MARK = 'SET_PAGE_TITLE_MARK';
 // Action Creators
 // -------------------------------------------------------------------------------------------------
 
-/**
- * Change page title
- * @param {string} title
- * @returns {{type: string, title: string}}
- */
 export function actionSetPageTitle(title) {
    return {
       type: SET_PAGE_TITLE,
@@ -26,12 +21,7 @@ export function actionSetPageTitle(title) {
    };
 }
 
-/**
- * Set verification mark
- * @param {boolean} verifiedMark
- * @returns {{verifiedMark: boolean, type: string}}
- */
-export function actionSetPageVerifiedMark(verifiedMark) {
+export function actionSetUsagePageVerifiedMark(verifiedMark) {
    return {
       type: SET_PAGE_TITLE_MARK,
       verifiedMark: verifiedMark,

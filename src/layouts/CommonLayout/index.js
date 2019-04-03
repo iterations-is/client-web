@@ -13,7 +13,6 @@ import Header from 'components/PageHeader';
 
 class CommonLayout extends React.Component {
    render() {
-      console.log(`Render {${this.props.usageInfoBar}`);
       return (
          <div className="layout layout_common">
             <NavBar />

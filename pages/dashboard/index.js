@@ -3,21 +3,19 @@
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
-import React from 'react';
 import { Cookies } from 'react-cookie';
-import { connect } from 'react-redux';
 import { verifyJWT } from 'utils/authorization.util';
-
-import { actionSetPageTitle, actionSetPageVerifiedMark } from 'actions/page-header.action';
-
 import axios from 'axios';
 const configServer = require('config/server.config');
-import CommonLayout from 'layouts/CommonLayout';
-import { bindActionCreators } from 'redux';
-import { actionChangePageTabBarVisibility } from 'actions/page-tabbar.action';
-import { actionAllowUsageInfoBar } from 'actions/info-bar.action';
 
-// import headerReducer from 'reducers/header';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionSetUsageTabBar } from 'actions/tab-bar.action';
+import { actionSetUsageInfoBar } from 'actions/info-bar.action';
+import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
+
+import React from 'react';
+import CommonLayout from 'layouts/CommonLayout';
 
 // set up cookies
 const cookies = new Cookies();
@@ -33,10 +31,13 @@ class DashboardPage extends React.Component {
    static async getInitialProps(ctx) {
       await verifyJWT(ctx);
 
-      ctx.store.dispatch(actionSetPageTitle('Dashboard, huh'));
-      ctx.store.dispatch(actionSetPageVerifiedMark(false));
-      ctx.store.dispatch(actionChangePageTabBarVisibility(true));
-      ctx.store.dispatch(actionAllowUsageInfoBar());
+      // Header
+      ctx.store.dispatch(actionSetPageTitle('Dashboard'));
+      ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
+      ctx.store.dispatch(actionSetUsageTabBar(true));
+
+      // Info Bar
+      ctx.store.dispatch(actionSetUsageInfoBar(true));
 
       return {};
    }

@@ -4,8 +4,7 @@
  */
 
 import {
-   INFO_BAR_USAGE_ALLOW,
-   INFO_BAR_USAGE_DENY,
+   INFO_BAR_USAGE,
    INFO_BAR_MOBILE_SHOW,
    INFO_BAR_MOBILE_HIDE,
    INFO_BAR_MOBILE_TOGGLE,
@@ -26,16 +25,10 @@ const initialState = {
 
 export default function reducerInfoBar(state = initialState, action) {
    switch (action.type) {
-      case INFO_BAR_USAGE_ALLOW:
+      case INFO_BAR_USAGE:
          return {
             ...state,
-            usage: true,
-         };
-
-      case INFO_BAR_USAGE_DENY:
-         return {
-            ...state,
-            usage: false,
+            usage: action.usage,
          };
 
       case INFO_BAR_MOBILE_SHOW:

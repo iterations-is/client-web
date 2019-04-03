@@ -1,55 +1,23 @@
 ////
-/// Loader Screen
+/// Page Header
 /// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
 ////
 
-header.header {
+.page-header {
    padding: $grid-gutter-width / 2 $grid-gutter-width / 2 0;
    border-bottom: 1px solid $line-separator;
    width: 100%;
 
+   &_without-tab-bar {
+      padding-bottom: $grid-gutter-width / 2;
+   }
+
    h1 {
-      margin: 0 0 $g3 0;
+      margin: 0;
       padding: 0;
 
       font: {
          weight: 200;
-      }
-   }
-
-   ul {
-      list-style-type: none;
-      display: flex;
-      padding: 0;
-      margin: 0 0 -1px;
-
-      li {
-         a {
-            display: block;
-            padding: $g1-05 0;
-            color: $color-asphalt-dark;
-            text-decoration: none;
-
-            &:hover,
-            &:active,
-            &:visited {
-               color: $color-asphalt-dark;
-               text-decoration: none;
-            }
-         }
-         margin: 0 $g2;
-
-         &:first-child {
-            margin-left: 0;
-         }
-         &:last-child {
-            margin-right: 0;
-         }
-
-         &.active,
-         &:hover {
-            border-bottom: 2px solid $color-asphalt-medium;
-         }
       }
    }
 }

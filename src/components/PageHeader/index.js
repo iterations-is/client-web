@@ -3,25 +3,18 @@
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
-// Next
-import Link from 'next/link';
-
-// Utils
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-
-// React
 import React from 'react';
-
-// Redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import TabBarComponent from './TabBar';
 
 // -------------------------------------------------------------------------------------------------
 // Component
 // -------------------------------------------------------------------------------------------------
 
-class PageHeader extends React.Component {
+class PageHeaderComponent extends React.Component {
    // Init
    // ----------------------------------------------------------------------------------------------
 
@@ -32,28 +25,23 @@ class PageHeader extends React.Component {
    // ----------------------------------------------------------------------------------------------
 
    render() {
+      const headerClassName = !this.props.usageTabBar
+         ? 'page-header page-header_without-tab-bar'
+         : 'page-header';
+
       return (
-         <header className="header">
+         <header className={headerClassName}>
             <h1>
                <span>{this.props.title}</span>
 
-               {this.props.verifiedMark && (
+               {this.props.titleVerifiedMark && (
                   <span className={'verified-mark'}>
                      <FontAwesomeIcon icon={faCheck} />
                   </span>
                )}
             </h1>
-            {this.props.tabBarVisibility && (
-               <ul>
-                  {this.props.tabBarItems.map((value, idx) => (
-                     <li key={idx} className={value.tabActive ? 'active' : ''}>
-                        <Link href={value.tabLink}>
-                           <a>{value.tabTitle}</a>
-                        </Link>
-                     </li>
-                  ))}
-               </ul>
-            )}
+
+            {this.props.usageTabBar && <TabBarComponent />}
          </header>
       );
    }
@@ -66,22 +54,17 @@ class PageHeader extends React.Component {
 const mapStateToProps = state => {
    return {
       title: state.reducerPageHeader.title,
-      verifiedMark: state.reducerPageHeader.verifiedMark,
-      tabBarVisibility: state.reducerPageTabBar.visibility,
-      tabBarItems: state.reducerPageTabBar.items,
+      titleVerifiedMark: state.reducerPageHeader.verifiedMark,
+
+      usageTabBar: state.reducerTabBar.usage,
    };
 };
 
 const mapDispatchToProps = dispatch => {
-   return bindActionCreators(
-      {
-         // Action objects {type: ...}
-      },
-      dispatch,
-   );
+   return bindActionCreators({}, dispatch);
 };
 
 export default connect(
    mapStateToProps,
    mapDispatchToProps,
-)(PageHeader);
+)(PageHeaderComponent);
