@@ -9,14 +9,16 @@ import { combineReducers } from 'redux';
 // -------------------------------------------------------------------------------------------------
 // Reducers
 // -------------------------------------------------------------------------------------------------
+import reducerInfoBar from 'reducers/info-bar.reducer';
+import reducerJWT from 'reducers/jwt.reducer';
 import reducerPageHeader from 'reducers/page-header.reducer';
 import reducerPageTabBar from 'reducers/page-tabbar.reducer';
-import reducerInfoBar from 'reducers/info-bar.reducer';
 
 const combinedReducers = combineReducers({
+   reducerInfoBar,
+   reducerJWT,
    reducerPageHeader,
    reducerPageTabBar,
-   reducerInfoBar,
 });
 
 // -------------------------------------------------------------------------------------------------

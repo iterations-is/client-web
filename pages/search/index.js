@@ -8,7 +8,7 @@ import { verifyJWT } from 'utils/authorization.util';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 // import { actionSetPageTitle, actionSetPageVerifiedMark } from 'actions/page-header.action';
-// import { actionHideInfoBar } from 'actions/info-bar.action';
+import { actionDenyUsageInfoBar } from 'actions/info-bar.action';
 // import { actionChangeTabBarUsage } from 'actions/page-tabbar.action';
 
 import React from 'react';
@@ -31,7 +31,7 @@ class SearchPage extends React.Component {
       // ctx.store.dispatch(actionChangeTabBarUsage(false));
       //
       // // Info Bar
-      // ctx.store.dispatch(actionHideInfoBar());
+      ctx.store.dispatch(actionDenyUsageInfoBar());
 
       return {};
    }

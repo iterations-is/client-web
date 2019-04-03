@@ -15,7 +15,7 @@ const configServer = require('config/server.config');
 import CommonLayout from 'layouts/CommonLayout';
 import { bindActionCreators } from 'redux';
 import { actionChangePageTabBarVisibility } from 'actions/page-tabbar.action';
-import { actionInfoBarShow } from 'actions/info-bar.action';
+import { actionAllowUsageInfoBar } from 'actions/info-bar.action';
 
 // import headerReducer from 'reducers/header';
 
@@ -36,7 +36,7 @@ class DashboardPage extends React.Component {
       ctx.store.dispatch(actionSetPageTitle('Dashboard, huh'));
       ctx.store.dispatch(actionSetPageVerifiedMark(false));
       ctx.store.dispatch(actionChangePageTabBarVisibility(true));
-      ctx.store.dispatch(actionInfoBarShow());
+      ctx.store.dispatch(actionAllowUsageInfoBar());
 
       return {};
    }

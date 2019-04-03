@@ -1,47 +1,62 @@
 /**
- * @file
+ * @file Info Bar
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
-import { INFO_BAR_SHOW, INFO_BAR_HIDE } from 'actions/info-bar.action';
+import {
+   INFO_BAR_USAGE_ALLOW,
+   INFO_BAR_USAGE_DENY,
+   INFO_BAR_MOBILE_SHOW,
+   INFO_BAR_MOBILE_HIDE,
+   INFO_BAR_MOBILE_TOGGLE,
+} from 'actions/info-bar.action';
 
 // -------------------------------------------------------------------------------------------------
 // Initial state
 // -------------------------------------------------------------------------------------------------
 
 const initialState = {
-   key: 'value',
+   usage: true,
+   visibilityMobile: false,
 };
 
 // -------------------------------------------------------------------------------------------------
 // Reducer
 // -------------------------------------------------------------------------------------------------
 
-export default function reducerName(state = initialState, action) {
+export default function reducerInfoBar(state = initialState, action) {
    switch (action.type) {
-      case INFO_BAR_SHOW:
+      case INFO_BAR_USAGE_ALLOW:
          return {
             ...state,
-            visibility: true,
+            usage: true,
          };
 
-      case INFO_BAR_HIDE:
+      case INFO_BAR_USAGE_DENY:
          return {
             ...state,
-            visibility: false,
+            usage: false,
+         };
+
+      case INFO_BAR_MOBILE_SHOW:
+         return {
+            ...state,
+            visibilityMobile: true,
+         };
+
+      case INFO_BAR_MOBILE_HIDE:
+         return {
+            ...state,
+            visibilityMobile: false,
+         };
+
+      case INFO_BAR_MOBILE_TOGGLE:
+         return {
+            ...state,
+            visibilityMobile: !state.visibilityMobile,
          };
 
       default:
          return state;
    }
 }
-
-// -------------------------------------------------------------------------------------------------
-//
-// -------------------------------------------------------------------------------------------------
-
-// export function getHeaderTitle(state) {
-//    console.log(state);
-//    console.log(state.headerReducer.title);
-//    return state.headerReducer.title;
-// }

@@ -7,29 +7,37 @@
 // Action Types
 // -------------------------------------------------------------------------------------------------
 
-export const INFO_BAR_HIDE = 'INFO_BAR_HIDE';
-export const INFO_BAR_SHOW = 'INFO_BAR_SHOW';
+export const INFO_BAR_USAGE_ALLOW = 'INFO_BAR_USAGE_ALLOW';
+export const INFO_BAR_USAGE_DENY = 'INFO_BAR_USAGE_DENY';
+
+export const INFO_BAR_MOBILE_SHOW = 'INFO_BAR_MOBILE_SHOW';
+export const INFO_BAR_MOBILE_HIDE = 'INFO_BAR_MOBILE_HIDE';
+export const INFO_BAR_MOBILE_TOGGLE = 'INFO_BAR_MOBILE_TOGGLE';
 
 // -------------------------------------------------------------------------------------------------
 // Action Creators
 // -------------------------------------------------------------------------------------------------
 
-/**
- * Show info bar
- * @returns {{type: string}}
- */
-export function actionInfoBarShow() {
-   return {
-      type: INFO_BAR_SHOW,
-   };
-}
+// Usage
+// -------------------------------------------------------------------------------------------------
+export const actionAllowUsageInfoBar = () => {
+   return { type: INFO_BAR_USAGE_ALLOW };
+};
 
-/**
- * Hide info bar
- * @returns {{type: string}}
- */
-export function actionInfoBarHide() {
-   return {
-      type: INFO_BAR_HIDE,
-   };
-}
+export const actionDenyUsageInfoBar = () => {
+   return { type: INFO_BAR_USAGE_DENY };
+};
+
+// Mobile visibility
+// -------------------------------------------------------------------------------------------------
+export const actionShowInfoBarMobile = () => {
+   return { type: INFO_BAR_MOBILE_SHOW };
+};
+
+export const actionHideInfoBarMobile = () => {
+   return { type: INFO_BAR_MOBILE_HIDE };
+};
+
+export const actionToggleInfoBarMobile = () => {
+   return { type: INFO_BAR_MOBILE_TOGGLE };
+};

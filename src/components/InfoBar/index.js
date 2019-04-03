@@ -64,7 +64,7 @@ class InfoBar extends React.Component {
 
    render() {
       return (
-         <nav className={!this.props.visibility ? 'info-bar info-bar_hidden' : 'info-bar'}>
+         <nav className="info-bar">
             {infoBarItems.map((groupValue, groupIdx) => (
                <InfoBarGroup key={groupIdx} title={groupValue.title} items={groupValue.items} />
             ))}
@@ -78,18 +78,11 @@ class InfoBar extends React.Component {
 // -------------------------------------------------------------------------------------------------
 
 const mapStateToProps = state => {
-   return {
-      visibility: state.reducerInfoBar.visibility,
-   };
+   return {};
 };
 
 const mapDispatchToProps = dispatch => {
-   return bindActionCreators(
-      {
-         // Action objects {type: ...}
-      },
-      dispatch,
-   );
+   return bindActionCreators({}, dispatch);
 };
 
 export default connect(
