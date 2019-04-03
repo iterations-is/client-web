@@ -28,5 +28,8 @@ const combinedReducers = combineReducers({
 // -------------------------------------------------------------------------------------------------
 
 export default (initialState, options) => {
-   return createStore(combinedReducers, initialState);
+   // New store with Redux Dev Tools
+   return typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__
+      ? createStore(combinedReducers, initialState, window.__REDUX_DEVTOOLS_EXTENSION__())
+      : createStore(combinedReducers, initialState);
 };
