@@ -22,26 +22,31 @@ const initialState = {
          name: 'Iterations',
          link: '/dashboard',
          icon: ['fas', 'circle-notch'],
+         permissions: [],
       },
       {
          name: 'Project List',
          link: '/search',
          icon: ['fas', 'list'],
+         permissions: [],
       },
       {
          name: 'Add Project',
          link: '/add',
          icon: ['fas', 'plus'],
+         permissions: ['project.create'],
       },
       {
          name: 'Notifications',
          link: '/notifications',
          icon: ['fas', 'bell'],
+         permissions: [],
       },
       {
          name: 'Panel',
          link: '/panel',
          icon: ['fas', 'key'],
+         permissions: [],
       },
    ],
 
@@ -50,11 +55,13 @@ const initialState = {
          name: 'FAQ',
          link: '/faq',
          icon: ['fas', 'question'],
+         permissions: [],
       },
       {
          name: 'Sign Out',
          link: '/auth/signout',
          icon: ['fas', 'sign-out-alt'],
+         permissions: [],
       },
    ],
 };

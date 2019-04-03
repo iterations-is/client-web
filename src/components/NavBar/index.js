@@ -7,6 +7,7 @@ import React from 'react';
 import Link from 'next/link';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { haveAtLeastOneOfPermissions } from 'utils/permissions.util';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,7 +20,6 @@ import {
    faQuestion,
    faBell,
 } from '@fortawesome/free-solid-svg-icons';
-
 library.add(faBell, faKey, faCircleNotch, faKey, faPlus, faSignOutAlt, faList, faQuestion, faBell);
 
 // -------------------------------------------------------------------------------------------------
@@ -40,16 +40,26 @@ class NavBar extends React.Component {
       return (
          <nav className={!this.props.visibilityMobile ? 'nav-bar' : 'nav-bar nav-bar_mobile-show'}>
             <ul>
-               {this.props.itemsTop.map((item, index) => (
-                  <li key={index}>
-                     <Link href={item.link}>
-                        <a>
-                           <FontAwesomeIcon icon={item.icon} />
-                           <span>{item.name}</span>
-                        </a>
-                     </Link>
-                  </li>
-               ))}
+               {this.props.itemsTop.map((item, index) => {
+                  if (
+                     item.permissions &&
+                     haveAtLeastOneOfPermissions(
+                        this.props.jwtPayload.permissions,
+                        item.permissions,
+                     )
+                  ) {
+                     return (
+                        <li key={index}>
+                           <Link href={item.link}>
+                              <a>
+                                 <FontAwesomeIcon icon={item.icon} />
+                                 <span>{item.name}</span>
+                              </a>
+                           </Link>
+                        </li>
+                     );
+                  }
+               })}
             </ul>
 
             <div>
