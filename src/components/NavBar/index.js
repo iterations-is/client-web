@@ -5,7 +5,10 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
+import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
    faCircleNotch,
@@ -14,65 +17,34 @@ import {
    faSignOutAlt,
    faList,
    faQuestion,
+   faBell,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { faBell } from '@fortawesome/free-regular-svg-icons';
+library.add(faBell, faKey, faCircleNotch, faKey, faPlus, faSignOutAlt, faList, faQuestion, faBell);
 
-const navBarItems = [
-   {
-      name: 'Iterations',
-      link: '/dashboard',
-      icon: <FontAwesomeIcon icon={faCircleNotch} />,
-   },
-   {
-      name: 'Project List',
-      link: '/search',
-      icon: <FontAwesomeIcon icon={faList} />,
-   },
-   {
-      name: 'Add Project',
-      link: '/add',
-      icon: <FontAwesomeIcon icon={faPlus} />,
-   },
-   {
-      name: 'Notifications',
-      link: '/notifications',
-      icon: <FontAwesomeIcon icon={faBell} />,
-   },
-   {
-      name: 'Admin panel',
-      link: '/panel',
-      icon: <FontAwesomeIcon icon={faKey} />,
-   },
-];
+// -------------------------------------------------------------------------------------------------
+// Component
+// -------------------------------------------------------------------------------------------------
 
-const navBarItemsSecondary = [
-   {
-      name: 'FAQ',
-      link: '/faq',
-      icon: <FontAwesomeIcon icon={faQuestion} />,
-   },
-   {
-      name: 'Sign Out',
-      link: '/auth/signout',
-      icon: <FontAwesomeIcon icon={faSignOutAlt} />,
-   },
-];
+class NavBar extends React.Component {
+   // Init
+   // ----------------------------------------------------------------------------------------------
 
-class Index extends React.Component {
-   constructor(props) {
-      super(props);
-   }
+   // Methods
+   // ----------------------------------------------------------------------------------------------
+
+   // Render
+   // ----------------------------------------------------------------------------------------------
 
    render() {
       return (
          <nav className="nav-bar">
             <ul>
-               {navBarItems.map((item, index) => (
+               {this.props.itemsTop.map((item, index) => (
                   <li key={index}>
                      <Link href={item.link}>
                         <a>
-                           {item.icon}
+                           <FontAwesomeIcon icon={item.icon} />
                            <span>{item.name}</span>
                         </a>
                      </Link>
@@ -87,11 +59,11 @@ class Index extends React.Component {
                   </li>
                </ul>
                <ul className={'nav-bar__small'}>
-                  {navBarItemsSecondary.map((item, index) => (
+                  {this.props.itemsBottom.map((item, index) => (
                      <li key={index}>
                         <Link href={item.link}>
                            <a>
-                              {item.icon}
+                              <FontAwesomeIcon icon={item.icon} />
                               <span>{item.name}</span>
                            </a>
                         </Link>
@@ -104,4 +76,24 @@ class Index extends React.Component {
    }
 }
 
-export default Index;
+// -------------------------------------------------------------------------------------------------
+// Redux
+// -------------------------------------------------------------------------------------------------
+
+const mapStateToProps = state => {
+   return {
+      visibilityMobile: state.reducerNavBar.visibilityMobile,
+      itemsTop: state.reducerNavBar.itemsTop,
+      itemsBottom: state.reducerNavBar.itemsBottom,
+      jwtPayload: state.reducerJWT.payload,
+   };
+};
+
+const mapDispatchToProps = dispatch => {
+   return bindActionCreators({}, dispatch);
+};
+
+export default connect(
+   mapStateToProps,
+   mapDispatchToProps,
+)(NavBar);

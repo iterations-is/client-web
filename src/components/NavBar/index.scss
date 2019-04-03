@@ -6,6 +6,7 @@
 .nav-bar {
    $size: 80px;
 
+   flex: 0 0 80px;
    top: 0;
    left: 0;
    z-index: 5000;
@@ -82,26 +83,42 @@
 @include media-breakpoint-down(md) {
    .nav-bar {
       $size: 80px;
-
+      width: 100%;
       display: none;
+      background-color: rgba(255, 255, 255, 0.95);
 
       ul li {
          height: $size / 2;
          width: 100%;
 
-         a {
-            width: 100%;
-            height: $size / 2;
+         justify-content: flex-start;
 
-            justify-content: flex-start;
-
-            svg {
-               margin: 0 30px;
-            }
+         svg {
+            margin: 0 30px;
          }
          span {
             display: block;
          }
+
+         svg,
+         span {
+            color: $color-asphalt-dark !important;
+         }
+
+         &:hover {
+            svg,
+            span {
+               color: white !important;
+            }
+         }
       }
+   }
+
+   .nav-bar__group_bottom {
+      display: none;
+   }
+
+   .nav-bar_mobile-show {
+      display: block;
    }
 }
