@@ -22,3 +22,26 @@ h3 {
    font-size: 19px;
    font-weight: 600;
 }
+
+main {
+
+   h1 {
+      font-size: 28px;
+      font-weight: 600;
+
+      &.unique {
+         font-weight: 200;
+         color: $color-sun-medium;
+      }
+   }
+
+   h2 {
+      font-size: 23px;
+      font-weight: 600;
+   }
+
+   h3 {
+      font-size: 19px;
+      font-weight: 600;
+   }
+}

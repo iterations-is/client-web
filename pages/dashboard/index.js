@@ -67,7 +67,6 @@ class DashboardPage extends React.Component {
    render() {
       return (
          <CommonLayout>
-            <p>Dashboard page.</p>
             <p>
                Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices viverra neque eget
                semper. Donec iaculis laoreet lorem, non mattis enim faucibus non. Suspendisse eu
@@ -80,6 +79,59 @@ class DashboardPage extends React.Component {
                ante eu sapien. Phasellus eget velit vel turpis consequat auctor at sit amet magna.
                In hac habitasse platea dictumst. Phasellus non tempus mauris.
             </p>
+            <p>
+               Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices viverra neque eget
+               semper. Donec iaculis laoreet lorem, non mattis enim faucibus non. Suspendisse eu
+               justo consequat, pulvinar tellus ut, pulvinar est. Fusce efficitur euismod tellus, in
+               tincidunt sem scelerisque vel. Nunc iaculis, odio eget aliquam laoreet, mi quam
+               suscipit lectus, sed rhoncus lacus dui eu elit. In quis risus turpis. Donec congue
+               felis vitae sollicitudin placerat. Vestibulum sit amet enim varius elit finibus
+               egestas sit amet sed est. Suspendisse blandit nulla accumsan nulla tempor laoreet.
+               Nunc dignissim, massa sed posuere lobortis, sem nibh lobortis lectus, ac luctus risus
+               ante eu sapien. Phasellus eget velit vel turpis consequat auctor at sit amet magna.
+               In hac habitasse platea dictumst. Phasellus non tempus mauris.
+            </p>
+            {/* Radio */}
+            {/* Checkbox simple */}
+            {/* Checkbox switch */}
+            <a className="button button_blue">Example Button</a>
+            <a className="button button_yellow">Example Button</a>
+            <a className="button button_red">Example Button</a>
+            <a className="button button_silver">Example Button</a>
+            <a className="button button_green">Example Button</a>
+            <a className="button button_gray">Example Button</a>
+            {/* Buttons */}
+            <h1>Style guide is a very important part of the design</h1>
+            <h2>Style guide is a very important part of the design</h2>
+            <h3>Style guide is a very important part of the design</h3>
+
+            <p>
+               Maecenas metus dui, tincidunt non nibh vel, ullamcorper facilisis eros. Nullam
+               aliquet massa enim, id tincidunt justo pretium quis. Nam coue nulla diam, vel
+               porttitor ante viverra id.
+            </p>
+
+            <p>
+               <strong>
+                  Maecenas metus dui, tincidunt non nibh vel, ullamcorper facilisis eros. Nullam
+                  aliquet massa enim, id tincidunt justo pretium quis. Nam coue nulla diam, vel
+                  porttitor ante viverra id.
+               </strong>
+            </p>
+
+            <p>
+               <em>
+                  Maecenas metus dui, tincidunt non nibh vel, ullamcorper facilisis eros. Nullam
+                  aliquet massa enim, id tincidunt justo pretium quis. Nam coue nulla diam, vel
+                  porttitor ante viverra id.
+               </em>
+            </p>
+
+            {/* Table */}
+            {/* Inputs */}
+            {/* Textarea */}
+
+            {/* Tags */}
 
             <button onClick={e => this.onPingTokenCall(e)}>Ping With Token Call</button>
          </CommonLayout>
