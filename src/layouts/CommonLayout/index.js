@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import NavBar from 'components/NavBar';
 import InfoBar from 'components/InfoBar';
 import Header from 'components/PageHeader';
+import MobileBar from 'components/MobileBar';
 
 class CommonLayout extends React.Component {
    render() {
@@ -22,6 +23,8 @@ class CommonLayout extends React.Component {
                <Header />
                <div className="container-fluid">{this.props.children}</div>
             </main>
+
+            <MobileBar />
          </div>
       );
    }

@@ -38,7 +38,7 @@ class NavBar extends React.Component {
 
    render() {
       return (
-         <nav className="nav-bar">
+         <nav className={!this.props.visibilityMobile ? 'nav-bar' : 'nav-bar nav-bar_mobile-show'}>
             <ul>
                {this.props.itemsTop.map((item, index) => (
                   <li key={index}>

@@ -63,8 +63,11 @@ class InfoBar extends React.Component {
    // ----------------------------------------------------------------------------------------------
 
    render() {
+      let infoBarClassName = 'info-bar';
+      if (this.props.visibilityMobile) infoBarClassName += ' info-bar_visibility-mobile';
+
       return (
-         <nav className="info-bar">
+         <nav className={infoBarClassName}>
             {infoBarItems.map((groupValue, groupIdx) => (
                <InfoBarGroup key={groupIdx} title={groupValue.title} items={groupValue.items} />
             ))}
@@ -78,7 +81,9 @@ class InfoBar extends React.Component {
 // -------------------------------------------------------------------------------------------------
 
 const mapStateToProps = state => {
-   return {};
+   return {
+      visibilityMobile: state.reducerInfoBar.visibilityMobile,
+   };
 };
 
 const mapDispatchToProps = dispatch => {
