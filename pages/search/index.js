@@ -8,8 +8,8 @@ import { verifyJWT } from 'utils/authorization.util';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionSetUsageTabBar } from 'actions/tab-bar.action';
-import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
+import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
@@ -27,7 +27,7 @@ class SearchPage extends React.Component {
 
       // Header
       ctx.store.dispatch(actionSetPageTitle('Search'));
-      ctx.store.dispatch(actionSetUsagePageVerifiedMark(true));
+      ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
       ctx.store.dispatch(actionSetUsageTabBar(false));
 
       // Info Bar

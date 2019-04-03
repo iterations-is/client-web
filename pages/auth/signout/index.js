@@ -7,9 +7,9 @@ import { verifyJWT } from 'utils/authorization.util';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-// import { actionSetPageTitle, actionSetPageVerifiedMark } from 'actions/page-header.action';
-// import { actionHideInfoBar } from 'actions/info-bar.action';
-// import { actionChangeTabBarUsage } from 'actions/page-tabbar.action';
+import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
+import { actionSetUsageTabBar } from 'actions/tab-bar.action';
+import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
@@ -25,13 +25,13 @@ class SignOutPage extends React.Component {
    static async getInitialProps(ctx) {
       await verifyJWT(ctx);
 
-      // // Set page header
-      // ctx.store.dispatch(actionSetPageTitle('FAQ'));
-      // ctx.store.dispatch(actionSetPageVerifiedMark(false));
-      // ctx.store.dispatch(actionChangeTabBarUsage(false));
-      //
-      // // Info Bar
-      // ctx.store.dispatch(actionHideInfoBar());
+      // Header
+      ctx.store.dispatch(actionSetPageTitle('Sign out'));
+      ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
+      ctx.store.dispatch(actionSetUsageTabBar(false));
+
+      // Info Bar
+      ctx.store.dispatch(actionSetUsageInfoBar(false));
 
       return {};
    }

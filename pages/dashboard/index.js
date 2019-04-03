@@ -34,10 +34,10 @@ class DashboardPage extends React.Component {
       // Header
       ctx.store.dispatch(actionSetPageTitle('Dashboard'));
       ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
-      ctx.store.dispatch(actionSetUsageTabBar(true));
+      ctx.store.dispatch(actionSetUsageTabBar(false));
 
       // Info Bar
-      ctx.store.dispatch(actionSetUsageInfoBar(true));
+      ctx.store.dispatch(actionSetUsageInfoBar(false));
 
       return {};
    }
