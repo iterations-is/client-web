@@ -16,6 +16,19 @@ import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page
 
 import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+   faCircleNotch,
+   faKey,
+   faPlus,
+   faSignOutAlt,
+   faList,
+   faQuestion,
+   faBell,
+   faTrash,
+} from '@fortawesome/free-solid-svg-icons';
+library.add(faBell, faKey, faCircleNotch, faKey, faPlus, faSignOutAlt, faList, faQuestion, faTrash);
 
 // set up cookies
 const cookies = new Cookies();
@@ -97,9 +110,60 @@ class DashboardPage extends React.Component {
             <a className="button button_blue">Example Button</a>
             <a className="button button_yellow">Example Button</a>
             <a className="button button_red">Example Button</a>
+            <div />
+
             <a className="button button_silver">Example Button</a>
             <a className="button button_green">Example Button</a>
             <a className="button button_gray">Example Button</a>
+
+            <div />
+
+            <a className="button button_blue">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+               Example Button
+            </a>
+            <a className="button button_yellow">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+               Example Button
+            </a>
+            <a className="button button_red">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+               Example Button
+            </a>
+            <div />
+            <a className="button button_silver">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+               Example Button
+            </a>
+            <a className="button button_green">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+               Example Button
+            </a>
+            <a className="button button_gray">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+               Example Button
+            </a>
+
+            <div />
+
+            <a className="sq-button sq-button_blue">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+            </a>
+            <a className="sq-button sq-button_yellow">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+            </a>
+            <a className="sq-button sq-button_red">
+               <FontAwesomeIcon icon={['fas', 'trash']} />
+            </a>
+            <a className="sq-button sq-button_silver">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+            </a>
+            <a className="sq-button sq-button_green">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+            </a>
+            <a className="sq-button sq-button_gray">
+               <FontAwesomeIcon icon={['fas', 'bell']} />
+            </a>
             {/* Buttons */}
             <h1>Style guide is a very important part of the design</h1>
             <h2>Style guide is a very important part of the design</h2>
