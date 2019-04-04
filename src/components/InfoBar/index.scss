@@ -6,21 +6,26 @@
 .info-bar {
    width: 280px;
    flex: 0 0 280px;
-   margin-left: 80px;
    min-height: 100vh;
 
    border-right: 1px solid $line-separator;
-   background: url('/static/images/theme_iterations/logo_white_light.svg') -100px 0;
-   background-attachment: fixed;
+   background: url('/static/images/theme_iterations/logo_white_light.svg') -100px 0 fixed;
 }
 
 @include media-breakpoint-down(md) {
    .info-bar {
       margin-left: 0;
-   }
-}
-@include media-breakpoint-down(sm) {
-   .info-bar {
       display: none;
+      width: 100%;
+      height: 100vh;
+      padding-bottom: 37px;
+      overflow: scroll;
+      background: rgba(255, 255, 255, 0.95);
+      z-index: 50;
+   }
+
+   .info-bar_visibility-mobile {
+      display: block;
+      position: fixed;
    }
 }

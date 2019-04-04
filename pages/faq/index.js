@@ -1,5 +1,5 @@
 /**
- * @file Search
+ * @file FAQ
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
@@ -7,8 +7,8 @@ import { verifyJWT } from 'utils/authorization.util';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionSetUsageTabBar } from 'actions/tab-bar.action';
 import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
+import { actionSetUsageTabBar } from 'actions/tab-bar.action';
 import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
@@ -18,7 +18,7 @@ import CommonLayout from 'layouts/CommonLayout';
 // Component
 // -------------------------------------------------------------------------------------------------
 
-class SearchPage extends React.Component {
+class FAQPage extends React.Component {
    // Init
    // ----------------------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ class SearchPage extends React.Component {
       await verifyJWT(ctx);
 
       // Header
-      ctx.store.dispatch(actionSetPageTitle('Search'));
+      ctx.store.dispatch(actionSetPageTitle('FAQ'));
       ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
       ctx.store.dispatch(actionSetUsageTabBar(false));
 
@@ -47,7 +47,36 @@ class SearchPage extends React.Component {
          <CommonLayout>
             <div className={'row'}>
                <div className="col-md-6 col-sm-12">
-                  <h1>Search</h1>
+                  <h1>Documentation</h1>
+                  <p>
+                     <strong>Q:</strong> I don't know how to do XYZ, where can I find it?
+                     <br />
+                     <strong>A:</strong> User documentation is available at{' '}
+                     <a href="https://iterations-is.github.io/docs-dev/#/" target="_blank">
+                        https://iterations-is.github.io/docs-dev/
+                     </a>
+                  </p>
+               </div>
+               <div className="col-md-6 col-sm-12">
+                  <h1>Personal information</h1>
+
+                  <p>
+                     <strong>Q:</strong> I don't know how to do XYZ, where can I find it?
+                     <br />
+                     <strong>A:</strong> User documentation is available at{' '}
+                     <a href="https://iterations-is.github.io/docs-dev/#/" target="_blank">
+                        https://iterations-is.github.io/docs-dev/
+                     </a>
+                  </p>
+
+                  <p>
+                     <strong>Q:</strong> I don't know how to do XYZ, where can I find it?
+                     <br />
+                     <strong>A:</strong> User documentation is available at{' '}
+                     <a href="https://iterations-is.github.io/docs-dev/#/" target="_blank">
+                        https://iterations-is.github.io/docs-dev/
+                     </a>
+                  </p>
                </div>
             </div>
          </CommonLayout>
@@ -70,4 +99,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
    mapStateToProps,
    mapDispatchToProps,
-)(SearchPage);
+)(FAQPage);

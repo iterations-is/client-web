@@ -6,9 +6,9 @@
 import axios from 'axios';
 import Router from 'next/router';
 import { Cookies } from 'react-cookie';
+import { actionSetJWT } from 'actions/jwt.action';
 
 const cookies = new Cookies();
-
 const configServer = require('config/server.config');
 
 /**
@@ -33,6 +33,9 @@ export async function verifyJWT(ctx) {
       // Client - get token from cookies
       token = cookies.get('JWT');
    }
+
+   // Set new token to redux
+   ctx.store.dispatch(actionSetJWT(token));
 
    try {
       await axios.get(configServer.host + '/api/token/verify', {

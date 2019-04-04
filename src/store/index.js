@@ -9,12 +9,18 @@ import { combineReducers } from 'redux';
 // -------------------------------------------------------------------------------------------------
 // Reducers
 // -------------------------------------------------------------------------------------------------
+import reducerInfoBar from 'reducers/info-bar.reducer';
+import reducerJWT from 'reducers/jwt.reducer';
+import reducerNavBar from 'reducers/nav-bar.reducer';
 import reducerPageHeader from 'reducers/page-header.reducer';
-import reducerPageTabBar from 'reducers/page-tabbar.reducer';
+import reducerTabBar from 'reducers/tab-bar.reducer';
 
 const combinedReducers = combineReducers({
+   reducerInfoBar,
+   reducerJWT,
+   reducerNavBar,
    reducerPageHeader,
-   reducerPageTabBar,
+   reducerTabBar,
 });
 
 // -------------------------------------------------------------------------------------------------
@@ -22,5 +28,8 @@ const combinedReducers = combineReducers({
 // -------------------------------------------------------------------------------------------------
 
 export default (initialState, options) => {
-   return createStore(combinedReducers, initialState);
+   // New store with Redux Dev Tools
+   return typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__
+      ? createStore(combinedReducers, initialState, window.__REDUX_DEVTOOLS_EXTENSION__())
+      : createStore(combinedReducers, initialState);
 };

@@ -1,5 +1,5 @@
 /**
- * @file Page header
+ * @file JWT
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
@@ -7,23 +7,15 @@
 // Action Types
 // -------------------------------------------------------------------------------------------------
 
-export const SET_PAGE_TITLE = 'SET_PAGE_TITLE';
-export const SET_PAGE_TITLE_MARK = 'SET_PAGE_TITLE_MARK';
+export const SET_JWT = 'SET_JWT';
 
 // -------------------------------------------------------------------------------------------------
 // Action Creators
 // -------------------------------------------------------------------------------------------------
 
-export function actionSetPageTitle(title) {
+export function actionSetJWT(token) {
    return {
-      type: SET_PAGE_TITLE,
-      title,
-   };
-}
-
-export function actionSetUsagePageVerifiedMark(verifiedMark) {
-   return {
-      type: SET_PAGE_TITLE_MARK,
-      verifiedMark: verifiedMark,
+      type: SET_JWT,
+      token: token,
    };
 }

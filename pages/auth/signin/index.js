@@ -19,13 +19,13 @@ import Loader from 'components/Loader';
 // set up cookies
 const cookies = new Cookies();
 
+// -------------------------------------------------------------------------------------------------
+// Component
+// -------------------------------------------------------------------------------------------------
+
 class Index extends React.Component {
-   constructor(props) {
-      super(props);
-      this.state = {
-         isWaitingForToken: false,
-      };
-   }
+   // Init
+   // ----------------------------------------------------------------------------------------------
 
    static async getInitialProps() {
       const response = await axios.get(configServer.host + '/api/token/temporary');
@@ -35,6 +35,16 @@ class Index extends React.Component {
          tokenTmp,
       };
    }
+
+   constructor(props) {
+      super(props);
+      this.state = {
+         isWaitingForToken: false,
+      };
+   }
+
+   // Methods
+   // ----------------------------------------------------------------------------------------------
 
    loginGithub = async e => {
       this.setState({
@@ -70,6 +80,9 @@ class Index extends React.Component {
          }
       }, 2000);
    };
+
+   // Render
+   // ----------------------------------------------------------------------------------------------
 
    render() {
       return (

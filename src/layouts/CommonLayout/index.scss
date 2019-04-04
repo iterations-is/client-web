@@ -5,14 +5,10 @@
 
 .layout_common {
    display: flex;
+   padding-left: 80px;
 
-   background: url('/static/images/theme_iterations/logo_white_light.svg') -250px 0;
+   background: url('/static/images/theme_iterations/logo_white_light.svg') -250px 0 fixed;
    background-size: 300px;
-   background-attachment: fixed;
-
-   .nav-bar {
-      flex: 0 0 80px;
-   }
 
    main {
       background-color: white;
@@ -22,6 +18,7 @@
          padding-top: $grid-gutter-width / 2;
          padding-bottom: $grid-gutter-width / 2;
 
+         // FIXME Sometimes useless
          & > :first-child {
             margin-top: 0;
          }
@@ -30,5 +27,10 @@
             margin-bottom: 0;
          }
       }
+   }
+
+   @include media-breakpoint-down(md) {
+      padding-left: 0;
+      display: block;
    }
 }

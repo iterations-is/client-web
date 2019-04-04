@@ -7,8 +7,8 @@ import { verifyJWT } from 'utils/authorization.util';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionSetUsageTabBar } from 'actions/tab-bar.action';
 import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
+import { actionSetUsageTabBar } from 'actions/tab-bar.action';
 import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
@@ -18,7 +18,7 @@ import CommonLayout from 'layouts/CommonLayout';
 // Component
 // -------------------------------------------------------------------------------------------------
 
-class SearchPage extends React.Component {
+class SignOutPage extends React.Component {
    // Init
    // ----------------------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ class SearchPage extends React.Component {
       await verifyJWT(ctx);
 
       // Header
-      ctx.store.dispatch(actionSetPageTitle('Search'));
+      ctx.store.dispatch(actionSetPageTitle('Sign out'));
       ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
       ctx.store.dispatch(actionSetUsageTabBar(false));
 
@@ -47,7 +47,7 @@ class SearchPage extends React.Component {
          <CommonLayout>
             <div className={'row'}>
                <div className="col-md-6 col-sm-12">
-                  <h1>Search</h1>
+                  <h1>Sign out...</h1>
                </div>
             </div>
          </CommonLayout>
@@ -70,4 +70,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
    mapStateToProps,
    mapDispatchToProps,
-)(SearchPage);
+)(SignOutPage);

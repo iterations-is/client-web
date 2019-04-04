@@ -1,0 +1,57 @@
+////
+/// NavBar
+/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
+////
+
+.mobile-bar {
+   width: 100%;
+   border-top: 1px solid $line-separator;
+   background-color: $color-asphalt-medium;
+   color: white;
+   position: fixed;
+   bottom: 0;
+   display: none;
+   left: 0;
+   z-index: 5010;
+
+   ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: space-around;
+      margin: 0;
+      padding: 0;
+
+      li {
+         flex: 1 1 0;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+
+         text-align: center;
+         padding: 8px 0;
+         text-transform: uppercase;
+         font-size: 12px;
+         line-height: 20px;
+         svg {
+            width: 20px !important;
+            height: 20px !important;
+         }
+
+         span {
+            padding: 0 8px;
+         }
+      }
+   }
+}
+
+@include media-breakpoint-down(md) {
+   .mobile-bar {
+      display: block;
+   }
+}
+
+@include media-breakpoint-down(sm) {
+   .mobile-bar__label {
+      display: none;
+   }
+}

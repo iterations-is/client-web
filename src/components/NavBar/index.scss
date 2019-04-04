@@ -28,16 +28,12 @@
          height: $size;
          overflow: hidden;
 
-         span {
-            color: white;
-            display: none;
-         }
-
          &:not(.nav-bar__logotype):hover {
             background: $color-asphalt-light;
          }
 
          a {
+            text-decoration: none;
             width: $size;
             height: $size;
             display: flex;
@@ -49,20 +45,21 @@
                width: $size / 4 !important;
                height: $size / 4 !important;
             }
+
+            span {
+               color: white;
+               display: none;
+            }
          }
       }
 
       &.nav-bar__small {
          display: flex;
 
-         li {
+         li,
+         li a {
             width: $size / 2;
             height: $size/ 2;
-
-            a {
-               width: $size / 2;
-               height: $size/2;
-            }
          }
       }
    }
@@ -82,26 +79,50 @@
 @include media-breakpoint-down(md) {
    .nav-bar {
       $size: 80px;
-
+      width: 100%;
       display: none;
+      background-color: rgba(255, 255, 255, 0.95);
 
       ul li {
          height: $size / 2;
          width: 100%;
 
          a {
-            width: 100%;
             height: $size / 2;
+            width: 100%;
 
             justify-content: flex-start;
+            color: $color-asphalt-dark;
 
             svg {
-               margin: 0 30px;
+               margin: 0 $g3;
+            }
+            span {
+               display: block;
+            }
+
+            svg,
+            span {
+               color: $color-asphalt-dark !important;
             }
          }
-         span {
-            display: block;
+
+         justify-content: flex-start;
+
+         &:hover {
+            svg,
+            span {
+               color: white !important;
+            }
          }
       }
+   }
+
+   .nav-bar__group_bottom {
+      display: none;
+   }
+
+   .nav-bar_mobile-show {
+      display: block;
    }
 }

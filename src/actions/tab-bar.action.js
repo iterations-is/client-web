@@ -1,5 +1,5 @@
 /**
- * @file Page Tab Bar
+ * @file Tab Bar
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
@@ -7,31 +7,21 @@
 // Action Types
 // -------------------------------------------------------------------------------------------------
 
-export const CHANGE_TAB_BAR_VISIBILITY = 'CHANGE_TAB_BAR_VISIBILITY';
+export const SET_TAB_BAR_USAGE = 'CHANGE_TAB_BAR_USAGE';
 export const SET_TAB_BAR_ITEMS = 'SET_TAB_BAR_ITEMS';
 
 // -------------------------------------------------------------------------------------------------
 // Action Creators
 // -------------------------------------------------------------------------------------------------
 
-/**
- * Change page tab bar
- * @param {boolean} visibility
- * @returns {{visibility: boolean, type: string}}
- */
-export function actionChangePageTabBarVisibility(visibility) {
+export function actionSetUsageTabBar(usage) {
    return {
-      type: CHANGE_TAB_BAR_VISIBILITY,
-      visibility,
+      type: SET_TAB_BAR_USAGE,
+      usage,
    };
 }
 
-/**
- * Set page tab bar items
- * @param {object} items
- * @returns {{type: string, items: object}}
- */
-export function actionSetPageTabBarItems(items) {
+export function actionSetTabBarItems(items) {
    return {
       type: SET_TAB_BAR_ITEMS,
       items,

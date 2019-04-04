@@ -1,46 +1,31 @@
 /**
- * @file Page tab bar
+ * @file JWT
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
-import { CHANGE_TAB_BAR_VISIBILITY, SET_TAB_BAR_ITEMS } from 'actions/page-tabbar.action';
+import { SET_JWT } from 'actions/jwt.action';
+const jwt = require('jsonwebtoken');
 
 // -------------------------------------------------------------------------------------------------
 // Initial state
 // -------------------------------------------------------------------------------------------------
 
 const initialState = {
-   visibility: false,
-   items: [
-      {
-         tabTitle: 'Example',
-         tabLink: '/',
-         tabActive: true,
-      },
-      {
-         tabTitle: 'Tab',
-         tabLink: '/',
-         tabActive: false,
-      },
-   ],
+   token: '',
+   payload: '',
 };
 
 // -------------------------------------------------------------------------------------------------
 // Reducer
 // -------------------------------------------------------------------------------------------------
 
-export default function reducerPageTabBar(state = initialState, action) {
+export default function reducerJWT(state = initialState, action) {
    switch (action.type) {
-      case CHANGE_TAB_BAR_VISIBILITY:
+      case SET_JWT:
          return {
             ...state,
-            visibility: action.visibility,
-         };
-
-      case SET_TAB_BAR_ITEMS:
-         return {
-            ...state,
-            items: action.items,
+            token: action.token,
+            payload: jwt.decode(action.token),
          };
 
       default:
