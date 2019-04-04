@@ -3,17 +3,30 @@
 /// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
 ////
 
+$button-colors: (
+   (blue, $color-indigo-dark, $color-indigo-medium, $color-indigo-light),
+   (yellow, $color-sun-dark, $color-sun-medium, $color-sun-light),
+   (red, $color-alizarin-dark, $color-alizarin-medium, $color-alizarin-light),
+   (silver, $color-silver-dark, $color-silver-medium, $color-silver-light),
+   (green, $color-turquoise-dark, $color-turquoise-medium, $color-turquoise-light),
+   (gray, $color-asphalt-dark, $color-asphalt-medium, $color-asphalt-light)
+);
+
 .button {
    display: inline-block;
    height: $g5;
    border-radius: $g1;
    padding: 0 $g3;
    text-decoration: none;
-   margin: 0;
+   margin: 0 0 3px;
    color: #fff;
    position: relative;
    font-size: 16px;
    line-height: $g5 - 1px;
+
+   & + & {
+      margin-left: $g1;
+   }
 
    &:active {
       transform: translate(0px, 3px);
@@ -25,19 +38,41 @@
    }
 }
 
-$button-colors: (
-   (blue, $color-indigo-dark, $color-indigo-medium, $color-indigo-light),
-   (yellow, $color-sun-dark, $color-sun-medium, $color-sun-light),
-   (red, $color-alizarin-dark, $color-alizarin-medium, $color-alizarin-light),
-   (silver, $color-silver-dark, $color-silver-medium, $color-silver-light),
-   (green, $color-turquoise-dark, $color-turquoise-medium, $color-turquoise-light),
-   (gray, $color-asphalt-dark, $color-asphalt-medium, $color-asphalt-light)
-);
-
 @each $name, $dark, $medium, $light in $button-colors {
    .button_#{$name} {
       background-color: $medium;
       box-shadow: 0 3px 0 0 $dark;
+      &:hover {
+         background-color: $light;
+      }
+   }
+}
+
+.sq-button {
+   display: inline-block;
+   height: $g5;
+   width: $g5;
+   text-align: center;
+   border-radius: $g1;
+   padding: 0;
+   text-decoration: none;
+   margin: 0 0;
+   color: #fff;
+   position: relative;
+   font-size: 16px;
+   line-height: $g5 - 1px;
+
+   & + & {
+      margin-left: $g1;
+   }
+   svg {
+      margin: 0;
+   }
+}
+
+@each $name, $dark, $medium, $light in $button-colors {
+   .sq-button_#{$name} {
+      background-color: $medium;
       &:hover {
          background-color: $light;
       }
