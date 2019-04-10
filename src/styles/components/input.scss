@@ -24,9 +24,9 @@ input[type='text'] {
    }
 }
 
-label {
+label:not(.switch) {
    display: block;
-   margin-bottom: $g2;
+   margin-bottom: $g1;
 
    span {
       font-weight: bold;

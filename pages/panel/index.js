@@ -18,6 +18,7 @@ import CommonLayout from 'layouts/CommonLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import Noty from 'noty';
 const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
@@ -59,6 +60,21 @@ class PanelPage extends React.Component {
    // Methods
    // ----------------------------------------------------------------------------------------------
 
+   ajaxPatchUserGlobalRole = async (values, actions) => {
+      try {
+         await axios.patch(`${configServer.host}/api/dashboard/role`, values);
+         new Noty({
+            text: 'User role was changed successfully.',
+            type: 'success',
+         }).show();
+      } catch (e) {
+         new Noty({
+            text: 'Cannot change user role.',
+            type: 'error',
+         }).show();
+      }
+   };
+
    // Render
    // ----------------------------------------------------------------------------------------------
 
@@ -76,17 +92,7 @@ class PanelPage extends React.Component {
                               username: '',
                               role: 1,
                            }}
-                           onSubmit={async (values, actions) => {
-                              try {
-                                 await axios.patch(
-                                    `${configServer.host}/api/dashboard/role`,
-                                    values,
-                                 );
-                                 console.log(`Done`);
-                              } catch (e) {
-                                 console.log(`Fail`);
-                              }
-                           }}
+                           onSubmit={this.ajaxPatchUserGlobalRole}
                            render={props => (
                               <Form>
                                  <label>
@@ -119,6 +125,7 @@ class PanelPage extends React.Component {
             <div className="row">
                <div className="col-12">
                   <h1>Permissions</h1>
+                  <p>Not implemented yet.</p>
                </div>
             </div>
          </CommonLayout>
