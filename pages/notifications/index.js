@@ -116,7 +116,7 @@ class NotificationsPage extends React.Component {
             id: 'isRead',
             maxWidth: 100,
             accessor: item => {
-               return item['isRead'] ? 'Unread' : '';
+               return item['isRead'] ? '' : 'Unread';
             },
          },
          {
