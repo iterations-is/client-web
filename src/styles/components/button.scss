@@ -23,6 +23,8 @@ $button-colors: (
    position: relative;
    font-size: 16px;
    line-height: $g5 - 1px;
+   cursor: pointer;
+   width: 100%;
 
    & + & {
       margin-left: $g1;
@@ -61,6 +63,8 @@ $button-colors: (
    position: relative;
    font-size: 16px;
    line-height: $g5 - 1px;
+   cursor: pointer;
+   border: none;
 
    & + & {
       margin-left: $g1;
