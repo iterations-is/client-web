@@ -154,6 +154,7 @@ class NotificationsPage extends React.Component {
                      data={this.state.notifications}
                      columns={columns}
                      filterable={false}
+                     noDataText={'No notifications.'}
                   />
                </div>
             </div>
