@@ -107,6 +107,18 @@ class DashboardPage extends React.Component {
             {/* Radio */}
             {/* Checkbox simple */}
             {/* Checkbox switch */}
+            <div />
+            <label className="switch">
+               <input type="checkbox" />
+               <span className="switch__inner" />
+            </label>
+            <label className="switch">
+               <input type="checkbox" defaultChecked />
+               <span className="switch__inner" />
+            </label>
+
+            <div />
+
             <a className="button button_blue">Example Button</a>
             <a className="button button_yellow">Example Button</a>
             <a className="button button_red">Example Button</a>
