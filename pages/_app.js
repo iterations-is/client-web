@@ -10,6 +10,9 @@ import store from 'store';
 import { Provider } from 'react-redux';
 import withRedux from 'next-redux-wrapper';
 
+import {} from 'utils/react-table.util';
+import {} from 'utils/axios.util';
+
 import 'styles/index.scss';
 
 class MyApp extends App {
