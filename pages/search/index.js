@@ -18,6 +18,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrash, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
+import Link from 'next/link';
 
 const configServer = require('config/server.config');
 
@@ -96,7 +97,14 @@ class SearchPage extends React.Component {
       const columns = [
          {
             Header: 'Name',
-            accessor: 'name',
+            id: 'name',
+            accessor: item => {
+               return (
+                  <Link as={`/project/${item.id}`} href={`/project?id_project=${item.id}`}>
+                     <a>{item.name}</a>
+                  </Link>
+               );
+            },
          },
          {
             Header: 'Category',
