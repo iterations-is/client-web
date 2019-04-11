@@ -254,21 +254,20 @@ class SearchPage extends React.Component {
                      filterable={true}
                      className={'table_search-projects'}
                      SubComponent={row => {
-                        let res = '';
-
                         return (
                            <div className="table__subsection">
                               <div className="row">
                                  <div className="col-6">
-                                    <h3>Description</h3>
+                                    <strong>Description</strong>
                                     <p>{row.original.descriptionPublic}</p>
                                  </div>
                                  <div className="col-6">
-                                    <h3>Created</h3>
-                                    <p>
+                                    <strong>Created: </strong>
+                                    <span>
                                        {moment(row.original.createdAt).format('DD.MM.YYYY HH:mm')}
-                                    </p>
-                                    <h3>Tags</h3>
+                                    </span>
+                                    <div />
+                                    <strong>Tags:</strong>
                                     <div className="tags">
                                        {row.original.tags.map((item, idx) => (
                                           <span className="tag" key={idx}>
