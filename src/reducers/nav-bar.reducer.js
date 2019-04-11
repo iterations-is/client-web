@@ -46,7 +46,12 @@ const initialState = {
          name: 'Panel',
          link: '/panel',
          icon: ['fas', 'key'],
-         permissions: [],
+         permissions: [
+            'admin.change_user_role',
+            'admin.add_global_role',
+            'admin.change_permission_for_role',
+            'admin.change_authority',
+         ],
       },
    ],
 

@@ -12,18 +12,14 @@ import { actionSetUsageTabBar } from 'actions/tab-bar.action';
 import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import ReactTable from 'react-table';
 import CommonLayout from 'layouts/CommonLayout';
+
 import axios from 'axios';
-
-const configServer = require('config/server.config');
-const $ = require('jquery');
-$.DataTable = require('datatables.net');
-
-import { library } from '@fortawesome/fontawesome-svg-core';
+import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
-library.add(faTrash, faEye);
+import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
 // Component
@@ -46,7 +42,6 @@ class NotificationsPage extends React.Component {
 
       // Ajax
       const token = ctx.store.getState().reducerJWT.token;
-      console.log(token);
 
       let notificationList;
       try {
@@ -64,120 +59,103 @@ class NotificationsPage extends React.Component {
 
    constructor(props) {
       super(props);
-      this.myRef = React.createRef();
-   }
 
-   componentDidMount() {
-      const tableActions = ReactDOMServer.renderToStaticMarkup(
-         <span>
-            <a href="" className="sq-button sq-button_blue editor_edit">
-               <FontAwesomeIcon icon={['fas', 'eye']} />
-            </a>
-            <a href="" className="sq-button sq-button_red editor_remove">
-               <FontAwesomeIcon icon={['fas', 'trash']} />
-            </a>
-         </span>,
-      );
-
-      console.log(this.props.notifications);
-      let table = $(this.myRef.current).DataTable({
-         dom: '<"table"<"table-find"f><"table-data"t><"table-info"li><"table-pages"p>>',
-         responsive: true,
-         data: this.props.notifications,
-         oLanguage: {
-            searchPlaceholder: 'Search records',
-            oPaginate: {
-               sFirst: '<<',
-               sPrevious: '<',
-               sNext: '>',
-               sLast: '>>',
-            },
-            sSearch: '',
-         },
-         aLengthMenu: [[10, 50, 100, -1], [10, 50, 100, 'All']],
-         pageLength: 10,
-         columns: [
-            {
-               title: 'ID',
-               data: 'id',
-               visible: false,
-               searchable: false,
-            },
-            {
-               title: 'Message',
-               data: 'message',
-            },
-            {
-               title: 'Read',
-               data: 'isRead',
-            },
-            {
-               searchable: false,
-               title: 'Edit',
-               data: null,
-               orderable: false,
-               className: 'table__edit',
-               defaultContent: tableActions,
-            },
-         ],
-      });
-
-      $('.dataTables_filter input').attr('placeholder', 'Search...');
-
-      $(this.myRef.current)
-         .find('tbody')
-         .on('click', 'tr', function() {
-            if ($(this).hasClass('selected')) {
-               $(this).removeClass('selected');
-            } else {
-               table.$('tr.selected').removeClass('selected');
-               $(this).addClass('selected');
-            }
-         });
-
-      $(this.myRef.current).on('click', 'a.editor_edit', function(e) {
-         e.preventDefault();
-
-         console.log(
-            $(this)
-               .closest('tr')
-               .find('td')
-               .eq(1)
-               .text(),
-         );
-      });
-
-      $(this.myRef.current).on('click', 'a.editor_remove', function(e) {
-         e.preventDefault();
-
-         table
-            .row('.selected')
-            .remove()
-            .draw(false);
-      });
-   }
-   componentWillUnmount() {
-      $('.data-table-wrapper')
-         .find('table')
-         .DataTable()
-         .destroy(true);
-   }
-   shouldComponentUpdate() {
-      return false;
+      this.state = {
+         notifications: [...this.props.notifications],
+      };
    }
 
    // Methods
    // ----------------------------------------------------------------------------------------------
 
+   ajaxToggleNotification = async row => {
+      try {
+         await axios.patch(`${configServer.host}/api/notification/${row.row._original.id}`);
+
+         let notifications = this.state.notifications;
+         notifications[row.index].isRead = !notifications[row.index].isRead;
+
+         this.setState({
+            notifications,
+         });
+      } catch (err) {}
+   };
+
+   ajaxRemoveNotification = async row => {
+      try {
+         await axios.delete(`${configServer.host}/api/notification/${row.row._original.id}`);
+
+         let notifications = this.state.notifications;
+         notifications.splice(row.index, 1);
+
+         this.setState({
+            notifications,
+         });
+      } catch (err) {}
+   };
+
    // Render
    // ----------------------------------------------------------------------------------------------
 
    render() {
+      const columns = [
+         {
+            Header: 'Message',
+            accessor: 'message',
+         },
+         {
+            Header: 'Date',
+            id: 'createdAt',
+            maxWidth: 150,
+            accessor: item => {
+               return moment(item['createdAt']).format('DD.MM.YYYY HH:mm');
+            },
+         },
+         {
+            Header: 'Read',
+            id: 'isRead',
+            maxWidth: 100,
+            accessor: item => {
+               return item['isRead'] ? '' : 'Unread';
+            },
+         },
+         {
+            Header: 'Edit',
+            filterable: false,
+            sortable: false,
+            className: 'table__edit',
+            width: 104,
+            Cell: row => {
+               return (
+                  <React.Fragment>
+                     <div
+                        className="sq-button sq-button_blue"
+                        onClick={() => this.ajaxToggleNotification(row)}
+                     >
+                        <FontAwesomeIcon icon={faEye} />
+                     </div>
+                     <div
+                        className="sq-button sq-button_red"
+                        onClick={() => this.ajaxRemoveNotification(row)}
+                     >
+                        <FontAwesomeIcon icon={faTrash} />
+                     </div>
+                  </React.Fragment>
+               );
+            },
+         },
+      ];
+
       return (
          <CommonLayout>
             <div className={'row'}>
                <div className="col-12">
-                  <table className={'table table-striped table-bordered'} ref={this.myRef} />
+                  <ReactTable
+                     data={this.state.notifications}
+                     columns={columns}
+                     filterable={false}
+                     noDataText={'No notifications.'}
+                  />
                </div>
             </div>
          </CommonLayout>

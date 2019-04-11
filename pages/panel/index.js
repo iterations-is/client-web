@@ -12,7 +12,14 @@ import { actionSetUsageTabBar } from 'actions/tab-bar.action';
 import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
+import { Field, Form, Formik } from 'formik';
 import CommonLayout from 'layouts/CommonLayout';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import Noty from 'noty';
+const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
 // Component
@@ -33,11 +40,40 @@ class PanelPage extends React.Component {
       // Info Bar
       ctx.store.dispatch(actionSetUsageInfoBar(false));
 
-      return {};
+      // Ajax
+      const token = ctx.store.getState().reducerJWT.token;
+
+      let globalRoles;
+      try {
+         globalRoles = await axios.get(`${configServer.host}/api/dashboard/roles`, {
+            headers: {
+               Authorization: token,
+            },
+         });
+      } catch (err) {}
+
+      return {
+         globalRoles: globalRoles.data.dat.roles,
+      };
    }
 
    // Methods
    // ----------------------------------------------------------------------------------------------
+
+   ajaxPatchUserGlobalRole = async (values, actions) => {
+      try {
+         await axios.patch(`${configServer.host}/api/dashboard/role`, values);
+         new Noty({
+            text: 'User role was changed successfully.',
+            type: 'success',
+         }).show();
+      } catch (e) {
+         new Noty({
+            text: 'Cannot change user role.',
+            type: 'error',
+         }).show();
+      }
+   };
 
    // Render
    // ----------------------------------------------------------------------------------------------
@@ -45,9 +81,51 @@ class PanelPage extends React.Component {
    render() {
       return (
          <CommonLayout>
-            <div className={'row'}>
-               <div className="col-md-6 col-sm-12">
-                  <h1>Admin panel</h1>
+            <div className="row">
+               <div className="col-6">
+                  <div className="row">
+                     <div className="col">
+                        <h1>Change user role</h1>
+
+                        <Formik
+                           initialValues={{
+                              username: '',
+                              role: 1,
+                           }}
+                           onSubmit={this.ajaxPatchUserGlobalRole}
+                           render={props => (
+                              <Form>
+                                 <label>
+                                    <span>Username</span>
+                                    <Field type="text" name="username" placeholder="username" />
+                                 </label>
+                                 <label>
+                                    <span>Role</span>
+                                    <Field component="select" name="role">
+                                       {this.props.globalRoles.map(role => {
+                                          return (
+                                             <option key={role.id} value={role.id}>
+                                                {role.name}
+                                             </option>
+                                          );
+                                       })}
+                                    </Field>
+                                 </label>
+                                 <button className="button button_green" type="submit">
+                                    <FontAwesomeIcon icon={faSave} />
+                                    Update user role
+                                 </button>
+                              </Form>
+                           )}
+                        />
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div className="row">
+               <div className="col-12">
+                  <h1>Permissions</h1>
+                  <p>Not implemented yet.</p>
                </div>
             </div>
          </CommonLayout>

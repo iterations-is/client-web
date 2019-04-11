@@ -1,0 +1,63 @@
+////
+/// Inputs
+/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
+////
+
+input[type='text'] {
+   width: 100%;
+   display: inline-block;
+   height: $g5;
+   text-decoration: none;
+   color: $color-asphalt-medium;
+   position: relative;
+   font-size: 16px;
+   line-height: $g5 - 1px;
+   cursor: pointer;
+   padding: 0 $g1-05;
+
+   outline: none;
+   border: 2px solid $color-asphalt-medium;
+   border-radius: $g1;
+
+   &::placeholder {
+      font-style: italic;
+   }
+}
+
+label:not(.switch) {
+   display: block;
+   margin-bottom: $g1;
+
+   span {
+      font-weight: bold;
+      display: block;
+      font-size: 14px;
+      margin-bottom: $g0-5;
+   }
+}
+
+select {
+   width: 100%;
+   //-webkit-appearance: none;
+   //appearance: none;
+   display: inline-block;
+   height: $g5;
+   text-decoration: none;
+   position: relative;
+   font-size: 16px;
+   line-height: $g5 - 1px;
+   cursor: pointer;
+   padding: 0 $g1-05;
+
+   outline: none;
+   border: 2px solid $color-asphalt-medium;
+   border-radius: $g1;
+   color: $color-asphalt-medium;
+}
+
+button {
+   -webkit-appearance: none;
+   appearance: none;
+   border: none;
+   outline: none;
+}
