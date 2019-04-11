@@ -4,9 +4,23 @@
 /// Based on ~react-table/react-table.css
 ////
 
+.table__subsection {
+   padding: 0 $g1 $g2 $g1;
+}
+
+.table_search-projects {
+   .rt-thead .rt-tr .rt-th:nth-child(7) {
+      display: none;
+   }
+}
+
 .ReactTable .rt-td.table__edit {
    text-align: right;
    padding: $g1;
+}
+
+.ReactTable .rt-td.table__hidden-column {
+   display: none;
 }
 
 .ReactTable {
@@ -139,6 +153,10 @@
          border-left: 0;
          border-right: 0;
          color: $color-silver-medium;
+         border-radius: 0;
+         height: auto;
+         line-height: 1em;
+         cursor: auto;
 
          &::placeholder {
             color: $color-silver-light;
