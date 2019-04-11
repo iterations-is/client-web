@@ -16,7 +16,16 @@ import CommonLayout from 'layouts/CommonLayout';
 import { Field, Form, Formik } from 'formik';
 import axios from 'axios';
 import Noty from 'noty';
+import Router from 'next/router';
 const configServer = require('config/server.config');
+
+import { WithContext as ReactTags } from 'react-tag-input';
+
+const KeyCodes = {
+   comma: 188,
+   enter: 13,
+};
+const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 // -------------------------------------------------------------------------------------------------
 // Component
@@ -54,16 +63,28 @@ class AddPage extends React.Component {
       };
    }
 
+   constructor(props) {
+      super(props);
+      this.state = {
+         tags: [],
+      };
+      this.handleDelete = this.handleDelete.bind(this);
+      this.handleAddition = this.handleAddition.bind(this);
+   }
+
    // Methods
    // ----------------------------------------------------------------------------------------------
 
    ajaxCreateProject = async (values, actions) => {
+      values.tags = this.tagsGetFromState();
       try {
-         await axios.post(`${configServer.host}/api/projects`, values);
+         let res = await axios.post(`${configServer.host}/api/projects`, values);
          new Noty({
             text: 'Project was creted.',
             type: 'success',
          }).show();
+
+         Router.push(`/project/${res.data.dat.projectID}`);
       } catch (e) {
          new Noty({
             text: 'Cannot create project.',
@@ -72,10 +93,33 @@ class AddPage extends React.Component {
       }
    };
 
+   tagsGetFromState = () => {
+      let tags = [];
+      for (let tag of this.state.tags) {
+         tags.push(tag.text.toLowerCase());
+      }
+      return tags;
+   };
+
+   handleDelete(i) {
+      const { tags } = this.state;
+      this.setState({
+         tags: tags.filter((tag, index) => index !== i),
+      });
+   }
+
+   handleAddition(tag) {
+      this.setState(state => ({ tags: [...state.tags, tag] }));
+   }
+
    // Render
    // ----------------------------------------------------------------------------------------------
 
    render() {
+      const { tags, suggestions } = this.state;
+
+      this.tagsGetFromState();
+
       return (
          <CommonLayout>
             <div className={'row'}>
@@ -91,7 +135,6 @@ class AddPage extends React.Component {
                         hasOpenVacancies: false,
 
                         roles: [],
-                        tags: [],
                         iterations: [],
                      }}
                      onSubmit={this.ajaxCreateProject}
@@ -99,28 +142,50 @@ class AddPage extends React.Component {
                         <Form>
                            <h1>Public information</h1>
 
-                           <label>
-                              <span>Category</span>
-                              <Field component="select" name="categoryId">
-                                 {this.props.categories.map(role => {
-                                    return (
-                                       <option key={role.id} value={role.id}>
-                                          {role.name}
-                                       </option>
-                                    );
-                                 })}
-                              </Field>
-                           </label>
-                           <label>
-                              <span>Project name</span>
-                              <Field type="text" name="name" placeholder="My awesome project..." />
-                           </label>
+                           <div className="row">
+                              <div className="col-4">
+                                 <label>
+                                    <span>Category</span>
+                                    <Field component="select" name="categoryId">
+                                       {this.props.categories.map(role => {
+                                          return (
+                                             <option key={role.id} value={role.id}>
+                                                {role.name}
+                                             </option>
+                                          );
+                                       })}
+                                    </Field>
+                                 </label>
+                              </div>
+                              <div className="col-8">
+                                 <label>
+                                    <span>Project name</span>
+                                    <Field
+                                       type="text"
+                                       name="name"
+                                       placeholder="My awesome project..."
+                                    />
+                                 </label>
+                              </div>
+                           </div>
+
                            <label>
                               <span>Public description (visible for all)</span>
                               <Field component="textarea" name="descriptionPublic" />
                            </label>
 
-                           <p>TAGS</p>
+                           <label>
+                              <span>Tags</span>
+                           </label>
+
+                           <ReactTags
+                              tags={tags}
+                              suggestions={suggestions}
+                              handleDelete={this.handleDelete}
+                              handleAddition={this.handleAddition}
+                              delimiters={delimiters}
+                              allowDragDrop={false}
+                           />
 
                            <h2>Vacancies</h2>
 
