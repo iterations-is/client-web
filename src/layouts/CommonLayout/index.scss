@@ -15,8 +15,7 @@
       flex: 1 1 0;
 
       & > .container-fluid {
-         padding-top: $grid-gutter-width / 2;
-         padding-bottom: $grid-gutter-width / 2;
+         padding: $grid-gutter-width;
 
          // FIXME Sometimes useless
          & > :first-child {

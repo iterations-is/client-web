@@ -8,6 +8,7 @@ import { verifyJWT } from 'utils/authorization.util';
 import axios from 'axios';
 const configServer = require('config/server.config');
 
+import Link from 'next/link';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionSetUsageTabBar } from 'actions/tab-bar.action';
@@ -80,6 +81,9 @@ class DashboardPage extends React.Component {
    render() {
       return (
          <CommonLayout>
+            <Link as={`/project/12`} href={`/project?id_project=12`}>
+               <a>Project example</a>
+            </Link>
             <p>
                Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices viverra neque eget
                semper. Donec iaculis laoreet lorem, non mattis enim faucibus non. Suspendisse eu

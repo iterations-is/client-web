@@ -4,12 +4,12 @@
 ////
 
 .page-header {
-   padding: $grid-gutter-width / 2 $grid-gutter-width / 2 0;
+   padding: $grid-gutter-width $grid-gutter-width 0;
    border-bottom: 1px solid $line-separator;
    width: 100%;
 
    &_without-tab-bar {
-      padding-bottom: $grid-gutter-width / 2;
+      padding-bottom: $grid-gutter-width;
    }
 
    h1 {
