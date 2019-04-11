@@ -3,7 +3,8 @@
 /// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
 ////
 
-input[type='text'] {
+input[type='text'],
+textarea {
    width: 100%;
    display: inline-block;
    height: $g5;
@@ -22,6 +23,11 @@ input[type='text'] {
    &::placeholder {
       font-style: italic;
    }
+}
+
+textarea {
+   min-height: 300px;
+   resize: vertical;
 }
 
 label:not(.switch) {
