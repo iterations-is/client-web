@@ -1,10 +1,9 @@
 /**
- * @file FAQ
+ * @file PersonalData
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
 import { verifyJWT } from 'utils/authorization.util';
-import Link from 'next/link';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,7 +18,7 @@ import CommonLayout from 'layouts/CommonLayout';
 // Component
 // -------------------------------------------------------------------------------------------------
 
-class FAQPage extends React.Component {
+class PersonalDataPage extends React.Component {
    // Init
    // ----------------------------------------------------------------------------------------------
 
@@ -27,7 +26,7 @@ class FAQPage extends React.Component {
       await verifyJWT(ctx);
 
       // Header
-      ctx.store.dispatch(actionSetPageTitle('FAQ'));
+      ctx.store.dispatch(actionSetPageTitle('Personal data'));
       ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
       ctx.store.dispatch(actionSetUsageTabBar(false));
 
@@ -46,28 +45,10 @@ class FAQPage extends React.Component {
    render() {
       return (
          <CommonLayout>
-            <div className={'row'}>
-               <div className="col-md-6 col-sm-12">
-                  <h1>Documentation</h1>
-                  <p>
-                     <strong>Q:</strong> I don't know how to do XYZ, where can I find it?
-                     <br />
-                     <strong>A:</strong> User documentation is available at{' '}
-                     <a href="https://iterations-is.github.io/docs-dev/#/" target="_blank">
-                        https://iterations-is.github.io/docs-dev/
-                     </a>
-                  </p>
-               </div>
-               <div className="col-md-6 col-sm-12">
-                  <h1>Personal information</h1>
-                  <p>
-                     <strong>Q:</strong> Personal data?
-                     <br />
-                     <strong>A:</strong> Personal data are available at{' '}
-                     <Link href="/faq/personal-data">
-                        <a>Personal Data</a>
-                     </Link>
-                  </p>
+            <div className="row">
+               <div className="col">
+                  <p>Personal data - user.</p>
+                  <div className="button button_red">Remove account</div>
                </div>
             </div>
          </CommonLayout>
@@ -90,4 +71,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
    mapStateToProps,
    mapDispatchToProps,
-)(FAQPage);
+)(PersonalDataPage);
