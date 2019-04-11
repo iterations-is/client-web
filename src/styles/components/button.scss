@@ -13,7 +13,8 @@ $button-colors: (
 );
 
 .button {
-   display: inline-block;
+   display: block;
+   text-align: center;
    height: $g5;
    border-radius: $g1;
    padding: 0 $g3;
@@ -25,10 +26,6 @@ $button-colors: (
    line-height: $g5 - 1px;
    cursor: pointer;
    width: 100%;
-
-   & + & {
-      margin-left: $g1;
-   }
 
    &:active {
       transform: translate(0px, 3px);
@@ -52,6 +49,7 @@ $button-colors: (
 
 .sq-button {
    display: inline-block;
+   text-align: center;
    height: $g5;
    width: $g5;
    text-align: center;
@@ -66,9 +64,6 @@ $button-colors: (
    cursor: pointer;
    border: none;
 
-   & + & {
-      margin-left: $g1;
-   }
    svg {
       margin: 0;
    }
