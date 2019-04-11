@@ -8,7 +8,7 @@ import {
    INFO_BAR_MOBILE_SHOW,
    INFO_BAR_MOBILE_HIDE,
    INFO_BAR_MOBILE_TOGGLE,
-   SET_INFO_BAR_ITEMS
+   SET_INFO_BAR_ITEMS,
 } from 'actions/info-bar.action';
 
 // -------------------------------------------------------------------------------------------------
