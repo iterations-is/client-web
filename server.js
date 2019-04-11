@@ -15,6 +15,12 @@ app.prepare()
    .then(() => {
       const server = express();
 
+      server.get('/project/:id_project', (req, res) => {
+         const actualPage = '/project';
+         const queryParams = { id_project: req.params.id_project };
+         app.render(req, res, actualPage, queryParams);
+      });
+
       server.get('*', (req, res) => {
          return handle(req, res);
       });
