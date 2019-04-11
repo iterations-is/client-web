@@ -1,0 +1,26 @@
+////
+/// Tags
+/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
+////
+
+.tags {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: flex-start;
+}
+
+.tag {
+   padding: 0 $g1-05;
+   margin-right: $g0-5;
+   background-color: $color-asphalt-medium;
+   text-transform: uppercase;
+   color: white;
+   border-radius: $g0-75;
+   font-size: 12px;
+   letter-spacing: 1px;
+   font-weight: 200;
+   height: $g3;
+   line-height: $g3;
+   overflow-y: hidden;
+   margin-bottom: $g1;
+}
