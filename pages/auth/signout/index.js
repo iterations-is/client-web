@@ -12,7 +12,12 @@ import { actionSetUsageTabBar } from 'actions/tab-bar.action';
 import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
+import { Cookies } from 'react-cookie';
 import CommonLayout from 'layouts/CommonLayout';
+const cookies = new Cookies();
+import Noty from 'noty';
+import Router from 'next/router';
+import { actionRemoveJWT } from 'actions/jwt.action';
 
 // -------------------------------------------------------------------------------------------------
 // Component
@@ -34,6 +39,18 @@ class SignOutPage extends React.Component {
       ctx.store.dispatch(actionSetUsageInfoBar(false));
 
       return {};
+   }
+
+   componentDidMount() {
+      cookies.remove('JWT');
+      this.props.actionRemoveJWT();
+
+      new Noty({
+         text: 'Signed out.',
+         type: 'info',
+      }).show();
+
+      window.location.href = '/auth/signin';
    }
 
    // Methods
@@ -64,7 +81,12 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-   return bindActionCreators({}, dispatch);
+   return bindActionCreators(
+      {
+         actionRemoveJWT,
+      },
+      dispatch,
+   );
 };
 
 export default connect(
