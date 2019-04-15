@@ -3,7 +3,7 @@
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
-import { SET_JWT } from 'actions/jwt.action';
+import { SET_JWT, REMOVE_JWT } from 'actions/jwt.action';
 const jwt = require('jsonwebtoken');
 
 // -------------------------------------------------------------------------------------------------
@@ -26,6 +26,12 @@ export default function reducerJWT(state = initialState, action) {
             ...state,
             token: action.token,
             payload: jwt.decode(action.token),
+         };
+      case REMOVE_JWT:
+         return {
+            ...state,
+            token: '',
+            payload: '',
          };
 
       default:
