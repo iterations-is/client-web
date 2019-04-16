@@ -61,6 +61,19 @@ app.prepare()
          app.render(req, res, actualPage, queryParams);
       });
 
+      server.get(
+         '/project/:id_project/iterations/:id_iteration/snapshot/:id_snapshot',
+         (req, res) => {
+            const actualPage = '/project/iterations/snapshot';
+            const queryParams = {
+               id_project: req.params.id_project,
+               id_iteration: req.params.id_iteration,
+               id_snapshot: req.params.id_snapshot,
+            };
+            app.render(req, res, actualPage, queryParams);
+         },
+      );
+
       server.get('/project/:id_project/contributors', (req, res) => {
          const actualPage = '/project/contributors';
          const queryParams = { id_project: req.params.id_project };

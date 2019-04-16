@@ -21,8 +21,11 @@ import CommonLayout from 'layouts/CommonLayout';
 import axios from 'axios';
 
 import ReactMarkdown from 'react-markdown';
-import Router from 'next/router';
+import Link from 'next/link';
 import { ErrorGetInitialProps } from '../../../src/utils/errors.util';
+import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faEye, faShareSquare, faStamp, faTrash } from '@fortawesome/free-solid-svg-icons';
 const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
@@ -67,6 +70,27 @@ class ProjectPage extends React.Component {
          ]);
       } catch (e) {
          console.log(e);
+         // Requests were failed
+         throw new ErrorGetInitialProps('Requests failed', 800);
+      }
+
+      // Get snapshots
+      try {
+         for (let iteration of ajaxDataIterations.data.dat.iterations) {
+            let snapshots = await axios.get(
+               `${configServer.host}/api/project/${ctx.query.id_project}/iteration/${
+                  iteration.id
+               }/snapshots`,
+               {
+                  headers: {
+                     Authorization: token,
+                  },
+               },
+            );
+
+            iteration.snapshots = snapshots.data.dat.snapshots;
+         }
+      } catch (e) {
          // Requests were failed
          throw new ErrorGetInitialProps('Requests failed', 800);
       }
@@ -188,10 +212,138 @@ class ProjectPage extends React.Component {
          <CommonLayout>
             <div className="row">
                <div className="col">
-                  <h1>Iterations</h1>
-                  <pre>
-                     <code>{JSON.stringify(this.props.iterations, null, 3)}</code>
-                  </pre>
+                  {this.props.iterations.iterations.map((iteration, idx) => (
+                     <div key={idx} className="row">
+                        <div className="col">
+                           <h1>
+                              {iteration.title} (
+                              {moment(iteration.deadline).format('DD.MM.YY HH:mm')})
+                           </h1>
+
+                           {iteration.tasks.map((task, idxTask) => (
+                              <React.Fragment>
+                                 <div className="row">
+                                    <div className="col-7">
+                                       <strong>{task.title}</strong>
+                                    </div>
+                                    <div className="col-1">
+                                       <strong>Min</strong>
+                                    </div>
+                                    <div className="col-1">
+                                       <strong>Max</strong>
+                                    </div>
+                                    <div className="col-1">
+                                       <strong>Value</strong>
+                                    </div>
+                                    <div className="col-2">
+                                       <strong>Graded by</strong>
+                                    </div>
+                                 </div>
+                                 <div className="row">
+                                    <div className="col-7">{task.description}</div>
+                                    <div className="col-1">{task.pointsMin}</div>
+                                    <div className="col-1">{task.pointsMax}</div>
+                                    <div className="col-1">?</div>
+                                    <div className="col-2">?</div>
+                                 </div>
+                              </React.Fragment>
+                           ))}
+                           <h2>Snapshots</h2>
+                           <div className="table-responsive">
+                              <table className="table">
+                                 <thead>
+                                    <tr>
+                                       <th scope="col">Created</th>
+                                       <th scope="col">Sent</th>
+                                       <th scope="col">Graded</th>
+                                       <th scope="col">Actions</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    {iteration.snapshots.map((snapshot, idx) => (
+                                       <tr>
+                                          <td>
+                                             {snapshot.createdBy && (
+                                                <React.Fragment>
+                                                   {moment(snapshot.dateCreated).format(
+                                                      'DD.MM.YYYY HH:mm',
+                                                   )}
+                                                   <br />
+                                                   {snapshot.createdBy.authUsername || '-'}
+                                                </React.Fragment>
+                                             )}
+                                          </td>
+                                          <td>
+                                             {snapshot.sentBy && (
+                                                <React.Fragment>
+                                                   {moment(snapshot.dateSent).format(
+                                                      'DD.MM.YYYY HH:mm',
+                                                   )}
+                                                   <br />
+                                                   {snapshot.sentBy.authUsername || '-'}
+                                                </React.Fragment>
+                                             )}
+                                          </td>
+                                          <td>
+                                             {snapshot.gradedBy && (
+                                                <React.Fragment>
+                                                   {moment(snapshot.dateGraded).format(
+                                                      'DD.MM.YYYY HH:mm',
+                                                   )}
+                                                   <br />
+                                                   {snapshot.gradedBy.authUsername || '-'}
+                                                </React.Fragment>
+                                             )}
+                                          </td>
+                                          <td>
+                                             <Link
+                                                as={`/project/${
+                                                   this.props.metadata.id
+                                                }/iterations/${iteration.id}/snapshot/${
+                                                   snapshot.id
+                                                }`}
+                                                href={`/project/iterations/snapshot?id_project=${
+                                                   this.props.metadata.id
+                                                }&id_iteration=${iteration.id}&id_snapshot=${
+                                                   snapshot.id
+                                                }`}
+                                             >
+                                                <a className="sq-button sq-button_blue">
+                                                   <FontAwesomeIcon icon={faEye} />
+                                                </a>
+                                             </Link>
+                                             {snapshot.sentByUserId === null && (
+                                                <a className="sq-button sq-button_yellow">
+                                                   <FontAwesomeIcon icon={faShareSquare} />
+                                                </a>
+                                             )}
+
+                                             {snapshot.sentByUserId !== null &&
+                                                snapshot.gradedByUserId === null && (
+                                                   <a className="sq-button sq-button_yellow">
+                                                      <FontAwesomeIcon icon={faStamp} />
+                                                   </a>
+                                                )}
+
+                                             {snapshot.sentByUserId !== null &&
+                                                snapshot.gradedByUserId !== null && (
+                                                   <a className="sq-button sq-button_yellow">
+                                                      <FontAwesomeIcon icon={faEdit} />
+                                                   </a>
+                                                )}
+
+                                             <a className="sq-button sq-button_red">
+                                                <FontAwesomeIcon icon={faTrash} />
+                                             </a>
+                                          </td>
+                                       </tr>
+                                    ))}
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                  ))}
                </div>
             </div>
          </CommonLayout>
