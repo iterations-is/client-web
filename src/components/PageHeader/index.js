@@ -41,7 +41,7 @@ class PageHeaderComponent extends React.Component {
                )}
             </h1>
 
-            {this.props.usageTabBar && <TabBarComponent />}
+            {this.props.usageTabBar && <TabBarComponent projectId={44} />}
          </header>
       );
    }

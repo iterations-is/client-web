@@ -100,7 +100,10 @@ class SearchPage extends React.Component {
             id: 'name',
             accessor: item => {
                return (
-                  <Link as={`/project/${item.id}`} href={`/project?id_project=${item.id}`}>
+                  <Link
+                     as={`/project/${item.id}/description`}
+                     href={`/project/description?id_project=${item.id}`}
+                  >
                      <a>{item.name}</a>
                   </Link>
                );

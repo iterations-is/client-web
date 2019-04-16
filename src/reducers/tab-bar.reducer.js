@@ -3,7 +3,7 @@
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
-import { SET_TAB_BAR_ITEMS, SET_TAB_BAR_USAGE } from 'actions/tab-bar.action';
+import { SET_TAB_BAR_ITEMS, SET_TAB_BAR_USAGE, SET_TAB_ACTIVE } from 'actions/tab-bar.action';
 
 // -------------------------------------------------------------------------------------------------
 // Initial state
@@ -11,18 +11,7 @@ import { SET_TAB_BAR_ITEMS, SET_TAB_BAR_USAGE } from 'actions/tab-bar.action';
 
 const initialState = {
    usage: false,
-   items: [
-      {
-         tabTitle: 'Example',
-         tabLink: '/',
-         tabActive: true,
-      },
-      {
-         tabTitle: 'Tab',
-         tabLink: '/',
-         tabActive: false,
-      },
-   ],
+   items: [],
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -42,6 +31,13 @@ export default function reducerTabBar(state = initialState, action) {
             ...state,
             items: action.items,
          };
+
+      case SET_TAB_ACTIVE:
+         let newState = { ...state };
+         for (let item of newState.items) {
+            item.tabActive = action.tabId === item.tabId;
+         }
+         return newState;
 
       default:
          return state;

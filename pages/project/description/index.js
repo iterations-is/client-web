@@ -9,7 +9,11 @@ import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
-import { actionSetUsageTabBar } from 'actions/tab-bar.action';
+import {
+   actionSetTabActive,
+   actionSetTabBarItems,
+   actionSetUsageTabBar,
+} from 'actions/tab-bar.action';
 import { actionSetInfoBarItems, actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
@@ -28,6 +32,7 @@ class ProjectPage extends React.Component {
    // ----------------------------------------------------------------------------------------------
 
    static async getInitialProps(ctx) {
+      console.log(`Coze Desc?`);
       await verifyJWT(ctx);
       // Ajax
       const token = ctx.store.getState().reducerJWT.token;
@@ -46,6 +51,51 @@ class ProjectPage extends React.Component {
 
       // Header
       ctx.store.dispatch(actionSetPageTitle(project.data.dat.public.name));
+      ctx.store.dispatch(
+         actionSetTabBarItems([
+            {
+               tabId: 'description',
+               tabTitle: 'Description',
+               tabLink: `/project/description?id_project=${project.data.dat.public.id}`,
+               tabLinkAs: `/project/${project.data.dat.public.id}/description`,
+               tabActive: true,
+               tabVisible: true,
+            },
+            {
+               tabId: 'content',
+               tabTitle: 'Content',
+               tabLink: `/project/content?id_project=${project.data.dat.public.id}`,
+               tabLinkAs: `/project/${project.data.dat.public.id}/content`,
+               tabActive: false,
+               tabVisible: true,
+            },
+            {
+               tabId: 'iterations',
+               tabTitle: 'Iterations',
+               tabLink: `/project/iterations?id_project=${project.data.dat.public.id}`,
+               tabLinkAs: `/project/${project.data.dat.public.id}/iterations`,
+               tabActive: false,
+               tabVisible: true,
+            },
+            {
+               tabId: 'contributors',
+               tabTitle: 'Contributors',
+               tabLink: `/project/contributors?id_project=${project.data.dat.public.id}`,
+               tabLinkAs: `/project/${project.data.dat.public.id}/contributors`,
+               tabActive: false,
+               tabVisible: true,
+            },
+            {
+               tabId: 'settings',
+               tabTitle: 'Settings',
+               tabLink: `/project/settings?id_project=${project.data.dat.public.id}`,
+               tabLinkAs: `/project/${project.data.dat.public.id}/settings`,
+               tabActive: false,
+               tabVisible: true,
+            },
+         ]),
+      );
+
       ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
       ctx.store.dispatch(actionSetUsageTabBar(true));
       ctx.store.dispatch(
@@ -98,7 +148,7 @@ class ProjectPage extends React.Component {
       ctx.store.dispatch(actionSetUsageInfoBar(true));
 
       return {
-         projectPublic: project.data.dat.public,
+         metadata: project.data.dat.public,
       };
    }
 
@@ -109,37 +159,27 @@ class ProjectPage extends React.Component {
    // ----------------------------------------------------------------------------------------------
 
    render() {
-      let descriptionPublic = (
-         <ReactMarkdown
-            source={
-               this.props.projectPublic.descriptionPublic === ''
-                  ? 'No description.'
-                  : this.props.projectPublic.descriptionPublic
-            }
-         />
-      );
-
-      let descriptionPrivate = (
-         <p>
-            Private description semper iaculis lectus eu faucibus. Maecenas ullamcorper ipsum massa.
-            Integer ut iaculis nunc, nec malesuada nibh. Praesent id posuere mi. Vestibulum quis
-            quam tincidunt, blandit tellus nec, semper quam. Duis id laoreet nisl. Vestibulum
-            tincidunt tortor eget ante auctor placerat quis quis tortor. Proin porttitor egestas
-            porta. Donec ut ultricies mauris. Integer dictum, enim at eleifend convallis, ligula
-            nisl dictum mauris, nec sollicitudin sem odio vel diam. Duis in enim eget felis dapibus
-            varius sit amet vel enim. Ut imperdiet porttitor felis vitae molestie. Proin id lectus
-            vehicula metus sodales bibendum a non tortor. Sed mauris erat, vestibulum et venenatis
-            quis, condimentum sed arcu.
-         </p>
-      );
-
       return (
          <CommonLayout>
             <div className="row">
                <div className="col">
-                  {descriptionPublic}
+                  <ReactMarkdown
+                     source={
+                        this.props.metadata.descriptionPublic === ''
+                           ? 'No description.'
+                           : this.props.metadata.descriptionPublic
+                     }
+                  />
                   <h1>Description for contributors</h1>
-                  {descriptionPrivate}
+                  {this.props.metadata.descriptionPrivate && (
+                     <ReactMarkdown
+                        source={
+                           this.props.metadata.descriptionPrivate === ''
+                              ? 'No private description.'
+                              : this.props.metadata.descriptionPrivate
+                        }
+                     />
+                  )}
                </div>
             </div>
          </CommonLayout>
