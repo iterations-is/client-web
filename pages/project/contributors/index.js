@@ -44,13 +44,13 @@ class ProjectPage extends React.Component {
 
       const token = ctx.store.getState().reducerJWT.token;
 
-      let ajaxDataProject, ajaxDataIterations;
+      let ajaxDataProject, ajaxDataTeam;
 
       try {
          [
             // Save data
             ajaxDataProject,
-            ajaxDataIterations,
+            ajaxDataTeam,
          ] = await Promise.all([
             // PROJECT
             axios.get(`${configServer.host}/api/project/${ctx.query.id_project}/metadata`, {
@@ -173,25 +173,86 @@ class ProjectPage extends React.Component {
 
       return {
          metadata: ajaxDataProject.data.dat.public,
-         iterations: ajaxDataIterations.data.dat,
+         team: ajaxDataTeam.data.dat.team,
       };
    }
 
    // Methods
    // ----------------------------------------------------------------------------------------------
 
+   ajaxJoinTeam = async roleId => {
+      console.log(roleId);
+
+      try {
+         await axios.post(`${configServer.host}/api/project/${this.props.metadata.id}/team`, {
+            projectRoleId: roleId,
+         });
+
+         Router.push(`/project/${this.props.metadata.id}/contributors`);
+      } catch (e) {}
+   };
+
+   ajaxLeaveTeam = async () => {
+      try {
+         await axios.delete(`${configServer.host}/api/project/${this.props.metadata.id}/team`);
+
+         Router.push(`/project/${this.props.metadata.id}/contributors`);
+      } catch (e) {}
+   };
+
    // Render
    // ----------------------------------------------------------------------------------------------
 
    render() {
+      console.log(this.props.metadata);
+
       return (
          <CommonLayout>
             <div className="row">
                <div className="col">
                   <h1>Team</h1>
-                  <pre>
-                     <code>{JSON.stringify(this.props.iterations, null, 3)}</code>
-                  </pre>
+                  {this.props.team.map((item, idx) => (
+                     <div key={idx}>
+                        <h2>
+                           {item[0].name}{' '}
+                           {item[0].name !== 'Leader' && item[0].name !== 'Visitors' && (
+                              <span>
+                                 ({item[0].users.length} / {item[0].capacity})
+                              </span>
+                           )}
+                        </h2>
+
+                        {item[0].users.map((user, idx) => (
+                           <div key={idx} className="team__contributor">
+                              {user.authUsername}
+                           </div>
+                        ))}
+                        {this.props.metadata.hasOpenVacancies && item[0].isEditable !== false && (
+                           <a
+                              onClick={() => this.ajaxJoinTeam(item[0].id)}
+                              className="button button_gray"
+                           >
+                              Join team as {item[0].name}
+                           </a>
+                        )}
+                        {this.props.metadata.hasOpenVacancies && item[0].name === 'Visitors' && (
+                           <a
+                              className="button button_gray"
+                              onClick={() => this.ajaxJoinTeam(item[0].id)}
+                           >
+                              Join as a visitor
+                           </a>
+                        )}
+                     </div>
+                  ))}
+               </div>
+            </div>
+            <div className="row">
+               <div className="col-6" />
+               <div className="col-6">
+                  <a className="button button_red" onClick={this.ajaxLeaveTeam}>
+                     Leave team
+                  </a>
                </div>
             </div>
          </CommonLayout>
