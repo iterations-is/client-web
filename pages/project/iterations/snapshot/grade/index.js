@@ -20,8 +20,13 @@ import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
 import axios from 'axios';
 
+import ReactMarkdown from 'react-markdown';
+import Router from 'next/router';
 import { ErrorGetInitialProps } from 'utils/errors.util';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faEye, faShareSquare, faStamp, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Field, FieldArray, Form, Formik } from 'formik';
 const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
@@ -43,12 +48,13 @@ class ProjectPage extends React.Component {
 
       const token = ctx.store.getState().reducerJWT.token;
 
-      let ajaxDataProject, ajaxDataSnapshot, ajaxDataSnapshotGrades;
+      let ajaxDataProject, ajaxTasks, ajaxDataSnapshot, ajaxDataSnapshotGrades;
 
       try {
          [
             // Save data
             ajaxDataProject,
+            ajaxTasks,
             ajaxDataSnapshot,
             ajaxDataSnapshotGrades,
          ] = await Promise.all([
@@ -58,6 +64,17 @@ class ProjectPage extends React.Component {
                   Authorization: token,
                },
             }),
+            // Iteration TASKS
+            axios.get(
+               `${configServer.host}/api/project/${ctx.query.id_project}/iteration/${
+                  ctx.query.id_iteration
+               }/tasks`,
+               {
+                  headers: {
+                     Authorization: token,
+                  },
+               },
+            ),
             // SNAPSHOT
             axios.get(
                `${configServer.host}/api/project/${ctx.query.id_project}/iteration/${
@@ -212,6 +229,7 @@ class ProjectPage extends React.Component {
       return {
          metadata: ajaxDataProject.data.dat.public,
          snapshot: ajaxDataSnapshot.data.dat.snapshot,
+         tasks: ajaxTasks.data.dat,
          grades: ajaxDataSnapshotGrades.data.dat.grades,
       };
    }
@@ -221,6 +239,7 @@ class ProjectPage extends React.Component {
 
       this.state = {
          parts: this.props.snapshot.parts,
+         grades: this.props.grades,
       };
    }
 
@@ -259,14 +278,43 @@ class ProjectPage extends React.Component {
       return { __html: html };
    };
 
+   ajaxGradeSnapshot = async data => {
+      try {
+         await axios.patch(
+            `${configServer.host}/api/project/${this.props.metadata.id}/iteration/${
+               this.props.snapshot.iterationsId
+            }/snapshot/${this.props.snapshot.id}/grades`,
+            data,
+         );
+
+         Router.push(
+            `/project/${this.props.metadata.id}/iterations/${
+               this.props.snapshot.iterationsId
+            }/snapshot/${this.props.snapshot.id}`,
+         );
+      } catch (e) {}
+   };
+
    // Render
    // ----------------------------------------------------------------------------------------------
 
    render() {
       const grades = this.props.grades;
 
+      let initialStateForm = [];
+      for (const grade of this.props.grades) {
+         initialStateForm.push({
+            id: grade.id,
+            points: grade.points || 0,
+            message: grade.message || '',
+         });
+      }
+
       return (
          <CommonLayout>
+            <div className="button button_yellow" onClick={this.ajaxGradeSnapshot}>
+               Save grades
+            </div>
             <div className="row">
                <div className="col">
                   <div>
@@ -299,11 +347,65 @@ class ProjectPage extends React.Component {
                   </div>
 
                   <h1>Tasks and grades</h1>
+
+                  <Formik
+                     initialValues={{ grades: initialStateForm }}
+                     onSubmit={this.ajaxGradeSnapshot}
+                  >
+                     <Form>
+                        <FieldArray
+                           name="grades"
+                           render={() => (
+                              <div>
+                                 <table className="table">
+                                    <thead>
+                                       <tr>
+                                          <th>Name</th>
+                                          <th>Min</th>
+                                          <th>Max</th>
+                                          <th>Value</th>
+                                          <th>Comment</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                       {grades.map((grade, index) => (
+                                          <tr key={index}>
+                                             <td>
+                                                <strong>{grade.task.title}</strong>
+                                                <br />
+                                                {grade.task.description}
+                                             </td>
+                                             <td>{grade.task.pointsMin}</td>
+                                             <td>{grade.task.pointsMax}</td>
+                                             <td>
+                                                <Field
+                                                   name={`grades.${index}.points`}
+                                                   type="number"
+                                                />
+                                             </td>
+                                             <td>
+                                                <Field
+                                                   component="textarea"
+                                                   name={`grades.${index}.message`}
+                                                />
+                                             </td>
+                                          </tr>
+                                       ))}
+                                    </tbody>
+                                 </table>
+                                 <button className="button button_yellow" type="submit">
+                                    Send
+                                 </button>
+                              </div>
+                           )}
+                        />
+                     </Form>
+                  </Formik>
+
                   <table className="table">
                      <thead>
                         <tr>
                            <th>Name</th>
-                           <th>Description</th>
                            <th>Min</th>
                            <th>Max</th>
                            <th>Value</th>
@@ -313,8 +415,11 @@ class ProjectPage extends React.Component {
                      <tbody>
                         {grades.map((grade, idx) => (
                            <tr key={idx}>
-                              <td>{grade.task.title}</td>
-                              <td>{grade.task.description}</td>
+                              <td>
+                                 <strong>{grade.task.title}</strong>
+                                 <br />
+                                 {grade.task.description}
+                              </td>
                               <td>{grade.task.pointsMin}</td>
                               <td>{grade.task.pointsMax}</td>
                               <td>{grade.points}</td>

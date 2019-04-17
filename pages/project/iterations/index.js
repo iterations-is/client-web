@@ -21,6 +21,7 @@ import CommonLayout from 'layouts/CommonLayout';
 import axios from 'axios';
 
 import ReactMarkdown from 'react-markdown';
+import Router from 'next/router';
 import Link from 'next/link';
 import { ErrorGetInitialProps } from '../../../src/utils/errors.util';
 import moment from 'moment';
@@ -204,6 +205,20 @@ class ProjectPage extends React.Component {
    // Methods
    // ----------------------------------------------------------------------------------------------
 
+   ajaxSendSnapshotForGrading = async (iterationId, snapshotId) => {
+      try {
+         await axios.post(
+            `${configServer.host}/api/project/${
+               this.props.metadata.id
+            }/iteration/${iterationId}/snapshot/${snapshotId}`,
+         );
+
+         Router.push(window.location.pathname);
+      } catch (e) {}
+   };
+
+   ajaxEditGrades = async (iterationId, snapshotId) => {};
+
    // Render
    // ----------------------------------------------------------------------------------------------
 
@@ -221,7 +236,7 @@ class ProjectPage extends React.Component {
                            </h1>
 
                            {iteration.tasks.map((task, idxTask) => (
-                              <React.Fragment>
+                              <div key={idxTask}>
                                  <div className="row">
                                     <div className="col-7">
                                        <strong>{task.title}</strong>
@@ -246,7 +261,7 @@ class ProjectPage extends React.Component {
                                     <div className="col-1">?</div>
                                     <div className="col-2">?</div>
                                  </div>
-                              </React.Fragment>
+                              </div>
                            ))}
                            <h2>Snapshots</h2>
                            <div className="table-responsive">
@@ -261,7 +276,7 @@ class ProjectPage extends React.Component {
                                  </thead>
                                  <tbody>
                                     {iteration.snapshots.map((snapshot, idx) => (
-                                       <tr>
+                                       <tr key={idx}>
                                           <td>
                                              {snapshot.createdBy && (
                                                 <React.Fragment>
@@ -312,22 +327,52 @@ class ProjectPage extends React.Component {
                                                    <FontAwesomeIcon icon={faEye} />
                                                 </a>
                                              </Link>
+
                                              {snapshot.sentByUserId === null && (
-                                                <a className="sq-button sq-button_yellow">
+                                                <a
+                                                   className="sq-button sq-button_yellow"
+                                                   onClick={() =>
+                                                      this.ajaxSendSnapshotForGrading(
+                                                         iteration.id,
+                                                         snapshot.id,
+                                                      )
+                                                   }
+                                                >
                                                    <FontAwesomeIcon icon={faShareSquare} />
                                                 </a>
                                              )}
 
                                              {snapshot.sentByUserId !== null &&
                                                 snapshot.gradedByUserId === null && (
-                                                   <a className="sq-button sq-button_yellow">
-                                                      <FontAwesomeIcon icon={faStamp} />
-                                                   </a>
+                                                   <Link
+                                                      as={`/project/${
+                                                         this.props.metadata.id
+                                                      }/iterations/${iteration.id}/snapshot/${
+                                                         snapshot.id
+                                                      }/grade`}
+                                                      href={`/project/iterations/snapshot/grade?id_project=${
+                                                         this.props.metadata.id
+                                                      }&id_iteration=${iteration.id}&id_snapshot=${
+                                                         snapshot.id
+                                                      }`}
+                                                   >
+                                                      <a className="sq-button sq-button_yellow">
+                                                         <FontAwesomeIcon icon={faStamp} />
+                                                      </a>
+                                                   </Link>
                                                 )}
 
                                              {snapshot.sentByUserId !== null &&
                                                 snapshot.gradedByUserId !== null && (
-                                                   <a className="sq-button sq-button_yellow">
+                                                   <a
+                                                      className="sq-button sq-button_yellow"
+                                                      onClick={() =>
+                                                         this.ajaxEditGrades(
+                                                            iteration.id,
+                                                            snapshot.id,
+                                                         )
+                                                      }
+                                                   >
                                                       <FontAwesomeIcon icon={faEdit} />
                                                    </a>
                                                 )}
