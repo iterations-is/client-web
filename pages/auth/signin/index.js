@@ -90,7 +90,7 @@ class Index extends React.Component {
             <div className="container-fluid">
                <div className="row">
                   <div className="col">
-                     <h1 className={'unique'}>Authorization</h1>
+                     <h1 className={'unique'}>Iterations</h1>
                      <p>
                         Nunc eget neque tincidunt felis ornare molestie a sed diam. Pellentesque
                         habitant morbi tristique senectus et netus et malesuada fames ac turpis
@@ -98,14 +98,18 @@ class Index extends React.Component {
                         congue tellus nec ipsum cursus, vitae viverra dolor vehicula. Phasellus id
                         tincidunt est.
                      </p>
+                  </div>
+               </div>
+               <div className="row">
+                  <div className="col-12 col-md-6">
                      <a
-                        className="button button_yellow"
+                        className="button button_gray"
                         href={configServer.host + '/pages/github?tokenTmp=' + this.props.tokenTmp}
                         target={'_blank'}
                         onClick={this.loginGithub}
                      >
                         <FontAwesomeIcon icon={faGithub} />
-                        <span>GutHub</span>
+                        <span>GitHub</span>
                      </a>
                   </div>
                </div>

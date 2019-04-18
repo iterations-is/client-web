@@ -9,7 +9,7 @@ h1 {
 
    &.unique {
       font-weight: 200;
-      color: $color-sun-medium;
+      color: $color-asphalt-medium;
    }
 }
 
@@ -28,11 +28,6 @@ main {
       margin-top: 0;
       font-size: 28px;
       font-weight: 600;
-
-      &.unique {
-         font-weight: 200;
-         color: $color-sun-medium;
-      }
    }
 
    h2 {

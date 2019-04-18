@@ -3,7 +3,7 @@
 /// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
 ////
 
-input[type='text'],
+input,
 textarea {
    width: 100%;
    display: inline-block;
@@ -13,7 +13,7 @@ textarea {
    position: relative;
    font-size: 16px;
    line-height: $g5 - 1px;
-   cursor: pointer;
+   //cursor: pointer;
    padding: 0 $g1-05;
 
    outline: none;
@@ -66,4 +66,26 @@ button {
    appearance: none;
    border: none;
    outline: none;
+}
+
+.row-flex {
+   display: flex;
+   margin-bottom: $g1;
+
+   & > * {
+      margin-right: $g1;
+
+      flex: 1 0 auto;
+      &:last-child {
+         margin-right: 0;
+      }
+   }
+
+   & > input {
+      flex: 1 1 auto;
+   }
+}
+
+form {
+   width: 100%;
 }
