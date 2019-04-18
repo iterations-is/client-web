@@ -50,7 +50,7 @@ class PanelPage extends React.Component {
             //
          ] = await Promise.all([
             // Global Roles
-            await axios.get(`${configServer.host}/api/dashboard/roles`, {
+            await axios.get(`${configServer.host}/api/roles`, {
                headers: { Authorization: token },
             }),
             // Categories
@@ -174,35 +174,39 @@ class PanelPage extends React.Component {
       const blockCategories = (
          <React.Fragment>
             <h1>Categories</h1>
-            <label>
-               <span>Name</span>
-            </label>
-            {categories.map((category, idx) => (
-               <div className="row" key={category.id}>
-                  <div className="col">
+            <div className="form-elem form-elem_input">
+               <span className="title">Name</span>
+               <div className="row">
+                  {categories.map((category, idx) => (
                      <Formik
                         initialValues={{ name: category.name }}
                         onSubmit={values => this.ajaxUpdateCategory(category.id, values)}
                      >
                         <Form>
-                           <div className="row-flex">
-                              <Field name="name" />
-                              <button className="sq-button sq-button_green" type="submit">
-                                 <FontAwesomeIcon icon={faSave} />
-                              </button>
+                           <div className="col" key={category.id}>
+                              <div className="row-flex">
+                                 <div className="form-elem form-elem_input">
+                                    <Field name="name" />
+                                 </div>
 
-                              <div
-                                 className="sq-button sq-button_red"
-                                 onClick={() => this.ajaxRemoveCategory(category.id, idx)}
-                              >
-                                 <FontAwesomeIcon icon={faTrash} />
+                                 <button className="sq-button sq-button_green" type="submit">
+                                    <FontAwesomeIcon icon={faSave} />
+                                 </button>
+
+                                 <div
+                                    className="sq-button sq-button_red"
+                                    onClick={() => this.ajaxRemoveCategory(category.id, idx)}
+                                 >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                 </div>
                               </div>
                            </div>
                         </Form>
                      </Formik>
-                  </div>
+                  ))}
                </div>
-            ))}
+            </div>
+
             <div className="row">
                <div className="col">
                   <Formik
@@ -210,12 +214,15 @@ class PanelPage extends React.Component {
                      onSubmit={values => this.ajaxCreateCategory(values)}
                   >
                      <Form>
-                        <div className="row-flex">
-                           <Field name="name" />
-                           <button className="sq-button sq-button_blue" type="submit">
-                              <FontAwesomeIcon icon={faPlus} />
-                           </button>
-                           <button style={{ visibility: 'hidden' }} className="sq-button" />
+                        <div className="form-elem form-elem_input">
+                           <div className="title">New category name</div>
+                           <div className="row-flex">
+                              <Field name="name" />
+                              <button className="sq-button sq-button_blue" type="submit">
+                                 <FontAwesomeIcon icon={faPlus} />
+                              </button>
+                              <button style={{ visibility: 'hidden' }} className="sq-button" />
+                           </div>
                         </div>
                      </Form>
                   </Formik>
@@ -233,28 +240,38 @@ class PanelPage extends React.Component {
                   role: 1,
                }}
                onSubmit={this.ajaxPatchUserGlobalRole}
-               render={props => (
+               render={() => (
                   <Form>
-                     <label>
-                        <span>Username</span>
-                        <Field type="text" name="username" placeholder="username" />
-                     </label>
-                     <label>
-                        <span>Role</span>
-                        <Field component="select" name="role">
-                           {this.props.globalRoles.map(role => {
-                              return (
-                                 <option key={role.id} value={role.id}>
-                                    {role.name}
-                                 </option>
-                              );
-                           })}
-                        </Field>
-                     </label>
-                     <button className="button button_green" type="submit">
-                        <FontAwesomeIcon icon={faSave} />
-                        Update user role
-                     </button>
+                     <div className="row">
+                        <div className="col">
+                           <div className="form-elem form-elem_input">
+                              <label>
+                                 <span className="title">Username</span>
+                                 <Field type="text" name="username" placeholder="username" />
+                              </label>
+                           </div>
+
+                           <div className="form-elem form-elem_select">
+                              <label>
+                                 <span className="title">Role</span>
+                                 <Field component="select" name="role">
+                                    {this.props.globalRoles.map(role => {
+                                       return (
+                                          <option key={role.id} value={role.id}>
+                                             {role.name}
+                                          </option>
+                                       );
+                                    })}
+                                 </Field>
+                              </label>
+                           </div>
+
+                           <button className="button button_green" type="submit">
+                              <FontAwesomeIcon icon={faSave} />
+                              Update user role
+                           </button>
+                        </div>
+                     </div>
                   </Form>
                )}
             />
