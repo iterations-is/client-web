@@ -31,6 +31,7 @@ form {
    }
 
    &_input,
+   &_input-list,
    &_select,
    &_textarea {
       flex-direction: column;
@@ -52,6 +53,10 @@ form {
          letter-spacing: 0.5px;
          padding: 0 $g0-25;
       }
+   }
+
+   &_input-list {
+      margin: 0 0 $g1;
    }
 
    input,
@@ -112,8 +117,12 @@ button {
       }
    }
 
-   & > .form-elem,
+   & > .form-elem_input-list,
    & > input {
-      flex: 1 1 auto;
+      flex: 1 1 0;
+   }
+
+   input[type='number'] {
+      width: 80px;
    }
 }
