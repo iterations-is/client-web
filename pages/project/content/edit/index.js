@@ -13,21 +13,25 @@ import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
 import axios from 'axios';
 
+import ReactMarkdown from 'react-markdown';
 import Router from 'next/router';
 import { ErrorGetInitialProps } from 'utils/errors.util';
 import { Field, Form, Formik } from 'formik';
-import { setProjectInitialProps } from 'utils/get-inital-props.util';
+import { setProjectInitialProps } from '../../../../src/utils/get-inital-props.util';
+import Noty from 'noty';
 const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
 // Component
 // -------------------------------------------------------------------------------------------------
 
-class ProjectPage extends React.Component {
+class PartPage extends React.Component {
    // Init
    // ----------------------------------------------------------------------------------------------
 
    static async getInitialProps(ctx) {
+      console.log(`GIP Part`);
+      console.log(ctx.query);
       // Authorization
       // -------------------------------------------------------------------------------------------
 
@@ -37,24 +41,37 @@ class ProjectPage extends React.Component {
       // -------------------------------------------------------------------------------------------
 
       const token = ctx.store.getState().reducerJWT.token;
-      let ajaxDataMetadata, ajaxDataInterpreters;
+
+      let ajaxDataMetadata, ajaxDataPart;
 
       try {
          [
             // Save data
             ajaxDataMetadata,
-            ajaxDataInterpreters,
+            ajaxDataPart,
+            // ajaxInterpreters,
          ] = await Promise.all([
             // PROJECT
             axios.get(`${configServer.host}/api/project/${ctx.query.id_project}/metadata`, {
-               headers: { Authorization: token },
+               headers: {
+                  Authorization: token,
+               },
             }),
+            // PART
+            axios.get(
+               `${configServer.host}/api/project/${ctx.query.id_project}/part/${ctx.query.id_part}`,
+               {
+                  headers: {
+                     Authorization: token,
+                  },
+               },
+            ),
             // INTERPRETERS
-            axios.get(`${configServer.host}/api/interpreters`, {
-               headers: { Authorization: token },
-            }),
+            // axios.get(`https://api.github.com/repositories/181357697/contents/dist`),
          ]);
       } catch (e) {
+         console.log(e);
+         // Requests were failed
          throw new ErrorGetInitialProps('Requests failed', 800);
       }
 
@@ -67,7 +84,7 @@ class ProjectPage extends React.Component {
             metadata: ajaxDataMetadata.data.dat,
          },
          {
-            pageTitle: 'Create part',
+            pageTitle: 'Edit part',
             currentTab: 'content',
             verifiedMark: false,
             invisibleTabIds: [],
@@ -79,7 +96,8 @@ class ProjectPage extends React.Component {
 
       return {
          metadata: ajaxDataMetadata.data.dat,
-         interpreters: ajaxDataInterpreters.data.dat,
+         part: ajaxDataPart.data.dat.part,
+         interpreters: [{ name: 'text-plain' }, { name: 'image-plain' }],
       };
    }
 
@@ -94,13 +112,25 @@ class ProjectPage extends React.Component {
    // Methods
    // ----------------------------------------------------------------------------------------------
 
-   ajaxCreatePart = async data => {
-      console.log(this.props.metadata.id, data);
+   ajaxUpdatePart = async data => {
+      console.log(this.props.part.id, data);
       try {
-         await axios.post(`${configServer.host}/api/project/${this.props.metadata.id}/parts`, data);
+         await axios.patch(
+            `${configServer.host}/api/project/${this.props.metadata.id}/part/${this.props.part.id}`,
+            data,
+         );
 
          Router.push(`/project/${this.props.metadata.id}/content`);
-      } catch (e) {}
+         new Noty({
+            text: 'Part was saved.',
+            type: 'success',
+         }).show();
+      } catch (e) {
+         new Noty({
+            text: 'Cannot save a part.',
+            type: 'error',
+         }).show();
+      }
    };
 
    // Render
@@ -111,14 +141,13 @@ class ProjectPage extends React.Component {
          <CommonLayout>
             <Formik
                initialValues={{
-                  interpreter:
-                     this.props.interpreters.length > 0 ? this.props.interpreters[0].name : '',
+                  interpreter: this.props.part.document.interpreter,
                   store: {
-                     title: '',
-                     body: '',
+                     title: this.props.part.document.store.title,
+                     body: this.props.part.document.store.body,
                   },
                }}
-               onSubmit={this.ajaxCreatePart}
+               onSubmit={this.ajaxUpdatePart}
             >
                <Form>
                   <div className="row">
@@ -165,9 +194,9 @@ class ProjectPage extends React.Component {
                   <div className="row">
                      <div className="col-6" />
                      <div className="col-6">
-                        <button className="button button_green" onSubmit={this.ajaxCreatePart}>
+                        <button className="button button_green" onSubmit={this.ajaxUpdatePart}>
                            {' '}
-                           Create part
+                           Save part
                         </button>
                      </div>
                   </div>
@@ -193,4 +222,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
    mapStateToProps,
    mapDispatchToProps,
-)(withRouter(ProjectPage));
+)(withRouter(PartPage));

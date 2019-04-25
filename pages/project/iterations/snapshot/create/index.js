@@ -1,5 +1,5 @@
 /**
- * @file PersonalData
+ * @file Create Content Page
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
@@ -16,12 +16,12 @@ import axios from 'axios';
 import Router from 'next/router';
 import { ErrorGetInitialProps } from 'utils/errors.util';
 import { Field, Form, Formik } from 'formik';
-import { setProjectInitialProps } from 'utils/get-inital-props.util';
+import { setProjectInitialProps } from '../../../../../src/utils/get-inital-props.util';
 const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
 // Component
-// -------------------------------------------------------------------------------------------------
+// ------------------------------------------------------- ------------------------------------------
 
 class ProjectPage extends React.Component {
    // Init
@@ -30,31 +30,37 @@ class ProjectPage extends React.Component {
    static async getInitialProps(ctx) {
       // Authorization
       // -------------------------------------------------------------------------------------------
-
       await verifyJWT(ctx);
 
       // Ajax
       // -------------------------------------------------------------------------------------------
 
       const token = ctx.store.getState().reducerJWT.token;
-      let ajaxDataMetadata, ajaxDataInterpreters;
+
+      let ajaxDataMetadata, ajaxDataTasks;
 
       try {
          [
             // Save data
             ajaxDataMetadata,
-            ajaxDataInterpreters,
+            ajaxDataTasks,
          ] = await Promise.all([
             // PROJECT
             axios.get(`${configServer.host}/api/project/${ctx.query.id_project}/metadata`, {
                headers: { Authorization: token },
             }),
-            // INTERPRETERS
-            axios.get(`${configServer.host}/api/interpreters`, {
-               headers: { Authorization: token },
-            }),
+            // Iteration TASKS
+            axios.get(
+               `${configServer.host}/api/project/${ctx.query.id_project}/iteration/${
+                  ctx.query.id_iteration
+               }/tasks`,
+               {
+                  headers: { Authorization: token },
+               },
+            ),
          ]);
       } catch (e) {
+         // Requests were failed
          throw new ErrorGetInitialProps('Requests failed', 800);
       }
 
@@ -67,8 +73,8 @@ class ProjectPage extends React.Component {
             metadata: ajaxDataMetadata.data.dat,
          },
          {
-            pageTitle: 'Create part',
-            currentTab: 'content',
+            pageTitle: 'Create a snapshot',
+            currentTab: 'iterations',
             verifiedMark: false,
             invisibleTabIds: [],
          },
@@ -79,7 +85,8 @@ class ProjectPage extends React.Component {
 
       return {
          metadata: ajaxDataMetadata.data.dat,
-         interpreters: ajaxDataInterpreters.data.dat,
+         iterationId: ctx.query.id_iteration,
+         ajaxTasks: ajaxDataTasks.data.dat,
       };
    }
 
@@ -94,12 +101,24 @@ class ProjectPage extends React.Component {
    // Methods
    // ----------------------------------------------------------------------------------------------
 
-   ajaxCreatePart = async data => {
+   ajaxCreateSnapshot = async data => {
       console.log(this.props.metadata.id, data);
+      console.log(this.props.iterationId);
       try {
-         await axios.post(`${configServer.host}/api/project/${this.props.metadata.id}/parts`, data);
+         let snapshot = await axios.post(
+            `${configServer.host}/api/project/${this.props.metadata.id}/iteration/${
+               this.props.iterationId
+            }/snapshots`,
+            data,
+         );
 
-         Router.push(`/project/${this.props.metadata.id}/content`);
+         let snapshotId = snapshot.data.dat.id;
+
+         Router.push(
+            `/project/${this.props.metadata.id}/iterations/${
+               this.props.iterationId
+            }/snapshot/${snapshotId}`,
+         );
       } catch (e) {}
    };
 
@@ -109,65 +128,56 @@ class ProjectPage extends React.Component {
    render() {
       return (
          <CommonLayout>
+            <div className="row">
+               <div className="col">
+                  <table className="table">
+                     <thead>
+                        <tr>
+                           <th>Name</th>
+                           <th>Min</th>
+                           <th>Max</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {this.props.ajaxTasks.tasks.map((task, index) => (
+                           <tr key={index}>
+                              <td>
+                                 <strong>{task.title}</strong>
+                                 <br />
+                                 {task.description}
+                              </td>
+                              <td>{task.pointsMin}</td>
+                              <td>{task.pointsMax}</td>
+                           </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+
             <Formik
                initialValues={{
-                  interpreter:
-                     this.props.interpreters.length > 0 ? this.props.interpreters[0].name : '',
-                  store: {
-                     title: '',
-                     body: '',
-                  },
+                  parts: [
+                     {
+                        tasks: [44],
+                        document: {
+                           interpreter: 'text-plain',
+                           store: {
+                              title: 'Part 1',
+                              body: 'Text',
+                           },
+                        },
+                     },
+                  ],
                }}
-               onSubmit={this.ajaxCreatePart}
+               onSubmit={this.ajaxCreateSnapshot}
             >
                <Form>
                   <div className="row">
                      <div className="col">
-                        <div className="form-elem form-elem_select">
-                           <span className="title">Interpreter</span>
-                           <label>
-                              <Field component="select" name="interpreter">
-                                 {this.props.interpreters.map((item, i) => {
-                                    return (
-                                       <option key={i} value={item.name}>
-                                          {item.name}
-                                       </option>
-                                    );
-                                 })}
-                              </Field>
-                           </label>
-                           <div className="description">Define part's interpreter</div>
-                        </div>
-                     </div>
-                     <div className="col">
-                        <div className="form-elem form-elem_input">
-                           <span className="title">Title</span>
-                           <label>
-                              <Field type="text" name="store.title" placeholder="Your title" />
-                           </label>
-                           <div className="description">Optional part's name</div>
-                        </div>
-                     </div>
-                  </div>
-
-                  <div className="row">
-                     <div className="col">
-                        <div className="form-elem form-elem_textarea">
-                           <span className="title">Store</span>
-                           <label>
-                              <Field component="textarea" name="store.body" />
-                           </label>
-                           <div className="description">Define interpreter's store</div>
-                        </div>
-                     </div>
-                  </div>
-
-                  <div className="row">
-                     <div className="col-6" />
-                     <div className="col-6">
-                        <button className="button button_green" onSubmit={this.ajaxCreatePart}>
-                           {' '}
-                           Create part
+                        <div className="form-elem form-elem_select" />
+                        <button type="submit" className="button button_yellow">
+                           Create
                         </button>
                      </div>
                   </div>

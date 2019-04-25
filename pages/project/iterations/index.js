@@ -8,25 +8,18 @@ import { withRouter } from 'next/router';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
-import {
-   actionSetTabActive,
-   actionSetTabBarItems,
-   actionSetUsageTabBar,
-} from 'actions/tab-bar.action';
-import { actionSetInfoBarItems, actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
 import axios from 'axios';
 
-import ReactMarkdown from 'react-markdown';
 import Router from 'next/router';
 import Link from 'next/link';
-import { ErrorGetInitialProps } from '../../../src/utils/errors.util';
+import { ErrorGetInitialProps } from 'utils/errors.util';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faEye, faShareSquare, faStamp, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { setProjectInitialProps } from 'utils/get-inital-props.util';
 const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
@@ -48,29 +41,24 @@ class ProjectPage extends React.Component {
 
       const token = ctx.store.getState().reducerJWT.token;
 
-      let ajaxDataProject, ajaxDataIterations;
+      let ajaxDataMetadata, ajaxDataIterations;
 
       try {
          [
             // Save data
-            ajaxDataProject,
+            ajaxDataMetadata,
             ajaxDataIterations,
          ] = await Promise.all([
             // PROJECT
             axios.get(`${configServer.host}/api/project/${ctx.query.id_project}/metadata`, {
-               headers: {
-                  Authorization: token,
-               },
+               headers: { Authorization: token },
             }),
             // ITERATIONS
             axios.get(`${configServer.host}/api/project/${ctx.query.id_project}/iterations`, {
-               headers: {
-                  Authorization: token,
-               },
+               headers: { Authorization: token },
             }),
          ]);
       } catch (e) {
-         console.log(e);
          // Requests were failed
          throw new ErrorGetInitialProps('Requests failed', 800);
       }
@@ -83,9 +71,7 @@ class ProjectPage extends React.Component {
                   iteration.id
                }/snapshots`,
                {
-                  headers: {
-                     Authorization: token,
-                  },
+                  headers: { Authorization: token },
                },
             );
 
@@ -99,105 +85,24 @@ class ProjectPage extends React.Component {
       // Redux states
       // -------------------------------------------------------------------------------------------
 
-      ctx.store.dispatch(actionSetPageTitle(ajaxDataProject.data.dat.public.name));
-      ctx.store.dispatch(
-         actionSetTabBarItems([
-            {
-               tabId: 'description',
-               tabTitle: 'Description',
-               tabLink: `/project/description?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/description`,
-               tabActive: false,
-               tabVisible: true,
-            },
-            {
-               tabId: 'content',
-               tabTitle: 'Content',
-               tabLink: `/project/content?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/content`,
-               tabActive: false,
-               tabVisible: true,
-            },
-            {
-               tabId: 'iterations',
-               tabTitle: 'Iterations',
-               tabLink: `/project/iterations?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/iterations`,
-               tabActive: true,
-               tabVisible: true,
-            },
-            {
-               tabId: 'contributors',
-               tabTitle: 'Contributors',
-               tabLink: `/project/contributors?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/contributors`,
-               tabActive: false,
-               tabVisible: true,
-            },
-            {
-               tabId: 'settings',
-               tabTitle: 'Settings',
-               tabLink: `/project/settings?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/settings`,
-               tabActive: false,
-               tabVisible: true,
-            },
-         ]),
+      setProjectInitialProps(
+         ctx,
+         {
+            metadata: ajaxDataMetadata.data.dat,
+         },
+         {
+            pageTitle: 'Iterations',
+            currentTab: 'iterations',
+            verifiedMark: false,
+            invisibleTabIds: [],
+         },
       );
 
-      ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
-      ctx.store.dispatch(actionSetUsageTabBar(true));
-      ctx.store.dispatch(
-         actionSetInfoBarItems([
-            {
-               title: 'Category',
-               items: [
-                  {
-                     title: ajaxDataProject.data.dat.public.category.name,
-                  },
-               ],
-            },
-            {
-               title: 'Metadata',
-               items: [
-                  {
-                     title: 'Public content',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.isPublic ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.isPublic ? 'green' : 'red',
-                     },
-                  },
-                  {
-                     title: 'Archived',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.isArchived ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.isArchived ? 'red' : 'green',
-                     },
-                  },
-                  {
-                     title: 'Searchable',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.isSearchable ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.isSearchable ? 'green' : 'red',
-                     },
-                  },
-                  {
-                     title: 'Open vacancies',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.hasOpenVacancies ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.hasOpenVacancies ? 'green' : 'red',
-                     },
-                  },
-               ],
-            },
-         ]),
-      );
-
-      // Info Bar
-      ctx.store.dispatch(actionSetUsageInfoBar(true));
+      // Props
+      // -------------------------------------------------------------------------------------------
 
       return {
-         metadata: ajaxDataProject.data.dat.public,
+         metadata: ajaxDataMetadata.data.dat,
          iterations: ajaxDataIterations.data.dat,
       };
    }
@@ -227,16 +132,25 @@ class ProjectPage extends React.Component {
          <CommonLayout>
             <div className="row">
                <div className="col">
+                  {this.props.iterations.iterations.length === 0 && (
+                     <p>Current project doesn't have iterations.</p>
+                  )}
+
                   {this.props.iterations.iterations.map((iteration, idx) => (
-                     <div key={idx} className="row">
+                     <div key={idx} className="row box">
                         <div className="col">
                            <h1>
-                              {iteration.title} (
-                              {moment(iteration.deadline).format('DD.MM.YY HH:mm')})
+                              {iteration.title} ({moment(iteration.deadline).format('DD.MM.YY')})
                            </h1>
 
+                           {iteration.tasks.length === 0 && (
+                              <div className="box">
+                                 <p>This iteration has no tasks.</p>
+                              </div>
+                           )}
+
                            {iteration.tasks.map((task, idxTask) => (
-                              <div key={idxTask}>
+                              <div key={idxTask} className="box">
                                  <div className="row">
                                     <div className="col-7">
                                        <strong>{task.title}</strong>
@@ -263,7 +177,24 @@ class ProjectPage extends React.Component {
                                  </div>
                               </div>
                            ))}
-                           <h2>Snapshots</h2>
+
+                           <div className="row">
+                              <div className="col-7">
+                                 <h2>Snapshots</h2>
+                              </div>
+                              <div className="col-5">
+                                 <Link
+                                    as={`/project/${this.props.metadata.id}/iterations/${
+                                       iteration.id
+                                    }/snapshot/create`}
+                                    href={`/project/iterations/snapshot/create?id_project=${
+                                       this.props.metadata.id
+                                    }&id_iteration=${iteration.id}`}
+                                 >
+                                    <a className="button button_gray">New snapshot</a>
+                                 </Link>
+                              </div>
+                           </div>
                            <div className="table-responsive">
                               <table className="table">
                                  <thead>

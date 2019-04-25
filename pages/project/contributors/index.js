@@ -8,22 +8,16 @@ import { withRouter } from 'next/router';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
-import {
-   actionSetTabActive,
-   actionSetTabBarItems,
-   actionSetUsageTabBar,
-} from 'actions/tab-bar.action';
-import { actionSetInfoBarItems, actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
 import axios from 'axios';
 
-import ReactMarkdown from 'react-markdown';
 import Router from 'next/router';
-import { ErrorGetInitialProps } from '../../../src/utils/errors.util';
+import { ErrorGetInitialProps } from 'utils/errors.util';
+import { setProjectInitialProps } from 'utils/get-inital-props.util';
 const configServer = require('config/server.config');
+import Noty from 'noty';
 
 // -------------------------------------------------------------------------------------------------
 // Component
@@ -43,137 +37,50 @@ class ProjectPage extends React.Component {
       // -------------------------------------------------------------------------------------------
 
       const token = ctx.store.getState().reducerJWT.token;
-
-      let ajaxDataProject, ajaxDataTeam;
+      let ajaxDataMetadata, ajaxDataTeam;
 
       try {
          [
             // Save data
-            ajaxDataProject,
+            ajaxDataMetadata,
             ajaxDataTeam,
          ] = await Promise.all([
-            // PROJECT
+            // Metadata
             axios.get(`${configServer.host}/api/project/${ctx.query.id_project}/metadata`, {
-               headers: {
-                  Authorization: token,
-               },
+               headers: { Authorization: token },
             }),
-            // ITERATIONS
+            // Iterations
             axios.get(`${configServer.host}/api/project/${ctx.query.id_project}/team`, {
-               headers: {
-                  Authorization: token,
-               },
+               headers: { Authorization: token },
             }),
          ]);
       } catch (e) {
-         console.log(e);
          // Requests were failed
-         throw new ErrorGetInitialProps('Requests failed', 800);
+         throw new ErrorGetInitialProps('Requests failed', 500);
       }
 
       // Redux states
       // -------------------------------------------------------------------------------------------
 
-      ctx.store.dispatch(actionSetPageTitle(ajaxDataProject.data.dat.public.name));
-      ctx.store.dispatch(
-         actionSetTabBarItems([
-            {
-               tabId: 'description',
-               tabTitle: 'Description',
-               tabLink: `/project/description?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/description`,
-               tabActive: false,
-               tabVisible: true,
-            },
-            {
-               tabId: 'content',
-               tabTitle: 'Content',
-               tabLink: `/project/content?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/content`,
-               tabActive: false,
-               tabVisible: true,
-            },
-            {
-               tabId: 'iterations',
-               tabTitle: 'Iterations',
-               tabLink: `/project/iterations?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/iterations`,
-               tabActive: false,
-               tabVisible: true,
-            },
-            {
-               tabId: 'contributors',
-               tabTitle: 'Contributors',
-               tabLink: `/project/contributors?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/contributors`,
-               tabActive: true,
-               tabVisible: true,
-            },
-            {
-               tabId: 'settings',
-               tabTitle: 'Settings',
-               tabLink: `/project/settings?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/settings`,
-               tabActive: false,
-               tabVisible: true,
-            },
-         ]),
+      setProjectInitialProps(
+         ctx,
+         {
+            metadata: ajaxDataMetadata.data.dat,
+         },
+         {
+            pageTitle: 'Contributors',
+            currentTab: 'contributors',
+            verifiedMark: false,
+            invisibleTabIds: [],
+         },
       );
 
-      ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
-      ctx.store.dispatch(actionSetUsageTabBar(true));
-      ctx.store.dispatch(
-         actionSetInfoBarItems([
-            {
-               title: 'Category',
-               items: [
-                  {
-                     title: ajaxDataProject.data.dat.public.category.name,
-                  },
-               ],
-            },
-            {
-               title: 'Metadata',
-               items: [
-                  {
-                     title: 'Public content',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.isPublic ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.isPublic ? 'green' : 'red',
-                     },
-                  },
-                  {
-                     title: 'Archived',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.isArchived ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.isArchived ? 'red' : 'green',
-                     },
-                  },
-                  {
-                     title: 'Searchable',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.isSearchable ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.isSearchable ? 'green' : 'red',
-                     },
-                  },
-                  {
-                     title: 'Open vacancies',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.hasOpenVacancies ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.hasOpenVacancies ? 'green' : 'red',
-                     },
-                  },
-               ],
-            },
-         ]),
-      );
-
-      // Info Bar
-      ctx.store.dispatch(actionSetUsageInfoBar(true));
+      // Props
+      // -------------------------------------------------------------------------------------------
 
       return {
-         metadata: ajaxDataProject.data.dat.public,
-         team: ajaxDataTeam.data.dat.team,
+         ajaxMetadata: ajaxDataMetadata.data.dat,
+         ajaxTeam: ajaxDataTeam.data.dat.team,
       };
    }
 
@@ -181,38 +88,71 @@ class ProjectPage extends React.Component {
    // ----------------------------------------------------------------------------------------------
 
    ajaxJoinTeam = async roleId => {
-      console.log(roleId);
+      const { ajaxMetadata } = this.props;
 
       try {
-         await axios.post(`${configServer.host}/api/project/${this.props.metadata.id}/team`, {
+         await axios.post(`${configServer.host}/api/project/${ajaxMetadata.id}/team`, {
             projectRoleId: roleId,
          });
 
-         Router.push(`/project/${this.props.metadata.id}/contributors`);
-      } catch (e) {}
+         Router.push(`/project/${ajaxMetadata.id}/contributors`);
+
+         new Noty({
+            text: 'You joined the project.',
+            type: 'success',
+         }).show();
+      } catch (e) {
+         new Noty({
+            text: 'You cannot assign or change a role: no capacity or you are the last leader.',
+            type: 'error',
+         }).show();
+      }
    };
 
    ajaxLeaveTeam = async () => {
-      try {
-         await axios.delete(`${configServer.host}/api/project/${this.props.metadata.id}/team`);
+      const { ajaxMetadata } = this.props;
 
-         Router.push(`/project/${this.props.metadata.id}/contributors`);
-      } catch (e) {}
+      try {
+         await axios.delete(`${configServer.host}/api/project/${ajaxMetadata.id}/team`);
+
+         Router.push(`/project/${ajaxMetadata.id}/contributors`);
+
+         new Noty({
+            text: 'You left the project.',
+            type: 'success',
+         }).show();
+      } catch (e) {
+         new Noty({
+            text: 'Cannot leave the project. You are the last leader.',
+            type: 'error',
+         }).show();
+      }
    };
 
    // Render
    // ----------------------------------------------------------------------------------------------
 
    render() {
-      console.log(this.props.metadata);
+      const { ajaxMetadata, ajaxTeam } = this.props;
+
+      let userIsInTeam = false;
+      (() => {
+         for (const role of ajaxTeam) {
+            for (const user of role[0]['users']) {
+               if (user['id'] === this.props.jwtPayload.userId) {
+                  userIsInTeam = true;
+                  return;
+               }
+            }
+         }
+      })();
 
       return (
          <CommonLayout>
-            <div className="row">
-               <div className="col">
-                  <h1>Team</h1>
-                  {this.props.team.map((item, idx) => (
-                     <div key={idx}>
+            {ajaxTeam.map((item, idx) => (
+               <div className="box" key={idx}>
+                  <div className="row">
+                     <div className="col-8">
                         <h2>
                            {item[0].name}{' '}
                            {item[0].name !== 'Leader' && item[0].name !== 'Visitors' && (
@@ -221,38 +161,40 @@ class ProjectPage extends React.Component {
                               </span>
                            )}
                         </h2>
+                     </div>
 
+                     <div className="col-4">
+                        {ajaxMetadata.hasOpenVacancies &&
+                           (item[0].isEditable !== false || item[0].name === 'Visitors') && (
+                              <a
+                                 onClick={() => this.ajaxJoinTeam(item[0].id)}
+                                 className="button button_gray"
+                              >
+                                 Join
+                              </a>
+                           )}
+                     </div>
+                  </div>
+
+                  <div className="row">
+                     <div className="col">
                         {item[0].users.map((user, idx) => (
                            <div key={idx} className="team__contributor">
                               {user.authUsername}
                            </div>
                         ))}
-                        {this.props.metadata.hasOpenVacancies && item[0].isEditable !== false && (
-                           <a
-                              onClick={() => this.ajaxJoinTeam(item[0].id)}
-                              className="button button_gray"
-                           >
-                              Join team as {item[0].name}
-                           </a>
-                        )}
-                        {this.props.metadata.hasOpenVacancies && item[0].name === 'Visitors' && (
-                           <a
-                              className="button button_gray"
-                              onClick={() => this.ajaxJoinTeam(item[0].id)}
-                           >
-                              Join as a visitor
-                           </a>
-                        )}
                      </div>
-                  ))}
+                  </div>
                </div>
-            </div>
+            ))}
             <div className="row">
                <div className="col-6" />
                <div className="col-6">
-                  <a className="button button_red" onClick={this.ajaxLeaveTeam}>
-                     Leave team
-                  </a>
+                  {userIsInTeam && (
+                     <a className="button button_red" onClick={this.ajaxLeaveTeam}>
+                        Leave team
+                     </a>
+                  )}
                </div>
             </div>
          </CommonLayout>
@@ -265,7 +207,9 @@ class ProjectPage extends React.Component {
 // -------------------------------------------------------------------------------------------------
 
 const mapStateToProps = state => {
-   return {};
+   return {
+      jwtPayload: state.reducerJWT.payload,
+   };
 };
 
 const mapDispatchToProps = dispatch => {

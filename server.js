@@ -34,8 +34,8 @@ app.prepare()
          app.render(req, res, actualPage, queryParams);
       });
 
-      server.get('/project/:id_project/content/part/:id_part', (req, res) => {
-         const actualPage = '/project/content/part';
+      server.get('/project/:id_project/content/edit/:id_part', (req, res) => {
+         const actualPage = '/project/content/edit';
          const queryParams = {
             id_project: req.params.id_project,
             id_part: req.params.id_part,
@@ -58,6 +58,15 @@ app.prepare()
       server.get('/project/:id_project/iterations', (req, res) => {
          const actualPage = '/project/iterations';
          const queryParams = { id_project: req.params.id_project };
+         app.render(req, res, actualPage, queryParams);
+      });
+
+      server.get('/project/:id_project/iterations/:id_iteration/snapshot/create', (req, res) => {
+         const actualPage = '/project/iterations/snapshot/create';
+         const queryParams = {
+            id_project: req.params.id_project,
+            id_iteration: req.params.id_iteration,
+         };
          app.render(req, res, actualPage, queryParams);
       });
 

@@ -8,25 +8,16 @@ import { withRouter } from 'next/router';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
-import {
-   actionSetTabActive,
-   actionSetTabBarItems,
-   actionSetUsageTabBar,
-} from 'actions/tab-bar.action';
-import { actionSetInfoBarItems, actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
 import axios from 'axios';
 
-import ReactMarkdown from 'react-markdown';
 import Router from 'next/router';
 import { ErrorGetInitialProps } from 'utils/errors.util';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faEye, faShareSquare, faStamp, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Field, FieldArray, Form, Formik } from 'formik';
+import { setProjectInitialProps } from 'utils/get-inital-props.util';
 const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
@@ -48,12 +39,12 @@ class ProjectPage extends React.Component {
 
       const token = ctx.store.getState().reducerJWT.token;
 
-      let ajaxDataProject, ajaxTasks, ajaxDataSnapshot, ajaxDataSnapshotGrades;
+      let ajaxDataMetadata, ajaxTasks, ajaxDataSnapshot, ajaxDataSnapshotGrades;
 
       try {
          [
             // Save data
-            ajaxDataProject,
+            ajaxDataMetadata,
             ajaxTasks,
             ajaxDataSnapshot,
             ajaxDataSnapshotGrades,
@@ -129,105 +120,24 @@ class ProjectPage extends React.Component {
       // Redux states
       // -------------------------------------------------------------------------------------------
 
-      ctx.store.dispatch(actionSetPageTitle(ajaxDataProject.data.dat.public.name));
-      ctx.store.dispatch(
-         actionSetTabBarItems([
-            {
-               tabId: 'description',
-               tabTitle: 'Description',
-               tabLink: `/project/description?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/description`,
-               tabActive: false,
-               tabVisible: true,
-            },
-            {
-               tabId: 'content',
-               tabTitle: 'Content',
-               tabLink: `/project/content?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/content`,
-               tabActive: false,
-               tabVisible: true,
-            },
-            {
-               tabId: 'iterations',
-               tabTitle: 'Iterations',
-               tabLink: `/project/iterations?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/iterations`,
-               tabActive: true,
-               tabVisible: true,
-            },
-            {
-               tabId: 'contributors',
-               tabTitle: 'Contributors',
-               tabLink: `/project/contributors?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/contributors`,
-               tabActive: false,
-               tabVisible: true,
-            },
-            {
-               tabId: 'settings',
-               tabTitle: 'Settings',
-               tabLink: `/project/settings?id_project=${ajaxDataProject.data.dat.public.id}`,
-               tabLinkAs: `/project/${ajaxDataProject.data.dat.public.id}/settings`,
-               tabActive: false,
-               tabVisible: true,
-            },
-         ]),
+      setProjectInitialProps(
+         ctx,
+         {
+            metadata: ajaxDataMetadata.data.dat,
+         },
+         {
+            pageTitle: 'Grade a snapshot',
+            currentTab: 'iterations',
+            verifiedMark: false,
+            invisibleTabIds: [],
+         },
       );
 
-      ctx.store.dispatch(actionSetUsagePageVerifiedMark(false));
-      ctx.store.dispatch(actionSetUsageTabBar(true));
-      ctx.store.dispatch(
-         actionSetInfoBarItems([
-            {
-               title: 'Category',
-               items: [
-                  {
-                     title: ajaxDataProject.data.dat.public.category.name,
-                  },
-               ],
-            },
-            {
-               title: 'Metadata',
-               items: [
-                  {
-                     title: 'Public content',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.isPublic ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.isPublic ? 'green' : 'red',
-                     },
-                  },
-                  {
-                     title: 'Archived',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.isArchived ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.isArchived ? 'red' : 'green',
-                     },
-                  },
-                  {
-                     title: 'Searchable',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.isSearchable ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.isSearchable ? 'green' : 'red',
-                     },
-                  },
-                  {
-                     title: 'Open vacancies',
-                     label: {
-                        text: ajaxDataProject.data.dat.public.hasOpenVacancies ? 'YES' : 'NO',
-                        color: ajaxDataProject.data.dat.public.hasOpenVacancies ? 'green' : 'red',
-                     },
-                  },
-               ],
-            },
-         ]),
-      );
-
-      // Info Bar
-      ctx.store.dispatch(actionSetUsageInfoBar(true));
+      // Props
+      // -------------------------------------------------------------------------------------------
 
       return {
-         metadata: ajaxDataProject.data.dat.public,
+         metadata: ajaxDataMetadata.data.dat,
          snapshot: ajaxDataSnapshot.data.dat.snapshot,
          tasks: ajaxTasks.data.dat,
          grades: ajaxDataSnapshotGrades.data.dat.grades,
@@ -312,47 +222,46 @@ class ProjectPage extends React.Component {
 
       return (
          <CommonLayout>
-            <div className="button button_yellow" onClick={this.ajaxGradeSnapshot}>
-               Save grades
-            </div>
-            <div className="row">
-               <div className="col">
-                  <div>
-                     <h2>Iteration</h2>
-                     {this.props.snapshot.iteration.title}
-                     <h3>Created</h3>
-                     {this.props.snapshot.createdBy && (
-                        <React.Fragment>
-                           {moment(this.props.snapshot.dateCreated).format('DD.MM.YYYY HH:mm')}
-                           <br />
-                           {this.props.snapshot.createdBy.authUsername || '-'}
-                        </React.Fragment>
-                     )}
-                     <h3>Sent by</h3>
-                     {this.props.snapshot.sentBy && (
-                        <React.Fragment>
-                           {moment(this.props.snapshot.dateSent).format('DD.MM.YYYY HH:mm')}
-                           <br />
-                           {this.props.snapshot.sentBy.authUsername || '-'}
-                        </React.Fragment>
-                     )}
-                     <h3>Graded by</h3>
-                     {this.props.snapshot.gradedBy && (
-                        <React.Fragment>
-                           {moment(this.props.snapshot.dateGraded).format('DD.MM.YYYY HH:mm')}
-                           <br />
-                           {this.props.snapshot.gradedBy.authUsername || '-'}
-                        </React.Fragment>
-                     )}
-                  </div>
+            <Formik initialValues={{ grades: initialStateForm }} onSubmit={this.ajaxGradeSnapshot}>
+               <Form>
+                  <button className="button button_yellow" type="submit">
+                     Save grades
+                  </button>
+                  <div className="row">
+                     <div className="col">
+                        <div>
+                           <h2>Iteration</h2>
+                           {this.props.snapshot.iteration.title}
+                           <h3>Created</h3>
+                           {this.props.snapshot.createdBy && (
+                              <React.Fragment>
+                                 {moment(this.props.snapshot.dateCreated).format(
+                                    'DD.MM.YYYY HH:mm',
+                                 )}
+                                 <br />
+                                 {this.props.snapshot.createdBy.authUsername || '-'}
+                              </React.Fragment>
+                           )}
+                           <h3>Sent by</h3>
+                           {this.props.snapshot.sentBy && (
+                              <React.Fragment>
+                                 {moment(this.props.snapshot.dateSent).format('DD.MM.YYYY HH:mm')}
+                                 <br />
+                                 {this.props.snapshot.sentBy.authUsername || '-'}
+                              </React.Fragment>
+                           )}
+                           <h3>Graded by</h3>
+                           {this.props.snapshot.gradedBy && (
+                              <React.Fragment>
+                                 {moment(this.props.snapshot.dateGraded).format('DD.MM.YYYY HH:mm')}
+                                 <br />
+                                 {this.props.snapshot.gradedBy.authUsername || '-'}
+                              </React.Fragment>
+                           )}
+                        </div>
 
-                  <h1>Tasks and grades</h1>
+                        <h1>Tasks and grades</h1>
 
-                  <Formik
-                     initialValues={{ grades: initialStateForm }}
-                     onSubmit={this.ajaxGradeSnapshot}
-                  >
-                     <Form>
                         <FieldArray
                            name="grades"
                            render={() => (
@@ -393,55 +302,23 @@ class ProjectPage extends React.Component {
                                        ))}
                                     </tbody>
                                  </table>
-                                 <button className="button button_yellow" type="submit">
-                                    Send
-                                 </button>
                               </div>
                            )}
                         />
-                     </Form>
-                  </Formik>
+                     </div>
+                  </div>
+               </Form>
+            </Formik>
 
-                  <table className="table">
-                     <thead>
-                        <tr>
-                           <th>Name</th>
-                           <th>Min</th>
-                           <th>Max</th>
-                           <th>Value</th>
-                           <th>Comment</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        {grades.map((grade, idx) => (
-                           <tr key={idx}>
-                              <td>
-                                 <strong>{grade.task.title}</strong>
-                                 <br />
-                                 {grade.task.description}
-                              </td>
-                              <td>{grade.task.pointsMin}</td>
-                              <td>{grade.task.pointsMax}</td>
-                              <td>{grade.points}</td>
-                              <td>{grade.message}</td>
-                           </tr>
-                        ))}
-                     </tbody>
-                  </table>
-
-                  {this.state.parts.map(part => {
-                     return (
-                        <div className="row" key={part.id}>
-                           <div className="col-12">
-                              <div
-                                 dangerouslySetInnerHTML={this.createMarkup(part.document.html)}
-                              />
-                           </div>
-                        </div>
-                     );
-                  })}
-               </div>
-            </div>
+            {this.state.parts.map(part => {
+               return (
+                  <div className="row" key={part.id}>
+                     <div className="col-12">
+                        <div dangerouslySetInnerHTML={this.createMarkup(part.document.html)} />
+                     </div>
+                  </div>
+               );
+            })}
          </CommonLayout>
       );
    }
