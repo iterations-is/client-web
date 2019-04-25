@@ -16,9 +16,10 @@ import { Field, Form, Formik } from 'formik';
 import CommonLayout from 'layouts/CommonLayout';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Noty from 'noty';
+import { ErrorGetInitialProps } from '../../src/utils/errors.util';
 const configServer = require('config/server.config');
 
 // -------------------------------------------------------------------------------------------------
@@ -30,7 +31,40 @@ class PanelPage extends React.Component {
    // ----------------------------------------------------------------------------------------------
 
    static async getInitialProps(ctx) {
+      // Authorization
+      // -------------------------------------------------------------------------------------------
+
       await verifyJWT(ctx);
+
+      // Ajax
+      // -------------------------------------------------------------------------------------------
+
+      const token = ctx.store.getState().reducerJWT.token;
+
+      let ajaxGlobalRoles, ajaxCategories;
+
+      try {
+         [
+            ajaxGlobalRoles,
+            ajaxCategories,
+            //
+         ] = await Promise.all([
+            // Global Roles
+            await axios.get(`${configServer.host}/api/roles`, {
+               headers: { Authorization: token },
+            }),
+            // Categories
+            await axios.get(`${configServer.host}/api/projects/categories`, {
+               headers: { Authorization: token },
+            }),
+         ]);
+      } catch (e) {
+         // Requests were failed
+         throw new ErrorGetInitialProps('Requests failed', 500);
+      }
+
+      // Redux states
+      // -------------------------------------------------------------------------------------------
 
       // Header
       ctx.store.dispatch(actionSetPageTitle('Control panel'));
@@ -40,20 +74,20 @@ class PanelPage extends React.Component {
       // Info Bar
       ctx.store.dispatch(actionSetUsageInfoBar(false));
 
-      // Ajax
-      const token = ctx.store.getState().reducerJWT.token;
-
-      let globalRoles;
-      try {
-         globalRoles = await axios.get(`${configServer.host}/api/dashboard/roles`, {
-            headers: {
-               Authorization: token,
-            },
-         });
-      } catch (err) {}
+      // Props
+      // -------------------------------------------------------------------------------------------
 
       return {
-         globalRoles: globalRoles.data.dat.roles,
+         globalRoles: ajaxGlobalRoles.data.dat.roles,
+         categories: ajaxCategories.data.dat.categories,
+      };
+   }
+
+   constructor(props) {
+      super(props);
+
+      this.state = {
+         categories: this.props.categories,
       };
    }
 
@@ -75,58 +109,180 @@ class PanelPage extends React.Component {
       }
    };
 
+   ajaxCreateCategory = async values => {
+      try {
+         let category = await axios.post(`${configServer.host}/api/projects/categories`, values);
+
+         new Noty({
+            text: 'Project category was created.',
+            type: 'success',
+         }).show();
+
+         let categories = [...this.state.categories];
+         categories.push(category.data.dat.category);
+         this.setState({ categories });
+      } catch (e) {
+         new Noty({
+            text: 'Cannot create project category.',
+            type: 'error',
+         }).show();
+      }
+   };
+
+   ajaxUpdateCategory = async (id, values) => {
+      try {
+         await axios.patch(`${configServer.host}/api/projects/category/${id}`, values);
+
+         new Noty({
+            text: 'Project category was updated.',
+            type: 'success',
+         }).show();
+      } catch (e) {
+         new Noty({
+            text: 'Cannot update project category.',
+            type: 'error',
+         }).show();
+      }
+   };
+
+   ajaxRemoveCategory = async (id, idx) => {
+      try {
+         await axios.delete(`${configServer.host}/api/projects/category/${id}`);
+
+         new Noty({
+            text: 'Project category was deleted.',
+            type: 'success',
+         }).show();
+
+         let categories = [...this.state.categories];
+         categories.splice(idx, 1);
+         this.setState({ categories });
+      } catch (e) {
+         new Noty({
+            text: 'Cannot delete project category. It has some dependencies.',
+            type: 'error',
+         }).show();
+      }
+   };
+
    // Render
    // ----------------------------------------------------------------------------------------------
 
    render() {
+      const { categories } = this.state;
+
+      const blockCategories = (
+         <React.Fragment>
+            <h1>Categories</h1>
+            <div className="form-elem form-elem_input">
+               <span className="title">Name</span>
+               <div className="row">
+                  {categories.map((category, idx) => (
+                     <Formik
+                        initialValues={{ name: category.name }}
+                        onSubmit={values => this.ajaxUpdateCategory(category.id, values)}
+                     >
+                        <Form>
+                           <div className="col" key={category.id}>
+                              <div className="row-flex">
+                                 <div className="form-elem form-elem_input">
+                                    <Field name="name" />
+                                 </div>
+
+                                 <button className="sq-button sq-button_green" type="submit">
+                                    <FontAwesomeIcon icon={faSave} />
+                                 </button>
+
+                                 <div
+                                    className="sq-button sq-button_red"
+                                    onClick={() => this.ajaxRemoveCategory(category.id, idx)}
+                                 >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                 </div>
+                              </div>
+                           </div>
+                        </Form>
+                     </Formik>
+                  ))}
+               </div>
+            </div>
+
+            <div className="row">
+               <div className="col">
+                  <Formik
+                     initialValues={{ name: '' }}
+                     onSubmit={values => this.ajaxCreateCategory(values)}
+                  >
+                     <Form>
+                        <div className="form-elem form-elem_input">
+                           <div className="title">New category name</div>
+                           <div className="row-flex">
+                              <Field name="name" />
+                              <button className="sq-button sq-button_blue" type="submit">
+                                 <FontAwesomeIcon icon={faPlus} />
+                              </button>
+                              <button style={{ visibility: 'hidden' }} className="sq-button" />
+                           </div>
+                        </div>
+                     </Form>
+                  </Formik>
+               </div>
+            </div>
+         </React.Fragment>
+      );
+
+      const blockChangeUserRole = (
+         <React.Fragment>
+            <h1>Change user role</h1>
+            <Formik
+               initialValues={{
+                  username: '',
+                  role: 1,
+               }}
+               onSubmit={this.ajaxPatchUserGlobalRole}
+               render={() => (
+                  <Form>
+                     <div className="row">
+                        <div className="col">
+                           <div className="form-elem form-elem_input">
+                              <label>
+                                 <span className="title">Username</span>
+                                 <Field type="text" name="username" placeholder="username" />
+                              </label>
+                           </div>
+
+                           <div className="form-elem form-elem_select">
+                              <label>
+                                 <span className="title">Role</span>
+                                 <Field component="select" name="role">
+                                    {this.props.globalRoles.map(role => {
+                                       return (
+                                          <option key={role.id} value={role.id}>
+                                             {role.name}
+                                          </option>
+                                       );
+                                    })}
+                                 </Field>
+                              </label>
+                           </div>
+
+                           <button className="button button_green" type="submit">
+                              <FontAwesomeIcon icon={faSave} />
+                              Update user role
+                           </button>
+                        </div>
+                     </div>
+                  </Form>
+               )}
+            />
+         </React.Fragment>
+      );
+
       return (
          <CommonLayout>
             <div className="row">
-               <div className="col-6">
-                  <div className="row">
-                     <div className="col">
-                        <h1>Change user role</h1>
-
-                        <Formik
-                           initialValues={{
-                              username: '',
-                              role: 1,
-                           }}
-                           onSubmit={this.ajaxPatchUserGlobalRole}
-                           render={props => (
-                              <Form>
-                                 <label>
-                                    <span>Username</span>
-                                    <Field type="text" name="username" placeholder="username" />
-                                 </label>
-                                 <label>
-                                    <span>Role</span>
-                                    <Field component="select" name="role">
-                                       {this.props.globalRoles.map(role => {
-                                          return (
-                                             <option key={role.id} value={role.id}>
-                                                {role.name}
-                                             </option>
-                                          );
-                                       })}
-                                    </Field>
-                                 </label>
-                                 <button className="button button_green" type="submit">
-                                    <FontAwesomeIcon icon={faSave} />
-                                    Update user role
-                                 </button>
-                              </Form>
-                           )}
-                        />
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div className="row">
-               <div className="col-12">
-                  <h1>Permissions</h1>
-                  <p>Not implemented yet.</p>
-               </div>
+               <div className="col-12 col-lg-6">{blockChangeUserRole}</div>
+               <div className="col-12 col-lg-6">{blockCategories}</div>
             </div>
          </CommonLayout>
       );

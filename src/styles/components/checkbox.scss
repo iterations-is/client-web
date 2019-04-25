@@ -1,12 +1,17 @@
 ////
+/// Checkbox
+/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
+////
+
+////
 /// Switch Checkbox
 /// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
 ////
 
-.switch {
+.checkbox {
    position: relative;
    display: inline-block;
-   width: $g6;
+   width: $g3;
    height: $g3;
    cursor: pointer;
 
@@ -15,16 +20,16 @@
       height: 0;
       opacity: 0;
 
-      &:checked + .switch__inner {
+      &:checked + .checkbox__inner {
          background-color: $color-asphalt-medium;
 
          &:before {
-            transform: translateX($g3);
+            background-color: $color-asphalt-medium;
          }
       }
    }
 
-   .switch__inner {
+   .checkbox__inner {
       position: absolute;
       top: 0;
       left: 0;

@@ -11,6 +11,9 @@
 @import '~normalize.css';
 @import 'variables-bootstrap';
 @import '~bootstrap/scss/bootstrap-grid';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/tables';
+@import './bootsrap';
 @import '~noty/src/noty.scss';
 @import '~noty/src/themes/relax.scss';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');

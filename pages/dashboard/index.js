@@ -29,6 +29,7 @@ import {
    faBell,
    faTrash,
 } from '@fortawesome/free-solid-svg-icons';
+import { Field, Form, Formik } from 'formik';
 library.add(faBell, faKey, faCircleNotch, faKey, faPlus, faSignOutAlt, faList, faQuestion, faTrash);
 
 // set up cookies
@@ -59,163 +60,240 @@ class DashboardPage extends React.Component {
    // Methods
    // ----------------------------------------------------------------------------------------------
 
-   // Pings to server with JWT token
-   onPingTokenCall = async e => {
-      const token = cookies.get('JWT');
-
-      try {
-         const res = await axios.get(configServer.host + '/api/token/verify', {
-            headers: { Authorization: token },
-         });
-         console.log(`Request success:`);
-         console.log(res.data.msg);
-      } catch (err) {
-         console.log(`Request failed:`);
-         console.log(err.response.data.msg);
-      }
-   };
-
    // Render
    // ----------------------------------------------------------------------------------------------
 
    render() {
       return (
          <CommonLayout>
-            <Link as={`/project/12`} href={`/project?id_project=12`}>
-               <a>Project example</a>
-            </Link>
-            <p>
-               Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices viverra neque eget
-               semper. Donec iaculis laoreet lorem, non mattis enim faucibus non. Suspendisse eu
-               justo consequat, pulvinar tellus ut, pulvinar est. Fusce efficitur euismod tellus, in
-               tincidunt sem scelerisque vel. Nunc iaculis, odio eget aliquam laoreet, mi quam
-               suscipit lectus, sed rhoncus lacus dui eu elit. In quis risus turpis. Donec congue
-               felis vitae sollicitudin placerat. Vestibulum sit amet enim varius elit finibus
-               egestas sit amet sed est. Suspendisse blandit nulla accumsan nulla tempor laoreet.
-               Nunc dignissim, massa sed posuere lobortis, sem nibh lobortis lectus, ac luctus risus
-               ante eu sapien. Phasellus eget velit vel turpis consequat auctor at sit amet magna.
-               In hac habitasse platea dictumst. Phasellus non tempus mauris.
-            </p>
-            <p>
-               Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices viverra neque eget
-               semper. Donec iaculis laoreet lorem, non mattis enim faucibus non. Suspendisse eu
-               justo consequat, pulvinar tellus ut, pulvinar est. Fusce efficitur euismod tellus, in
-               tincidunt sem scelerisque vel. Nunc iaculis, odio eget aliquam laoreet, mi quam
-               suscipit lectus, sed rhoncus lacus dui eu elit. In quis risus turpis. Donec congue
-               felis vitae sollicitudin placerat. Vestibulum sit amet enim varius elit finibus
-               egestas sit amet sed est. Suspendisse blandit nulla accumsan nulla tempor laoreet.
-               Nunc dignissim, massa sed posuere lobortis, sem nibh lobortis lectus, ac luctus risus
-               ante eu sapien. Phasellus eget velit vel turpis consequat auctor at sit amet magna.
-               In hac habitasse platea dictumst. Phasellus non tempus mauris.
-            </p>
-            {/* Radio */}
-            {/* Checkbox simple */}
-            {/* Checkbox switch */}
-            <div />
-            <label className="switch">
-               <input type="checkbox" />
-               <span className="switch__inner" />
-            </label>
-            <label className="switch">
-               <input type="checkbox" defaultChecked />
-               <span className="switch__inner" />
-            </label>
-
-            <div />
-
             <div className="row">
                <div className="col">
-                  <a className="button button_blue">Example Button</a>
-                  <a className="button button_yellow">Example Button</a>
-                  <a className="button button_red">Example Button</a>
-                  <a className="button button_silver">Example Button</a>
-                  <a className="button button_green">Example Button</a>
-                  <a className="button button_gray">Example Button</a>
-               </div>
+                  <h1>Style guide is a very important part of the design</h1>
+                  <h2>Style guide is a very important part of the design</h2>
+                  <h3>Style guide is a very important part of the design</h3>
 
-               <div className="col">
-                  <a className="button button_blue">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                     Example Button
-                  </a>
-                  <a className="button button_yellow">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                     Example Button
-                  </a>
-                  <a className="button button_red">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                     Example Button
-                  </a>
-                  <a className="button button_silver">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                     Example Button
-                  </a>
-                  <a className="button button_green">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                     Example Button
-                  </a>
-                  <a className="button button_gray">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                     Example Button
-                  </a>
-               </div>
-
-               <div className="col">
-                  <a className="sq-button sq-button_blue">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                  </a>
-                  <a className="sq-button sq-button_yellow">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                  </a>
-                  <a className="sq-button sq-button_red">
-                     <FontAwesomeIcon icon={['fas', 'trash']} />
-                  </a>
-                  <a className="sq-button sq-button_silver">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                  </a>
-                  <a className="sq-button sq-button_green">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                  </a>
-                  <a className="sq-button sq-button_gray">
-                     <FontAwesomeIcon icon={['fas', 'bell']} />
-                  </a>
+                  <p>
+                     Maecenas metus dui, tincidunt non nibh vel, ullamcorper facilisis eros. Nullam
+                     aliquet massa enim, id tincidunt justo pretium quis. Nam coue nulla diam, vel
+                     porttitor ante viverra id.
+                  </p>
+                  <p>
+                     <strong>
+                        Maecenas metus dui, tincidunt non nibh vel, ullamcorper facilisis eros.
+                        Nullam aliquet massa enim, id tincidunt justo pretium quis. Nam coue nulla
+                        diam, vel porttitor ante viverra id.
+                     </strong>
+                  </p>
+                  <p>
+                     <em>
+                        Maecenas metus dui, tincidunt non nibh vel, ullamcorper facilisis eros.
+                        Nullam aliquet massa enim, id tincidunt justo pretium quis. Nam coue nulla
+                        diam, vel porttitor ante viverra id.
+                     </em>
+                  </p>
                </div>
             </div>
 
-            {/* Buttons */}
-            <h1>Style guide is a very important part of the design</h1>
-            <h2>Style guide is a very important part of the design</h2>
-            <h3>Style guide is a very important part of the design</h3>
+            <div className="row">
+               <div className="col">
+                  <div className="form-elem form-elem_switch">
+                     <label className="switch">
+                        <input type="checkbox" />
+                        <span className="switch__inner" />
+                     </label>
+                     <div className="description">
+                        Donec iaculis laoreet lorem non mattis enim faucibus non
+                     </div>
+                  </div>
+               </div>
+               <div className="col">
+                  <div className="form-elem form-elem_checkbox">
+                     <label className="checkbox">
+                        <input type="checkbox" />
+                        <span className="checkbox__inner" />
+                     </label>
+                     <div className="description">
+                        Donec iaculis laoreet lorem non mattis enim faucibus non
+                     </div>
+                  </div>
+               </div>
+               <div className="col" />
+            </div>
 
-            <p>
-               Maecenas metus dui, tincidunt non nibh vel, ullamcorper facilisis eros. Nullam
-               aliquet massa enim, id tincidunt justo pretium quis. Nam coue nulla diam, vel
-               porttitor ante viverra id.
-            </p>
+            <Formik
+               initialValues={{
+                  input1: '',
+                  input2: '',
+               }}
+               onSubmit={() => {}}
+            >
+               <Form>
+                  <div className="row">
+                     <div className="col">
+                        <div className="form-elem form-elem_input">
+                           <label>
+                              <span className="title">Input label</span>
+                              <Field
+                                 type="text"
+                                 name="input1"
+                                 component="input"
+                                 placeholder="Input"
+                              />
+                           </label>
+                           <span className="description">
+                              Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices
+                              viverra neque eget semper.
+                           </span>
+                        </div>
+                     </div>
+                     <div className="col">
+                        <div className="form-elem form-elem_select">
+                           <label>
+                              <span className="title">Input label</span>
+                              <Field
+                                 type="text"
+                                 name="input2"
+                                 component="select"
+                                 placeholder="Input"
+                              >
+                                 <option>Iterations</option>
+                                 <option>System</option>
+                              </Field>
+                           </label>
+                           <span className="description">
+                              Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices
+                              viverra neque eget semper.
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+               </Form>
+            </Formik>
 
-            <p>
-               <strong>
-                  Maecenas metus dui, tincidunt non nibh vel, ullamcorper facilisis eros. Nullam
-                  aliquet massa enim, id tincidunt justo pretium quis. Nam coue nulla diam, vel
-                  porttitor ante viverra id.
-               </strong>
-            </p>
+            <Formik
+               initialValues={{
+                  input: '',
+               }}
+               onSubmit={() => {}}
+            >
+               <Form>
+                  <div className="row">
+                     <div className="col">
+                        <div className="form-elem form-elem_textarea">
+                           <label>
+                              <span className="title">Input label</span>
+                              <Field name="input" component="textarea" placeholder="Your text" />
+                           </label>
+                           <span className="description">
+                              Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices
+                              viverra neque eget semper.
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+               </Form>
+            </Formik>
 
-            <p>
-               <em>
-                  Maecenas metus dui, tincidunt non nibh vel, ullamcorper facilisis eros. Nullam
-                  aliquet massa enim, id tincidunt justo pretium quis. Nam coue nulla diam, vel
-                  porttitor ante viverra id.
-               </em>
-            </p>
+            <div className="row">
+               <div className="col">
+                  <p>
+                     Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices viverra neque
+                     eget semper. Donec iaculis laoreet lorem, non mattis enim faucibus non.
+                     Suspendisse eu justo consequat, pulvinar tellus ut, pulvinar est. Fusce
+                     efficitur euismod tellus, in tincidunt sem scelerisque vel. Nunc iaculis, odio
+                     eget aliquam laoreet, mi quam suscipit lectus, sed rhoncus lacus dui eu elit.
+                     In quis risus turpis. Donec congue felis vitae sollicitudin placerat.
+                     Vestibulum sit amet enim varius elit finibus egestas sit amet sed est.
+                     Suspendisse blandit nulla accumsan nulla tempor laoreet. Nunc dignissim, massa
+                     sed posuere lobortis, sem nibh lobortis lectus, ac luctus risus ante eu sapien.
+                     Phasellus eget velit vel turpis consequat auctor at sit amet magna. In hac
+                     habitasse platea dictumst. Phasellus non tempus mauris.
+                  </p>
+                  <p>
+                     Fusce a augue sed dolor efficitur condimentum. Phasellus ultrices viverra neque
+                     eget semper. Donec iaculis laoreet lorem, non mattis enim faucibus non.
+                     Suspendisse eu justo consequat, pulvinar tellus ut, pulvinar est. Fusce
+                     efficitur euismod tellus, in tincidunt sem scelerisque vel. Nunc iaculis, odio
+                     eget aliquam laoreet, mi quam suscipit lectus, sed rhoncus lacus dui eu elit.
+                     In quis risus turpis. Donec congue felis vitae sollicitudin placerat.
+                     Vestibulum sit amet enim varius elit finibus egestas sit amet sed est.
+                     Suspendisse blandit nulla accumsan nulla tempor laoreet. Nunc dignissim, massa
+                     sed posuere lobortis, sem nibh lobortis lectus, ac luctus risus ante eu sapien.
+                     Phasellus eget velit vel turpis consequat auctor at sit amet magna. In hac
+                     habitasse platea dictumst. Phasellus non tempus mauris.
+                  </p>
+                  {/* Radio */}
+                  {/* Checkbox simple */}
+                  {/* Checkbox switch */}
 
-            {/* Table */}
-            {/* Inputs */}
-            {/* Textarea */}
+                  <div className="row">
+                     <div className="col">
+                        <a className="button button_blue">Example Button</a>
+                        <a className="button button_yellow">Example Button</a>
+                        <a className="button button_red">Example Button</a>
+                        <a className="button button_silver">Example Button</a>
+                        <a className="button button_green">Example Button</a>
+                        <a className="button button_gray">Example Button</a>
+                     </div>
 
-            {/* Tags */}
+                     <div className="col">
+                        <a className="button button_blue">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                           Example Button
+                        </a>
+                        <a className="button button_yellow">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                           Example Button
+                        </a>
+                        <a className="button button_red">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                           Example Button
+                        </a>
+                        <a className="button button_silver">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                           Example Button
+                        </a>
+                        <a className="button button_green">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                           Example Button
+                        </a>
+                        <a className="button button_gray">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                           Example Button
+                        </a>
+                     </div>
 
-            <button onClick={e => this.onPingTokenCall(e)}>Ping With Token Call</button>
+                     <div className="col">
+                        <a className="sq-button sq-button_blue">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                        </a>
+                        <a className="sq-button sq-button_yellow">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                        </a>
+                        <a className="sq-button sq-button_red">
+                           <FontAwesomeIcon icon={['fas', 'trash']} />
+                        </a>
+                        <a className="sq-button sq-button_silver">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                        </a>
+                        <a className="sq-button sq-button_green">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                        </a>
+                        <a className="sq-button sq-button_gray">
+                           <FontAwesomeIcon icon={['fas', 'bell']} />
+                        </a>
+                     </div>
+                  </div>
+
+                  {/* Buttons */}
+
+                  {/* Table */}
+                  {/* Inputs */}
+                  {/* Textarea */}
+
+                  {/* Tags */}
+               </div>
+            </div>
          </CommonLayout>
       );
    }

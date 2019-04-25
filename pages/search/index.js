@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrash, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import Link from 'next/link';
+import { Field } from 'formik';
 
 const configServer = require('config/server.config');
 
@@ -98,10 +99,15 @@ class SearchPage extends React.Component {
          {
             Header: 'Name',
             id: 'name',
-            accessor: item => {
+            accessor: 'name',
+            Cell: item => {
+               console.log(item);
                return (
-                  <Link as={`/project/${item.id}`} href={`/project?id_project=${item.id}`}>
-                     <a>{item.name}</a>
+                  <Link
+                     as={`/project/${item.original.id}/description`}
+                     href={`/project/description?id_project=${item.original.id}`}
+                  >
+                     <a>{item.original.name}</a>
                   </Link>
                );
             },
@@ -232,24 +238,14 @@ class SearchPage extends React.Component {
 
       return (
          <CommonLayout>
-            {/*<div className="row">*/}
-            {/*<div className="col-lg-6 col-md-12">*/}
-            {/*<label>*/}
-            {/*<span>Public state</span>*/}
-            {/*<select onChange={e => this.isPublicSearch(e, columns)}>*/}
-            {/*<option value="">All</option>*/}
-            {/*<option value="Yes">Yes</option>*/}
-            {/*<option value="No">No</option>*/}
-            {/*</select>*/}
-            {/*</label>*/}
-            {/*</div>*/}
-            {/*</div>*/}
             <div className="row">
                <div className="col">
-                  <label>
-                     <span>Tags</span>
-                     <input type="text" onChange={e => this.hasTagsSearch(e, columns)} />
-                  </label>
+                  <div className="form-elem form-elem_input">
+                     <label>
+                        <span className="title">Tags</span>
+                        <input type="text" onChange={e => this.hasTagsSearch(e, columns)} />
+                     </label>
+                  </div>
                </div>
             </div>
 

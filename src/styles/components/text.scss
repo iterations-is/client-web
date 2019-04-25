@@ -12,3 +12,26 @@ body {
 p {
    margin: 0 0 1.5em;
 }
+
+hr {
+   padding: 0;
+   border: none;
+   border-top: 1px solid $line-separator;
+   color: $line-separator;
+   text-align: center;
+   position: relative;
+   margin: $g5 0;
+
+   &:after {
+      content: '';
+      border-top: 5px solid white;
+      border-bottom: 5px solid white;
+      position: absolute;
+      width: 20px;
+      height: 1px;
+      background-color: $line-separator;
+      transform: rotate(-45deg) translate(0, -8px);
+      display: block;
+      left: 50%;
+   }
+}

@@ -12,7 +12,7 @@ const jwt = require('jsonwebtoken');
 
 const initialState = {
    token: '',
-   payload: '',
+   payload: {},
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -30,8 +30,8 @@ export default function reducerJWT(state = initialState, action) {
       case REMOVE_JWT:
          return {
             ...state,
-            token: '',
-            payload: '',
+            token: ' ',
+            payload: {},
          };
 
       default:

@@ -1,0 +1,128 @@
+////
+/// Form Elements
+/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
+////
+
+form {
+   width: 100%;
+}
+
+.form-elem {
+   display: flex;
+
+   ::placeholder {
+      color: $color-silver-light;
+      font-style: italic;
+      font-weight: 400;
+   }
+
+   &_switch,
+   &_checkbox {
+      margin: 0 0 $g3;
+
+      label {
+         flex: 0 0 auto;
+         margin-right: $g2;
+      }
+
+      .description {
+         flex: 1 1 0;
+      }
+   }
+
+   &_input,
+   &_input-list,
+   &_select,
+   &_textarea {
+      flex-direction: column;
+      margin: 0 0 $g3;
+
+      .title {
+         font-weight: bold;
+         display: block;
+         font-size: 14px;
+         margin-bottom: $g1;
+      }
+
+      .description {
+         margin-top: $g1;
+         text-transform: uppercase;
+         font-size: 0.7em;
+         font-weight: 400;
+         color: $color-silver-dark;
+         letter-spacing: 0.5px;
+         padding: 0 $g0-25;
+      }
+   }
+
+   &_input-list {
+      margin: 0 0 $g1;
+   }
+
+   input,
+   select,
+   textarea {
+      width: 100%;
+      display: block;
+      height: $g5;
+      text-decoration: none;
+      color: $color-asphalt-medium;
+      position: relative;
+      font-size: 16px;
+      line-height: $g5 - 1px;
+      padding: 0 $g1-05;
+      background-color: white;
+
+      outline: none;
+      border: 2px solid $color-asphalt-medium;
+      border-radius: $g1 !important;
+
+      &::placeholder {
+         font-style: italic;
+      }
+   }
+
+   select {
+      -webkit-appearance: none;
+      appearance: none;
+      background-position: right 50%;
+      background-repeat: no-repeat;
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDZFNDEwNjlGNzFEMTFFMkJEQ0VDRTM1N0RCMzMyMkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDZFNDEwNkFGNzFEMTFFMkJEQ0VDRTM1N0RCMzMyMkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0NkU0MTA2N0Y3MUQxMUUyQkRDRUNFMzU3REIzMzIyQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0NkU0MTA2OEY3MUQxMUUyQkRDRUNFMzU3REIzMzIyQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuGsgwQAAAA5SURBVHjaYvz//z8DOYCJgUxAf42MQIzTk0D/M+KzkRGPoQSdykiKJrBGpOhgJFYTWNEIiEeAAAMAzNENEOH+do8AAAAASUVORK5CYII=);
+   }
+
+   textarea {
+      padding: $g1-05;
+      min-height: 200px;
+      resize: vertical;
+      line-height: 1.5;
+   }
+}
+
+button {
+   -webkit-appearance: none;
+   appearance: none;
+   border: none;
+   outline: none;
+}
+
+.row-flex {
+   display: flex;
+
+   & > * {
+      margin-right: $g1;
+
+      flex: 0 0 auto;
+      &:last-child {
+         margin-right: 0;
+      }
+   }
+
+   & > .form-elem_input-list,
+   & > input {
+      flex: 1 1 0;
+   }
+
+   input[type='number'] {
+      width: 80px;
+   }
+}

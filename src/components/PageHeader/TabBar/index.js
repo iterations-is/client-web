@@ -27,7 +27,7 @@ class TabBarComponent extends React.Component {
          <ul className={'tab-bar'}>
             {this.props.items.map((value, idx) => (
                <li key={idx} className={value.tabActive ? 'active' : ''}>
-                  <Link href={value.tabLink}>
+                  <Link as={value.tabLinkAs} href={value.tabLink}>
                      <a>{value.tabTitle}</a>
                   </Link>
                </li>

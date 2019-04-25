@@ -13,13 +13,17 @@ import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
 import CommonLayout from 'layouts/CommonLayout';
-import { Field, Form, Formik } from 'formik';
+import { Field, FieldArray, Form, Formik } from 'formik';
 import axios from 'axios';
 import Noty from 'noty';
 import Router from 'next/router';
 const configServer = require('config/server.config');
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faMarkdown } from '@fortawesome/free-brands-svg-icons';
+
 import { WithContext as ReactTags } from 'react-tag-input';
+import { faPlus, faTags, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const KeyCodes = {
    comma: 188,
@@ -66,7 +70,7 @@ class AddPage extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
-         tags: [],
+         tags: [{ id: 'tag', text: 'tag' }],
       };
       this.handleDelete = this.handleDelete.bind(this);
       this.handleAddition = this.handleAddition.bind(this);
@@ -84,7 +88,7 @@ class AddPage extends React.Component {
             type: 'success',
          }).show();
 
-         Router.push(`/project/${res.data.dat.projectID}`);
+         Router.push(`/project/${res.data.dat.projectID}/description`);
       } catch (e) {
          new Noty({
             text: 'Cannot create project.',
@@ -122,114 +126,378 @@ class AddPage extends React.Component {
 
       return (
          <CommonLayout>
-            <div className={'row'}>
-               <div className="col">
-                  <Formik
-                     initialValues={{
-                        categoryId: this.props.categories[0] ? this.props.categories[0].id : '',
-                        name: '',
-                        descriptionPublic: '',
-                        descriptionPrivate: '',
-                        isSearchable: true,
-                        isPublic: false,
-                        hasOpenVacancies: false,
+            <Formik
+               initialValues={{
+                  categoryId: this.props.categories[0] ? this.props.categories[0].id : '',
+                  name: '',
+                  descriptionPublic: '',
+                  descriptionPrivate: '',
+                  isSearchable: true,
+                  isPublic: false,
+                  hasOpenVacancies: false,
 
-                        roles: [],
-                        iterations: [],
-                     }}
-                     onSubmit={this.ajaxCreateProject}
-                     render={props => (
-                        <Form>
-                           <h1>Public information</h1>
+                  roles: [{ name: 'Example', capacity: 5 }],
+                  iterations: [
+                     {
+                        title: 'Iteration title 1',
+                        deadline: '2019-04-21',
+                        tasks: [
+                           {
+                              title: 'Task title 1',
+                              description: 'Task description 1',
+                              pointsMin: 0,
+                              pointsMax: 10,
+                           },
+                           {
+                              title: 'Task title 2',
+                              description: 'Task description 2',
+                              pointsMin: 0,
+                              pointsMax: 10,
+                           },
+                        ],
+                     },
 
-                           <div className="row">
-                              <div className="col-4">
-                                 <label>
-                                    <span>Category</span>
-                                    <Field component="select" name="categoryId">
-                                       {this.props.categories.map(role => {
-                                          return (
-                                             <option key={role.id} value={role.id}>
-                                                {role.name}
-                                             </option>
-                                          );
-                                       })}
-                                    </Field>
-                                 </label>
-                              </div>
-                              <div className="col-8">
-                                 <label>
-                                    <span>Project name</span>
-                                    <Field
-                                       type="text"
-                                       name="name"
-                                       placeholder="My awesome project..."
-                                    />
-                                 </label>
+                     {
+                        title: 'Iteration title 2',
+                        deadline: '2019-04-21',
+                        tasks: [],
+                     },
+                  ],
+               }}
+               onSubmit={this.ajaxCreateProject}
+               render={formProps => (
+                  <Form>
+                     <h1>Public information</h1>
+
+                     <div className="row">
+                        <div className="col-12 col-md-4">
+                           <div className="form-elem form-elem_select">
+                              <span className="title">Category</span>
+                              <label>
+                                 <Field component="select" name="categoryId">
+                                    {this.props.categories.map(role => {
+                                       return (
+                                          <option key={role.id} value={role.id}>
+                                             {role.name}
+                                          </option>
+                                       );
+                                    })}
+                                 </Field>
+                              </label>
+                           </div>
+                        </div>
+                        <div className="col-12 col-md-8">
+                           <div className="form-elem form-elem_input">
+                              <span className="title">Project name</span>
+                              <label>
+                                 <Field
+                                    type="text"
+                                    name="name"
+                                    placeholder="Magnificent project name"
+                                 />
+                              </label>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div className="row">
+                        <div className="col">
+                           <div className="form-elem form-elem_textarea">
+                              <span className="title">Public description</span>
+                              <label>
+                                 <Field
+                                    component="textarea"
+                                    name="descriptionPublic"
+                                    placeholder="# Public description&#10;Text with *Markdown*."
+                                 />
+                              </label>
+                              <div className="description">
+                                 This description is always visible for everybody. Markdown{' '}
+                                 <FontAwesomeIcon icon={faMarkdown} /> enabled.
                               </div>
                            </div>
+                        </div>
+                     </div>
 
-                           <label>
-                              <span>Public description (visible for all)</span>
-                              <Field component="textarea" name="descriptionPublic" />
-                           </label>
+                     <div className="form-elem form-elem_textarea">
+                        <span className="title">Tags</span>
 
-                           <label>
-                              <span>Tags</span>
-                           </label>
+                        <ReactTags
+                           tags={tags}
+                           suggestions={suggestions}
+                           handleDelete={this.handleDelete}
+                           handleAddition={this.handleAddition}
+                           delimiters={delimiters}
+                           allowDragDrop={false}
+                        />
+                        <div className="description">
+                           Add some tags <FontAwesomeIcon icon={faTags} /> to make your project
+                           easier to search.
+                        </div>
+                     </div>
 
-                           <ReactTags
-                              tags={tags}
-                              suggestions={suggestions}
-                              handleDelete={this.handleDelete}
-                              handleAddition={this.handleAddition}
-                              delimiters={delimiters}
-                              allowDragDrop={false}
-                           />
+                     <h2>Vacancies</h2>
 
-                           <h2>Vacancies</h2>
+                     <div className="row">
+                        <FieldArray
+                           name="roles"
+                           render={arrayHelper => (
+                              <div className="col">
+                                 {formProps.values.roles.map((role, idx) => (
+                                    <div className="row-flex" key={idx}>
+                                       <div className="form-elem form-elem_input-list">
+                                          <Field type="text" name={`roles.${idx}.name`} />
+                                       </div>
 
-                           <label>
-                              <span>Allow free vacancy accessing</span>
+                                       <div className="form-elem">
+                                          <Field
+                                             type="number"
+                                             name={`roles.${idx}.capacity`}
+                                             max="9999"
+                                             min="0"
+                                          />
+                                       </div>
+
+                                       <div
+                                          className="sq-button sq-button_red"
+                                          onClick={() => arrayHelper.remove(idx)}
+                                       >
+                                          <FontAwesomeIcon icon={faTrash} />
+                                       </div>
+                                    </div>
+                                 ))}
+
+                                 <div
+                                    className="button button_gray"
+                                    onClick={() => arrayHelper.push({ name: '', capacity: 0 })}
+                                 >
+                                    Add vacancy
+                                 </div>
+                              </div>
+                           )}
+                        />
+                        <div className="col">
+                           <div className="form-elem form-elem_switch">
                               <label className="switch">
                                  <Field type="checkbox" name="hasOpenVacancies" />
                                  <span className="switch__inner" />
                               </label>
-                           </label>
+                              <span className="description">Allow free vacancy accessing</span>
+                           </div>
+                        </div>
+                     </div>
 
-                           <h1>Content visibility options</h1>
+                     <h2>Iterations</h2>
+                     <div className="row">
+                        <FieldArray
+                           name="iterations"
+                           render={arrayHelperIterations => (
+                              <div className="col">
+                                 {formProps.values.iterations.map((iteration, idx) => (
+                                    <div className="row" key={idx}>
+                                       <div className="col-4">
+                                          <div className="form-elem form-elem_input">
+                                             <div className="title">Iteration name</div>
+                                             <Field type="text" name={`iterations.${idx}.title`} />
+                                          </div>
+                                          <div className="form-elem form-elem_input">
+                                             <div className="title">Deadline</div>
+                                             <Field
+                                                type="date"
+                                                name={`iterations.${idx}.deadline`}
+                                             />
+                                          </div>
 
-                           <label>
-                              <span>Add the project into global search list</span>
+                                          <div
+                                             className="sq-button sq-button_red"
+                                             onClick={() => arrayHelperIterations.remove(idx)}
+                                          >
+                                             <FontAwesomeIcon icon={faTrash} />
+                                          </div>
+                                       </div>
+
+                                       <div className="col-8">
+                                          <FieldArray
+                                             name={`iterations.${idx}.tasks`}
+                                             render={arrayHelperTasks => (
+                                                <div className="col">
+                                                   {formProps.values.iterations[idx].tasks.map(
+                                                      (task, idxTasks) => (
+                                                         <div key={idxTasks}>
+                                                            <div className="row">
+                                                               <div className="col-12">
+                                                                  <div
+                                                                     className="row-flex"
+                                                                     key={idx}
+                                                                  >
+                                                                     <div className="form-elem form-elem_input">
+                                                                        <div className="title">
+                                                                           Task name
+                                                                        </div>
+                                                                        <Field
+                                                                           type="text"
+                                                                           name={`iterations.${idx}.tasks.${idxTasks}.title`}
+                                                                        />
+                                                                     </div>
+
+                                                                     <div className="form-elem  form-elem_input">
+                                                                        <div className="title">
+                                                                           Points Min{' '}
+                                                                        </div>
+                                                                        <Field
+                                                                           type="number"
+                                                                           name={`iterations.${idx}.tasks.${idxTasks}.pointsMin`}
+                                                                           max="999"
+                                                                        />
+                                                                     </div>
+
+                                                                     <div className="form-elem form-elem_input">
+                                                                        <div className="title">
+                                                                           Points Max
+                                                                        </div>
+                                                                        <Field
+                                                                           type="number"
+                                                                           name={`iterations.${idx}.tasks.${idxTasks}.pointsMax`}
+                                                                           max="999"
+                                                                        />
+                                                                     </div>
+
+                                                                     <div
+                                                                        className="sq-button sq-button_red"
+                                                                        onClick={() =>
+                                                                           arrayHelperTasks.remove(
+                                                                              idxTasks,
+                                                                           )
+                                                                        }
+                                                                     >
+                                                                        <FontAwesomeIcon
+                                                                           icon={faTrash}
+                                                                        />
+                                                                     </div>
+                                                                  </div>
+                                                               </div>
+                                                               <div className="col-12">
+                                                                  <div className="form-elem form-elem_textarea">
+                                                                     <span className="title">
+                                                                        Task description
+                                                                     </span>
+                                                                     <label>
+                                                                        <Field
+                                                                           component="textarea"
+                                                                           name={`iterations.${idx}.tasks.${idxTasks}.description`}
+                                                                           placeholder="# Task description&#10;Text with *Markdown*."
+                                                                        />
+                                                                     </label>
+                                                                     <div className="description">
+                                                                        Markdown{' '}
+                                                                        <FontAwesomeIcon
+                                                                           icon={faMarkdown}
+                                                                        />{' '}
+                                                                        enabled.
+                                                                     </div>
+                                                                  </div>
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                      ),
+                                                   )}
+
+                                                   <div
+                                                      className="button button_gray"
+                                                      onClick={() =>
+                                                         arrayHelperTasks.push({
+                                                            title: '',
+                                                            description: '',
+                                                            pointsMin: 0,
+                                                            pointsMax: 0,
+                                                         })
+                                                      }
+                                                   >
+                                                      Add task
+                                                   </div>
+                                                </div>
+                                             )}
+                                          />
+                                       </div>
+                                    </div>
+                                 ))}
+
+                                 <div className="row">
+                                    <div className="col-4">
+                                       <div
+                                          className="button button_gray"
+                                          onClick={() =>
+                                             arrayHelperIterations.push({
+                                                title: '',
+                                                deadline: null,
+                                                tasks: [],
+                                             })
+                                          }
+                                       >
+                                          Add iteration
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           )}
+                        />
+                     </div>
+
+                     <h1>Content visibility options</h1>
+
+                     <div className="row">
+                        <div className="col">
+                           {' '}
+                           <div className="form-elem form-elem_switch">
                               <label className="switch">
                                  <Field type="checkbox" name="isSearchable" defaultChecked />
                                  <span className="switch__inner" />
                               </label>
-                           </label>
-
-                           <label>
-                              <span>Make internal project content public</span>
+                              <span className="description">
+                                 Add the project into global search list
+                              </span>
+                           </div>
+                        </div>
+                        <div className="col">
+                           <div className="form-elem form-elem_switch">
                               <label className="switch">
                                  <Field type="checkbox" name="isPublic" />
                                  <span className="switch__inner" />
                               </label>
-                           </label>
+                              <span className="description">
+                                 Make internal project content public
+                              </span>
+                           </div>
+                        </div>
+                     </div>
 
-                           <h1>Private information</h1>
+                     <h1>Private information</h1>
 
-                           <label>
-                              <span>Private description (visible only for contributors)</span>
-                              <Field component="textarea" name="descriptionPrivate" />
-                           </label>
+                     <div className="row">
+                        <div className="col">
+                           <div className="form-elem form-elem_textarea">
+                              <span className="title">Private description</span>
+                              <label>
+                                 <Field
+                                    component="textarea"
+                                    name="descriptionPrivate"
+                                    placeholder="# Public description&#10;Text with *Markdown*."
+                                 />
+                              </label>
+                              <div className="description">
+                                 This description is visible only for project team. Markdown{' '}
+                                 <FontAwesomeIcon icon={faMarkdown} /> enabled.
+                              </div>
+                           </div>
+                        </div>
+                     </div>
 
-                           <button className="button button_green" type="submit">
-                              Create project
-                           </button>
-                        </Form>
-                     )}
-                  />
-               </div>
-            </div>
+                     <button className="button button_green" type="submit">
+                        Create project
+                     </button>
+                  </Form>
+               )}
+            />
          </CommonLayout>
       );
    }

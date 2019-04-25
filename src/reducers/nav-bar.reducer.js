@@ -34,24 +34,19 @@ const initialState = {
          name: 'Add Project',
          link: '/add',
          icon: ['fas', 'plus'],
-         permissions: ['project.create'],
+         permissions: ['projects.edit'],
       },
       {
          name: 'Notifications',
          link: '/notifications',
          icon: ['fas', 'bell'],
-         permissions: [],
+         permissions: ['notifications.get'],
       },
       {
          name: 'Panel',
          link: '/panel',
          icon: ['fas', 'key'],
-         permissions: [
-            'admin.change_user_role',
-            'admin.add_global_role',
-            'admin.change_permission_for_role',
-            'admin.change_authority',
-         ],
+         permissions: ['global_roles.edit', 'categories.edit'],
       },
    ],
 
