@@ -9,14 +9,10 @@ import Router from 'next/router';
 import { Cookies } from 'react-cookie';
 const configServer = require('config/server.config');
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-
 // React components
 import AuthorizationLayout from 'layouts/AuthorizationLayout';
-import Loader from 'components/Loader';
+import AuthButton from 'components/AuthButton';
 
-// set up cookies
 const cookies = new Cookies();
 
 // -------------------------------------------------------------------------------------------------
@@ -36,46 +32,34 @@ class Index extends React.Component {
       };
    }
 
-   constructor(props) {
-      super(props);
-      this.state = {
-         isWaitingForToken: false,
-      };
-   }
+   state = {
+      isAuthGithubInProcess: false,
+   };
 
    // Methods
    // ----------------------------------------------------------------------------------------------
 
-   loginGithub = async e => {
-      this.setState({
-         tokenTmp: this.props.tokenTmp,
-         isWaitingForToken: true,
-      });
+   authGithub = async e => {
+      // Avoid double click
+      if (this.state.isAuthGithubInProcess) return;
+      this.setState({ isAuthGithubInProcess: true });
 
-      let intervalID = setInterval(async () => {
+      const intervalId = setInterval(async () => {
          try {
             const response = await axios.get(configServer.host + '/api/token/persistent', {
-               params: {
-                  tokenTmp: this.props.tokenTmp,
-               },
+               params: { tokenTmp: this.props.tokenTmp },
             });
             const token = response.data.dat.token;
 
             if (token) {
-               cookies.set('JWT', `${token}`, {
-                  path: '/',
-               });
-               clearInterval(intervalID);
-
-               this.setState({
-                  isWaitingForToken: false,
-               });
-
+               clearInterval(intervalId);
+               cookies.set('JWT', `${token}`, { path: '/' });
+               this.setState({ isAuthGithubInProcess: false });
                Router.push('/search');
             }
          } catch (e) {
             // Something failed
-            clearInterval(intervalID);
+            clearInterval(intervalId);
             Router.push('/error/400');
          }
       }, 2000);
@@ -90,33 +74,26 @@ class Index extends React.Component {
             <div className="container-fluid">
                <div className="row">
                   <div className="col">
-                     <h1 className={'unique'}>Iterations</h1>
-                     <p>
-                        Nunc eget neque tincidunt felis ornare molestie a sed diam. Pellentesque
-                        habitant morbi tristique senectus et netus et malesuada fames ac turpis
-                        egestas. Duis elementum dolor dui, id faucibus dui malesuada sed. Etiam
-                        congue tellus nec ipsum cursus, vitae viverra dolor vehicula. Phasellus id
-                        tincidunt est.
-                     </p>
+                     <div className="box">
+                        <h1 className={'unique'}>Iterations</h1>
+                        <p>
+                           Welcome to the main page of the information system for study projects
+                           "Iterations"! Please use one of the available services to authorise.
+                        </p>
+                     </div>
                   </div>
                </div>
                <div className="row">
                   <div className="col-12 col-md-6">
-                     <a
-                        className="button button_gray"
-                        href={configServer.host + '/pages/github?tokenTmp=' + this.props.tokenTmp}
-                        target={'_blank'}
-                        onClick={this.loginGithub}
-                     >
-                        <FontAwesomeIcon icon={faGithub} />
-                        <span>GitHub</span>
-                     </a>
+                     <AuthButton
+                        service="github"
+                        animate={this.state.isAuthGithubInProcess}
+                        token={this.props.tokenTmp}
+                        onClick={this.authGithub}
+                     />
                   </div>
                </div>
             </div>
-            {this.state.isWaitingForToken && (
-               <Loader title="Loading" subtitle="waiting for token" />
-            )}
          </AuthorizationLayout>
       );
    }
