@@ -6,6 +6,7 @@
 import React from 'react';
 import App, { Container } from 'next/app';
 import ErrorPage from 'next/error';
+import NProgress from 'nprogress';
 
 import store from 'store';
 import { Provider } from 'react-redux';
@@ -16,7 +17,15 @@ import {} from 'utils/axios.util';
 import {} from 'utils/noty.util';
 
 import 'styles/index.scss';
-import { ErrorGetInitialProps } from '../src/utils/errors.util';
+import { ErrorGetInitialProps } from 'utils/errors.util';
+
+import Router from 'next/router';
+
+Router.events.on('routeChangeStart', url => {
+   NProgress.start();
+});
++Router.events.on('routeChangeComplete', () => NProgress.done());
++Router.events.on('routeChangeError', () => NProgress.done());
 
 const PageWrapper = Component => {
    return class WithError extends React.Component {

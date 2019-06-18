@@ -71,7 +71,7 @@ class Index extends React.Component {
                   isWaitingForToken: false,
                });
 
-               Router.push('/dashboard');
+               Router.push('/search');
             }
          } catch (e) {
             // Something failed
