@@ -17,7 +17,6 @@
       & > .container-fluid {
          padding: $grid-gutter-width;
          margin-left: 0;
-         max-width: 1200px;
 
          // FIXME Sometimes useless
          & > :first-child {
