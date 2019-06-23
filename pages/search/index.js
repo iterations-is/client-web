@@ -5,21 +5,14 @@
 
 import { verifyJWT } from 'utils/authorization.util';
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { actionSetPageTitle, actionSetUsagePageVerifiedMark } from 'actions/page-header.action';
 import { actionSetUsageTabBar } from 'actions/tab-bar.action';
 import { actionSetUsageInfoBar } from 'actions/info-bar.action';
 
 import React from 'react';
-import ReactTable from 'react-table';
 import CommonLayout from 'layouts/CommonLayout';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faTrash, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
-import Link from 'next/link';
-import { Field } from 'formik';
+import SearchBoxProjects from '../../src/components/SearchBoxProjects';
 
 const configServer = require('config/server.config');
 
@@ -63,248 +56,19 @@ class SearchPage extends React.Component {
       };
    }
 
-   constructor(props) {
-      super(props);
-      this.reactTable = React.createRef();
-   }
-
-   componentDidMount() {
-      this.addFilterPlaceholder();
-   }
-
    // Methods
    // ----------------------------------------------------------------------------------------------
-
-   addFilterPlaceholder = () => {
-      const filters = document.querySelectorAll('div.rt-th > input');
-      for (let filter of filters) filter.placeholder = '^(regex)$';
-   };
-
-   // isPublicSearch = (e, columns) => {
-   //    this.reactTable.current.filterColumn(columns[2], e.target.value);
-   // };
-
-   hasTagsSearch = (e, columns) => {
-      this.reactTable.current.filterColumn(columns[6], e.target.value);
-   };
 
    // Render
    // ----------------------------------------------------------------------------------------------
 
    render() {
-      const data = this.props.projects;
-      console.log(data);
-
-      const columns = [
-         {
-            Header: 'Name',
-            id: 'name',
-            accessor: 'name',
-            Cell: item => {
-               console.log(item);
-               return (
-                  <Link
-                     as={`/project/${item.original.id}/description`}
-                     href={`/project/description?id_project=${item.original.id}`}
-                  >
-                     <a>{item.original.name}</a>
-                  </Link>
-               );
-            },
-         },
-         {
-            Header: 'Category',
-            accessor: 'category.name',
-            width: 200,
-         },
-         {
-            Header: 'Public',
-            id: 'isPublic',
-            width: 90,
-            accessor: item => {
-               return item['isPublic'] ? 'Yes' : 'No';
-            },
-            filterMethod: (filter, row) => {
-               switch (filter.value) {
-                  case 'all':
-                     return true;
-                  case 'yes':
-                     return row[filter.id] === 'Yes';
-                  case 'no':
-                     return row[filter.id] === 'No';
-               }
-            },
-            Filter: ({ filter, onChange }) => (
-               <select
-                  onChange={event => onChange(event.target.value)}
-                  value={filter ? filter.value : 'all'}
-               >
-                  <option value="all">All</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-               </select>
-            ),
-         },
-         {
-            Header: 'Archived',
-            id: 'isArchived',
-            width: 90,
-            accessor: item => {
-               return item['isArchived'] ? 'Yes' : 'No';
-            },
-            filterMethod: (filter, row) => {
-               switch (filter.value) {
-                  case 'all':
-                     return true;
-                  case 'yes':
-                     return row[filter.id] === 'Yes';
-                  case 'no':
-                     return row[filter.id] === 'No';
-               }
-            },
-            Filter: ({ filter, onChange }) => (
-               <select
-                  onChange={event => onChange(event.target.value)}
-                  value={filter ? filter.value : 'all'}
-               >
-                  <option value="all">All</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-               </select>
-            ),
-         },
-         {
-            Header: 'Open Vacancies',
-            id: 'hasOpenVacancies',
-            width: 140,
-            accessor: item => {
-               return item['hasOpenVacancies'] ? 'Yes' : 'No';
-            },
-            filterMethod: (filter, row) => {
-               switch (filter.value) {
-                  case 'all':
-                     return true;
-                  case 'yes':
-                     return row[filter.id] === 'Yes';
-                  case 'no':
-                     return row[filter.id] === 'No';
-               }
-            },
-            Filter: ({ filter, onChange }) => (
-               <select
-                  onChange={event => onChange(event.target.value)}
-                  value={filter ? filter.value : 'all'}
-               >
-                  <option value="all">All</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-               </select>
-            ),
-         },
-         {
-            Header: 'More',
-            expander: true,
-            filterable: false,
-            sortable: false,
-            width: 56,
-            className: 'table__edit',
-            Expander: ({ isExpanded, ...rest }) => (
-               <div>
-                  {isExpanded ? (
-                     <div className="sq-button sq-button_blue">
-                        <FontAwesomeIcon icon={faEyeSlash} />
-                     </div>
-                  ) : (
-                     <div className="sq-button sq-button_blue">
-                        <FontAwesomeIcon icon={faEye} />
-                     </div>
-                  )}
-               </div>
-            ),
-         },
-         {
-            Header: 'Tags',
-            id: 'tags',
-            className: 'table__hidden-column',
-            accessor: item => {
-               let str = '';
-               for (let tag of item.tags) {
-                  str += ` ${tag.name}`;
-               }
-               return str;
-            },
-         },
-      ];
-
       return (
          <CommonLayout>
-            <div className="row">
-               <div className="col">
-                  <div className="form-elem form-elem_input">
-                     <label>
-                        <span className="title">Tags</span>
-                        <input type="text" onChange={e => this.hasTagsSearch(e, columns)} />
-                     </label>
-                  </div>
-               </div>
-            </div>
-
-            <div className={'row'}>
-               <div className="col-12">
-                  <ReactTable
-                     ref={this.reactTable}
-                     data={data}
-                     columns={columns}
-                     filterable={true}
-                     className={'table_search-projects'}
-                     SubComponent={row => {
-                        return (
-                           <div className="table__subsection">
-                              <div className="row">
-                                 <div className="col-6">
-                                    <strong>Description</strong>
-                                    <p>{row.original.descriptionPublic}</p>
-                                 </div>
-                                 <div className="col-6">
-                                    <strong>Created: </strong>
-                                    <span>
-                                       {moment(row.original.createdAt).format('DD.MM.YYYY HH:mm')}
-                                    </span>
-                                    <div />
-                                    <strong>Tags:</strong>
-                                    <div className="tags">
-                                       {row.original.tags.map((item, idx) => (
-                                          <span className="tag" key={idx}>
-                                             {item.name}
-                                          </span>
-                                       ))}
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        );
-                     }}
-                  />
-               </div>
-            </div>
+            <SearchBoxProjects projects={this.props.projects} />
          </CommonLayout>
       );
    }
 }
 
-// -------------------------------------------------------------------------------------------------
-// Redux
-// -------------------------------------------------------------------------------------------------
-
-const mapStateToProps = state => {
-   return {};
-};
-
-const mapDispatchToProps = dispatch => {
-   return bindActionCreators({}, dispatch);
-};
-
-export default connect(
-   mapStateToProps,
-   mapDispatchToProps,
-)(SearchPage);
+export default SearchPage;

@@ -33,7 +33,7 @@ const initialState = {
       {
          name: 'Add Project',
          link: '/add',
-         icon: ['fas', 'plus'],
+         icon: ['fas', 'folder-plus'],
          permissions: ['projects.edit'],
       },
       {

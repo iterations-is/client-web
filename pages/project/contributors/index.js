@@ -19,6 +19,9 @@ import { setProjectInitialProps } from 'utils/get-inital-props.util';
 const configServer = require('config/server.config');
 import Noty from 'noty';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faSave, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 // -------------------------------------------------------------------------------------------------
 // Component
 // -------------------------------------------------------------------------------------------------
@@ -129,11 +132,37 @@ class ProjectPage extends React.Component {
       }
    };
 
+   ajaxRemoveFromTeam = async username => {
+      const { ajaxMetadata } = this.props;
+
+      try {
+         await axios.delete(`${configServer.host}/api/project/${ajaxMetadata.id}/team/user`, {
+            data: {
+               username: username,
+            },
+         });
+
+         Router.push(`/project/${ajaxMetadata.id}/contributors`);
+
+         new Noty({
+            text: 'You remove user from the project.',
+            type: 'success',
+         }).show();
+      } catch (e) {
+         new Noty({
+            text: 'Cannot remove user.',
+            type: 'error',
+         }).show();
+      }
+   };
+
    // Render
    // ----------------------------------------------------------------------------------------------
 
    render() {
       const { ajaxMetadata, ajaxTeam } = this.props;
+
+      const canRemoveMembers = ajaxMetadata.currentUserProjectRole === 'LEADER';
 
       let userIsInTeam = false;
       (() => {
@@ -179,8 +208,18 @@ class ProjectPage extends React.Component {
                   <div className="row">
                      <div className="col">
                         {item[0].users.map((user, idx) => (
-                           <div key={idx} className="team__contributor">
-                              {user.authUsername}
+                           <div className="box_horizontal">
+                              <div key={idx} className="team__contributor">
+                                 {user.authUsername}
+                              </div>
+                              {canRemoveMembers && (
+                                 <div
+                                    className="sq-button sq-button_red"
+                                    onClick={() => this.ajaxRemoveFromTeam(user.authUsername)}
+                                 >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                 </div>
+                              )}
                            </div>
                         ))}
                      </div>

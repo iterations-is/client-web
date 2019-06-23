@@ -183,16 +183,16 @@ class ProjectPage extends React.Component {
                                  <h2>Snapshots</h2>
                               </div>
                               <div className="col-5">
-                                 <Link
-                                    as={`/project/${this.props.metadata.id}/iterations/${
-                                       iteration.id
-                                    }/snapshot/create`}
-                                    href={`/project/iterations/snapshot/create?id_project=${
-                                       this.props.metadata.id
-                                    }&id_iteration=${iteration.id}`}
-                                 >
-                                    <a className="button button_gray">New snapshot</a>
-                                 </Link>
+                                 {/*<Link*/}
+                                 {/*   as={`/project/${this.props.metadata.id}/iterations/${*/}
+                                 {/*      iteration.id*/}
+                                 {/*   }/snapshot/create`}*/}
+                                 {/*   href={`/project/iterations/snapshot/create?id_project=${*/}
+                                 {/*      this.props.metadata.id*/}
+                                 {/*   }&id_iteration=${iteration.id}`}*/}
+                                 {/*>*/}
+                                 {/*   <a className="button button_gray">New snapshot</a>*/}
+                                 {/*</Link>*/}
                               </div>
                            </div>
                            <div className="table-responsive">

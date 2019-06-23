@@ -4,9 +4,10 @@
 ////
 
 .info-bar {
-   width: 280px;
-   flex: 0 0 280px;
+   width: 320px;
+   flex: 0 0 320px;
    min-height: 100vh;
+   padding: $g5;
 
    border-right: 1px solid $line-separator;
    background: url('/static/images/theme_iterations/logo_white_light.svg') -100px 0 fixed;

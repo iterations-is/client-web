@@ -19,8 +19,20 @@ import {
    faList,
    faQuestion,
    faBell,
+   faFolderPlus,
 } from '@fortawesome/free-solid-svg-icons';
-library.add(faBell, faKey, faCircleNotch, faKey, faPlus, faSignOutAlt, faList, faQuestion, faBell);
+library.add(
+   faBell,
+   faKey,
+   faCircleNotch,
+   faKey,
+   faPlus,
+   faSignOutAlt,
+   faList,
+   faQuestion,
+   faBell,
+   faFolderPlus,
+);
 
 // -------------------------------------------------------------------------------------------------
 // Component

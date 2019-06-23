@@ -4,10 +4,12 @@
 ////
 
 .infoBarGroup {
-   padding: 0 $g3;
+   &:not(:last-child) {
+      padding-bottom: $g5;
+   }
 
    &__title {
-      padding: $g3 0;
+      padding: 0 0 $g2 0;
       text-transform: uppercase;
       font: {
          weight: bold;

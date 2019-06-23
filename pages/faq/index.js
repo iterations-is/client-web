@@ -34,7 +34,11 @@ class FAQPage extends React.Component {
       // Info Bar
       ctx.store.dispatch(actionSetUsageInfoBar(false));
 
-      return {};
+      const jwt = ctx.store.getState().reducerJWT;
+
+      return {
+         jwt,
+      };
    }
 
    // Methods
@@ -48,26 +52,34 @@ class FAQPage extends React.Component {
          <CommonLayout>
             <div className={'row'}>
                <div className="col-md-6 col-sm-12">
-                  <h1>Documentation</h1>
+                  <h1>Documentations</h1>
                   <p>
-                     <strong>Q:</strong> I don't know how to do XYZ, where can I find it?
+                     <strong>Q:</strong> Is there any documentation for developers?
                      <br />
-                     <strong>A:</strong> User documentation is available at{' '}
+                     <strong>A:</strong> Developer documentation is available at{' '}
                      <a href="https://iterations-is.github.io/docs-dev/#/" target="_blank">
                         https://iterations-is.github.io/docs-dev/
+                     </a>
+                  </p>
+                  <p>
+                     <strong>Q:</strong> Is there any documentation for users?
+                     <br />
+                     <strong>A:</strong> User documentation is available at{' '}
+                     <a href="https://iterations-is.github.io/docs-user/#/" target="_blank">
+                        https://iterations-is.github.io/docs-user/
                      </a>
                   </p>
                </div>
                <div className="col-md-6 col-sm-12">
                   <h1>Personal information</h1>
                   <p>
-                     <strong>Q:</strong> Personal data?
+                     <strong>Q:</strong> Which personal data do you store?
                      <br />
-                     <strong>A:</strong> Personal data are available at{' '}
-                     <Link href="/faq/personal-data">
-                        <a>Personal Data</a>
-                     </Link>
+                     <strong>A:</strong> We store only one item that could be marked as personal -
+                     your public OAuth data from the third party service. You can modify them via
+                     your OAuth service or contact us at user@example.com to change or delete them.
                   </p>
+                  <p>OAuth ID: {this.props.jwt.payload.authId}</p>
                </div>
             </div>
          </CommonLayout>

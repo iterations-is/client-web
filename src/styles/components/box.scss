@@ -1,0 +1,29 @@
+.box {
+   & > :first-child {
+      margin-top: 0;
+   }
+
+   & > :last-child {
+      margin-bottom: 0;
+   }
+
+   &_horizontal {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-content: space-between;
+      .sq-button {
+         margin-left: $g1;
+      }
+   }
+
+   &_vertical-sq-buttons {
+      .sq-button {
+         margin-bottom: $g1;
+      }
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+   }
+}

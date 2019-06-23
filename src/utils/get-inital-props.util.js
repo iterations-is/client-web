@@ -48,13 +48,13 @@ export const setProjectInitialProps = (ctx, ajaxData, reduxSettings) => {
                      color: ajaxData.metadata.isPublic ? 'green' : 'red',
                   },
                },
-               {
-                  title: 'Archived',
-                  label: {
-                     text: ajaxData.metadata.isArchived ? 'YES' : 'NO',
-                     color: ajaxData.metadata.isArchived ? 'red' : 'green',
-                  },
-               },
+               // {
+               //    title: 'Archived',
+               //    label: {
+               //       text: ajaxData.metadata.isArchived ? 'YES' : 'NO',
+               //       color: ajaxData.metadata.isArchived ? 'red' : 'green',
+               //    },
+               // },
                {
                   title: 'Searchable',
                   label: {

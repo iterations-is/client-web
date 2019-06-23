@@ -7,17 +7,17 @@
    display: flex;
    padding-left: 80px;
 
-   background: url('/static/images/theme_iterations/logo_white_light.svg') -250px 0 fixed;
-   background-size: 300px;
+   background: url('/static/images/theme_iterations/logo_white_light.svg') fixed;
 
    main {
       background-color: white;
       flex: 1 1 0;
+      //max-width: calc(100% - 320px);
 
       & > .container-fluid {
          padding: $grid-gutter-width;
          margin-left: 0;
-         max-width: 1200px;
+         overflow-x: hidden;
 
          // FIXME Sometimes useless
          & > :first-child {

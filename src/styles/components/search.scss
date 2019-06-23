@@ -1,0 +1,10 @@
+.search-title-link {
+   display: inline-block;
+   cursor: pointer;
+   width: 100%;
+   //color: $color-indigo-dark;
+
+   &:hover {
+      color: $color-indigo-medium;
+   }
+}
