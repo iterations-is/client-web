@@ -3,9 +3,10 @@
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Head from 'next/head';
 
 import NavBar from 'components/NavBar';
 import InfoBar from 'components/InfoBar';
@@ -15,17 +16,22 @@ import MobileBar from 'components/MobileBar';
 class CommonLayout extends React.Component {
    render() {
       return (
-         <div className="layout layout_common">
-            <NavBar />
-            {this.props.usageInfoBar && <InfoBar />}
+         <Fragment>
+            <Head>
+               <title>Iterations</title>
+            </Head>
+            <div className="layout layout_common">
+               <NavBar />
+               {this.props.usageInfoBar && <InfoBar />}
 
-            <main>
-               <Header />
-               <div className="container-fluid">{this.props.children}</div>
-            </main>
+               <main>
+                  <Header />
+                  <div className="container-fluid">{this.props.children}</div>
+               </main>
 
-            <MobileBar />
-         </div>
+               <MobileBar />
+            </div>
+         </Fragment>
       );
    }
 }

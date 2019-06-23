@@ -3,17 +3,21 @@
  * @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
+import Head from 'next/head';
 
-class Index extends React.Component {
-   render() {
-      return (
+const AuthorizationLayout = ({ children }) => {
+   return (
+      <Fragment>
+         <Head>
+            <title>Iterations</title>
+         </Head>
          <div className="layout layout_authorization authorization">
-            <main className="authorization__main">{this.props.children}</main>
+            <main className="authorization__main">{children}</main>
             <div className="authorization__logotype" />
          </div>
-      );
-   }
-}
+      </Fragment>
+   );
+};
 
-export default Index;
+export default AuthorizationLayout;
