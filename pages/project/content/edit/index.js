@@ -42,14 +42,14 @@ class PartPage extends React.Component {
 
       const token = ctx.store.getState().reducerJWT.token;
 
-      let ajaxDataMetadata, ajaxDataPart;
+      let ajaxDataMetadata, ajaxDataPart, ajaxInterpreters;
 
       try {
          [
             // Save data
             ajaxDataMetadata,
             ajaxDataPart,
-            // ajaxInterpreters,
+            ajaxInterpreters,
          ] = await Promise.all([
             // PROJECT
             axios.get(`${configServer.host}/api/project/${ctx.query.id_project}/metadata`, {
@@ -67,7 +67,9 @@ class PartPage extends React.Component {
                },
             ),
             // INTERPRETERS
-            // axios.get(`https://api.github.com/repositories/181357697/contents/dist`),
+            axios.get(`${configServer.host}/api/interpreters`, {
+               headers: { Authorization: token },
+            }),
          ]);
       } catch (e) {
          console.log(e);
@@ -97,7 +99,7 @@ class PartPage extends React.Component {
       return {
          metadata: ajaxDataMetadata.data.dat,
          part: ajaxDataPart.data.dat.part,
-         interpreters: [{ name: 'text-plain' }, { name: 'image-plain' }],
+         interpreters: ajaxInterpreters.data.dat,
       };
    }
 
