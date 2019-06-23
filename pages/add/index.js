@@ -116,6 +116,12 @@ class AddPage extends React.Component {
       this.setState(state => ({ tags: [...state.tags, tag] }));
    }
 
+   randomString = () => {
+      return Math.random()
+         .toString(36)
+         .substring(7);
+   };
+
    // Render
    // ----------------------------------------------------------------------------------------------
 
@@ -136,33 +142,8 @@ class AddPage extends React.Component {
                   isPublic: false,
                   hasOpenVacancies: false,
 
-                  roles: [{ name: 'Example', capacity: 5 }],
-                  iterations: [
-                     {
-                        title: 'Iteration title 1',
-                        deadline: '2019-04-21',
-                        tasks: [
-                           {
-                              title: 'Task title 1',
-                              description: 'Task description 1',
-                              pointsMin: 0,
-                              pointsMax: 10,
-                           },
-                           {
-                              title: 'Task title 2',
-                              description: 'Task description 2',
-                              pointsMin: 0,
-                              pointsMax: 10,
-                           },
-                        ],
-                     },
-
-                     {
-                        title: 'Iteration title 2',
-                        deadline: '2019-04-21',
-                        tasks: [],
-                     },
-                  ],
+                  roles: [],
+                  iterations: [],
                }}
                onSubmit={this.ajaxCreateProject}
                render={formProps => (
@@ -219,7 +200,7 @@ class AddPage extends React.Component {
                         </div>
                      </div>
 
-                     <div className="form-elem form-elem_textarea">
+                     <div className="form-elem form-elem_textarea box">
                         <span className="title">Tags</span>
 
                         <ReactTags
@@ -238,13 +219,13 @@ class AddPage extends React.Component {
 
                      <h2>Vacancies</h2>
 
-                     <div className="row">
+                     <div className="row box">
                         <FieldArray
                            name="roles"
                            render={arrayHelper => (
                               <div className="col">
                                  {formProps.values.roles.map((role, idx) => (
-                                    <div className="row-flex" key={idx}>
+                                    <div className="row-flex" key={this.randomString()}>
                                        <div className="form-elem form-elem_input-list">
                                           <Field type="text" name={`roles.${idx}.name`} />
                                        </div>
@@ -288,13 +269,13 @@ class AddPage extends React.Component {
                      </div>
 
                      <h2>Iterations</h2>
-                     <div className="row">
+                     <div className="row box">
                         <FieldArray
                            name="iterations"
                            render={arrayHelperIterations => (
                               <div className="col">
                                  {formProps.values.iterations.map((iteration, idx) => (
-                                    <div className="row" key={idx}>
+                                    <div className="row box" key={this.randomString()}>
                                        <div className="col-4">
                                           <div className="form-elem form-elem_input">
                                              <div className="title">Iteration name</div>
@@ -323,7 +304,10 @@ class AddPage extends React.Component {
                                                 <div className="col">
                                                    {formProps.values.iterations[idx].tasks.map(
                                                       (task, idxTasks) => (
-                                                         <div key={idxTasks}>
+                                                         <div
+                                                            key={this.randomString()}
+                                                            className="box"
+                                                         >
                                                             <div className="row">
                                                                <div className="col-12">
                                                                   <div
@@ -402,18 +386,20 @@ class AddPage extends React.Component {
                                                       ),
                                                    )}
 
-                                                   <div
-                                                      className="button button_gray"
-                                                      onClick={() =>
-                                                         arrayHelperTasks.push({
-                                                            title: '',
-                                                            description: '',
-                                                            pointsMin: 0,
-                                                            pointsMax: 0,
-                                                         })
-                                                      }
-                                                   >
-                                                      Add task
+                                                   <div className="box">
+                                                      <div
+                                                         className="button button_gray"
+                                                         onClick={() =>
+                                                            arrayHelperTasks.push({
+                                                               title: '',
+                                                               description: '',
+                                                               pointsMin: 0,
+                                                               pointsMax: 0,
+                                                            })
+                                                         }
+                                                      >
+                                                         Add task
+                                                      </div>
                                                    </div>
                                                 </div>
                                              )}
@@ -429,7 +415,7 @@ class AddPage extends React.Component {
                                           onClick={() =>
                                              arrayHelperIterations.push({
                                                 title: '',
-                                                deadline: null,
+                                                deadline: '',
                                                 tasks: [],
                                              })
                                           }
