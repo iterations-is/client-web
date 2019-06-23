@@ -14,11 +14,11 @@ class Index extends React.Component {
          if (isAuthorized) {
             if (ctx.res) {
                // SSR redirect
-               ctx.res.writeHead(302, { Location: '/search' });
+               ctx.res.writeHead(302, { Location: '/dashboard' });
                ctx.res.end();
             } else {
                // CSR redirect
-               Router.push('/search');
+               Router.push('/dashboard');
             }
          }
       });

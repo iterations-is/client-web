@@ -85,11 +85,12 @@ class ProjectPage extends React.Component {
 
    render() {
       const { ajaxMetadata } = this.props;
+      const isNobody = ajaxMetadata.currentUserProjectRole === 'NOBODY';
 
       return (
          <CommonLayout>
             <div className="row">
-               <div className="col-12 col-xl-6">
+               <div className={`col-12`}>
                   <ReactMarkdown
                      source={
                         ajaxMetadata.descriptionPublic === ''
@@ -98,7 +99,7 @@ class ProjectPage extends React.Component {
                      }
                   />
                </div>
-               <div className="col-12 col-xl-6">
+               <div className="col-12">
                   {ajaxMetadata.descriptionPrivate !== undefined && (
                      <React.Fragment>
                         <hr />

@@ -181,9 +181,10 @@ class PanelPage extends React.Component {
                      <Formik
                         initialValues={{ name: category.name }}
                         onSubmit={values => this.ajaxUpdateCategory(category.id, values)}
+                        key={category.id}
                      >
                         <Form>
-                           <div className="col" key={category.id}>
+                           <div className="col">
                               <div className="row-flex">
                                  <div className="form-elem form-elem_input">
                                     <Field name="name" />

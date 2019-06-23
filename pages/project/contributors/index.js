@@ -162,6 +162,8 @@ class ProjectPage extends React.Component {
    render() {
       const { ajaxMetadata, ajaxTeam } = this.props;
 
+      const canRemoveMembers = ajaxMetadata.currentUserProjectRole === 'LEADER';
+
       let userIsInTeam = false;
       (() => {
          for (const role of ajaxTeam) {
@@ -206,16 +208,18 @@ class ProjectPage extends React.Component {
                   <div className="row">
                      <div className="col">
                         {item[0].users.map((user, idx) => (
-                           <div>
+                           <div className="box_horizontal">
                               <div key={idx} className="team__contributor">
                                  {user.authUsername}
                               </div>
-                              <div
-                                 className="sq-button sq-button_red"
-                                 onClick={() => this.ajaxRemoveFromTeam(user.authUsername)}
-                              >
-                                 <FontAwesomeIcon icon={faTrash} />
-                              </div>
+                              {canRemoveMembers && (
+                                 <div
+                                    className="sq-button sq-button_red"
+                                    onClick={() => this.ajaxRemoveFromTeam(user.authUsername)}
+                                 >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                 </div>
+                              )}
                            </div>
                         ))}
                      </div>

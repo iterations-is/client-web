@@ -108,7 +108,7 @@ class ProjectPage extends React.Component {
       }
 
       for (const interpreter of uniqueInterpreters) {
-         const file = `https://cdn.jsdelivr.net/gh/iterations-is/interpreters@latest/dist/${interpreter}/index.js`;
+         const file = `https://cdn.jsdelivr.net/gh/iterations-is/interpreters/dist/${interpreter}/index.js`;
          let script = document.createElement('script');
          script.src = file;
 
@@ -159,23 +159,29 @@ class ProjectPage extends React.Component {
    render() {
       const { ajaxMetadata, ajaxIterations, ajaxInterpreters } = this.props;
 
+      const canEditProject =
+         ajaxMetadata.currentUserProjectRole !== 'NOBODY' &&
+         ajaxMetadata.currentUserProjectRole !== 'VISITOR';
+
       return (
          <CommonLayout>
-            <div className="row box">
-               <div className="col">
-                  {this.state.parts.length === 0 && (
+            {this.state.parts.length === 0 && (
+               <div className="row">
+                  <div className="col">
                      <p>Current project doesn't have content parts.</p>
-                  )}
+                  </div>
+               </div>
+            )}
 
-                  {this.state.parts.map(part => {
-                     return (
-                        <div className="row" key={part.id}>
-                           <div className="col-10">
-                              <div
-                                 dangerouslySetInnerHTML={this.createMarkup(part.document.html)}
-                              />
-                           </div>
-                           <div className="col-2">
+            {this.state.parts.map(part => {
+               return (
+                  <div className="row box" key={part.id}>
+                     <div className={canEditProject ? 'col-11' : 'col-12'}>
+                        <div dangerouslySetInnerHTML={this.createMarkup(part.document.html)} />
+                     </div>
+                     {canEditProject && (
+                        <div className="col-1">
+                           <div className="box box_vertical-sq-buttons">
                               <Link
                                  as={`/project/${ajaxMetadata.id}/content/edit/${part.id}`}
                                  href={`/project/content/edit?id_project=${
@@ -195,23 +201,23 @@ class ProjectPage extends React.Component {
                               </div>
                            </div>
                         </div>
-                     );
-                  })}
-               </div>
-            </div>
-            <div className="row">
-               <div className="col-6">
-                  {ajaxMetadata.currentUserProjectRole !== 'NOBODY' &&
-                     ajaxMetadata.currentUserProjectRole !== 'VISITOR' && (
-                        <Link
-                           as={`/project/${ajaxMetadata.id}/content/create`}
-                           href={`/project/content/create?id_project=${ajaxMetadata.id}`}
-                        >
-                           <a className="button button_green">Create a part</a>
-                        </Link>
                      )}
+                  </div>
+               );
+            })}
+
+            {canEditProject && (
+               <div className="row">
+                  <div className="col-4 offset-8">
+                     <Link
+                        as={`/project/${ajaxMetadata.id}/content/create`}
+                        href={`/project/content/create?id_project=${ajaxMetadata.id}`}
+                     >
+                        <a className="button button_green">Create a part</a>
+                     </Link>
+                  </div>
                </div>
-            </div>
+            )}
          </CommonLayout>
       );
    }

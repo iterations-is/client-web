@@ -1,14 +1,9 @@
-////
-/// Project - Contributors
-/// @author Sergey Dunaevskiy (dunaevskiy) <sergey@dunaevskiy.eu>
-////
-
 .team__contributor {
    background-color: $color-silver-ultra-light;
    height: $g5;
    line-height: $g5;
    padding: 0 $g2;
    display: inline-block;
-   border: 1px solid $color-silver-light;
+   //border: 1px solid $color-silver-light;
    border-radius: $g1;
 }

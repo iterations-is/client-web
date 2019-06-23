@@ -18,12 +18,12 @@ const initialState = {
    visibilityMobile: false,
 
    itemsTop: [
-      // {
-      //    name: 'Iterations',
-      //    link: '/dashboard',
-      //    icon: ['fas', 'circle-notch'],
-      //    permissions: [],
-      // },
+      {
+         name: 'Iterations',
+         link: '/dashboard',
+         icon: ['fas', 'circle-notch'],
+         permissions: [],
+      },
       {
          name: 'Project List',
          link: '/search',

@@ -55,7 +55,7 @@ class Index extends React.Component {
                clearInterval(intervalId);
                cookies.set('JWT', `${token}`, { path: '/' });
                this.setState({ isAuthGithubInProcess: false });
-               Router.push('/search');
+               Router.push('/dashboard');
             }
          } catch (e) {
             // Something failed
